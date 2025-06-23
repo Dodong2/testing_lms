@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: lms
+      POSTGRES_PASSWORD: lms2025
+      POSTGRES_DB: lms-db
+    ports:
+      - "5432:5432"
