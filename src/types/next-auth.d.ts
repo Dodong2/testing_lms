@@ -1,22 +1,31 @@
-import { DefaultSession, DefaultUser } from 'next-auth'
-import { Role } from '@prisma/client'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import NextAuth from "next-auth";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
-      id: string
-      role: Role
-    } & DefaultSession['user']
+      name: string;
+      email: string;
+      image?: string;
+      role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY";
+    };
   }
 
-  interface User extends DefaultUser {
-    role: Role
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+    role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY";
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
-    role: Role
-    id: string
+    id: string;
+    name: string;
+    email: string;
+    picture?: string;
+    role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY";
   }
 }

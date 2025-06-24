@@ -1,11 +1,11 @@
 import TestPage from "@/components/TestPage";
-import LoginPage from "./(frontend)/login/page";
+import HomePage from "./(frontend)/home/page";
 
 export default function Home() {
   return (
     <div>
       <TestPage/>
-      <LoginPage/>
+      <HomePage/>
     </div>
   );
 }

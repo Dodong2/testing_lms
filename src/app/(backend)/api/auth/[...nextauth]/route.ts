@@ -1,9 +1,14 @@
-import NextAuth from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { prisma } from '@/lib/db'
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/db";
+import { AuthOptions } from "next-auth";
 
-const handler = NextAuth({
+type ExtendedProfile = {
+  picture?: string;
+} & Record<string, unknown>;
+
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -12,104 +17,80 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      console.log('SignIn callback:', { 
-        user: user.email, 
-        provider: account?.provider,
-        profileId: profile?.sub 
-      })
-      
-      if (account?.provider === 'google') {
-        try {
-          // Check if user exists in database
-          const existingUser = await prisma.user.findUnique({
-            where: { email: user.email || '' }
-          })
-          
-          console.log('Existing user found:', !!existingUser)
-          
-          // Only allow sign in if user exists (admin must create account first)
-          if (!existingUser) {
-            console.log('User not found in database, blocking sign in')
-            return false
-          }
+    async signIn({ user, account }) {
+  const existingUser = await prisma.user.findUnique({
+    where: { email: user.email ?? undefined },
+  });
 
-          // Check if account is already linked
-          const existingAccount = await prisma.account.findUnique({
-            where: {
-              provider_providerAccountId: {
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-              }
-            }
-          })
+  if (!existingUser) {
+    // ❌ Reject sign in if user is not registered via your custom register route
+    return false;
+  }
 
-          console.log('Existing account found:', !!existingAccount)
-
-          // If account doesn't exist, create it and link to existing user
-          if (!existingAccount) {
-            console.log('Creating new account link for existing user')
-            await prisma.account.create({
-              data: {
-                userId: existingUser.id,
-                type: account.type,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                refresh_token: account.refresh_token,
-                access_token: account.access_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-                session_state: account.session_state,
-              }
-            })
-            console.log('Account link created successfully')
-          }
-          
-          return true
-        } catch (error) {
-          console.error('Error in signIn callback:', error)
-          return false
-        }
-      }
-      return true
+  // ✅ Ensure the account is linked to this user
+  const existingAccount = await prisma.account.findFirst({
+    where: {
+      provider: account?.provider,
+      providerAccountId: account?.providerAccountId,
     },
-    async jwt({ token, user }) {
+  });
+
+  // ✅ If not yet linked, create the account manually
+  if (!existingAccount && account) {
+    await prisma.account.create({
+      data: {
+        userId: existingUser.id,
+        type: account.type,
+        provider: account.provider,
+        providerAccountId: account.providerAccountId,
+        access_token: account.access_token,
+        token_type: account.token_type,
+        scope: account.scope,
+        id_token: account.id_token,
+        expires_at: account.expires_at,
+        refresh_token: account.refresh_token,
+      },
+    });
+  }
+
+  return true;
+},
+    async jwt({ token, user, profile }) {
+      const extendedProfile = profile as ExtendedProfile;
       if (user) {
-        try {
-          // Get user from database to include role
-          const dbUser = await prisma.user.findUnique({
-            where: { email: user.email || '' }
-          })
-          
-          if (dbUser) {
-            token.role = dbUser.role
-            token.id = dbUser.id
-            console.log('JWT token updated with role:', dbUser.role)
-          }
-        } catch (error) {
-          console.error('Error in jwt callback:', error)
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+          token.name = dbUser.name;
+          token.email = dbUser.email;
+          token.picture = dbUser.image || extendedProfile?.picture 
         }
       }
-      return token
+
+      return token;
     },
+
     async session({ session, token }) {
-      // Add role and id to session from JWT token
-      if (token && session.user) {
-        session.user.role = token.role
-        session.user.id = token.id
-        console.log('Session updated with role:', token.role)
+      if (session.user) {
+        session.user.name = token.name!;
+        session.user.email = token.email!;
+        session.user.image = token.picture;
+        session.user.role = token.role!;
       }
-      
-      return session
+
+      return session;
     },
+  },
+  session: {
+    strategy: "jwt",
   },
   pages: {
-    signIn: '/login',
-    error: '/login',
+    error: "/error"
   },
-  debug: process.env.NODE_ENV === 'development',
-})
-
-export { handler as GET, handler as POST }
+};
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

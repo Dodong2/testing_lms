@@ -1,49 +1,38 @@
 'use client'
-
-import { useAuth } from '@/hooks/useAuth'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import Image from 'next/image'
+import Image from "next/image"
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function HomePage() {
-  const { user, signOut, isLoading } = useAuth()
-  const router = useRouter()
+  const { data: session, status } = useSession()
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-    }
-  }, [user, isLoading, router])
+  if (status === "loading") return <div>Loading...</div>
 
-  if (isLoading) {
-    return <div>Loading...</div>
+  if (!session) {
+    return (
+      <div>
+        <h1>Welcome to the LMs</h1>
+        <button onClick={() => signIn("google", {prompt: "consent select_account"})}>Continue with Google</button>
+      </div>
+    )
   }
 
-  if (!user) {
-    return null
-  }
+  const { name, email, role } = session.user
 
   return (
     <div>
-      <h1>Welcome to LMS</h1>
-      <div>
-        <h2>Profile Information</h2>
-        <p><strong>Name:</strong> {user.name}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Role:</strong> {user.role}</p>
-        {user.image && (
-          <Image
-            src={user.image} 
-            alt="Profile" 
-            width={50} 
-            height={50}
-            style={{ borderRadius: '50%' }}
-          />
-        )}
-      </div>
-      <button onClick={() => signOut()}>
-        Sign Out
-      </button>
+      <h1>Welcome, {name}</h1>
+      <p>Email: {email}</p>
+      <p>Role: {role}</p>
+
+    {session.user.image && (
+      <Image src={session.user.image} alt="Profile" width={100} height={100} />
+      )}
+
+      {session.user.role === 'BENEFICIARY' && (
+        <button>for BENEFICIARY</button>
+      )}
+
+      <button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
     </div>
   )
 }
