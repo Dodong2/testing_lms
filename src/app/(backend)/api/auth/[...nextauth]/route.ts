@@ -1,8 +1,8 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/db";
-
+import { AuthOptions, SessionStrategy } from "next-auth";
 
 type ExtendedProfile = {
   picture?: string;
@@ -86,7 +86,7 @@ export const authOptions: AuthOptions = {
     },
   },
   session: {
-    strategy: "jwt",
+    strategy: "jwt" satisfies SessionStrategy,
   },
   pages: {
     error: "/error"
