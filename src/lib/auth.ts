@@ -2,12 +2,8 @@
 import type { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "./db";
- 
+import { prisma } from "@/lib/db";
 
-type ExtendedProfile = {
-  picture?: string;
-} & Record<string, unknown>;
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -57,8 +53,7 @@ export const authOptions: AuthOptions = {
 
       return true;
     },
-    async jwt({ token, user, profile }) {
-      const extendedProfile = profile as ExtendedProfile;
+    async jwt({ token, user}) {
       if (user) {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email! },
@@ -69,7 +64,7 @@ export const authOptions: AuthOptions = {
           token.role = dbUser.role;
           token.name = dbUser.name;
           token.email = dbUser.email;
-          token.picture = dbUser.image || extendedProfile?.picture 
+          
         }
       }
 

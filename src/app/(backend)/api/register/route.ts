@@ -10,6 +10,7 @@ const registerSchema = z.object({
 })
 
 export async function POST(req: Request) {
+    try {
     const body = await req.json()
     const parsed = registerSchema.safeParse(body)
 
@@ -30,4 +31,11 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json({ success: true, user: newUser })
+} catch(error) {
+    console.error(error)
+    return NextResponse.json(
+        { error: "cant create acc something error" },
+        { status: 500 }
+    )
+}
 }

@@ -19,7 +19,6 @@ model User {
   id       String    @id @default(cuid())
   name     String
   email    String    @unique
-  image    String?
   role     Role      @default(BENEFICIARY)
   accounts Account[]
   sessions Session[]
