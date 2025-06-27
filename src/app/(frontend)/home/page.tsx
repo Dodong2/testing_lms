@@ -32,6 +32,14 @@ export default function HomePage() {
         <button>for BENEFICIARY</button>
       )}
 
+      {session.user.role === 'ADMIN' && (
+        <button>for ADMIN</button>
+      )}
+
+      {session.user.role === 'INSTRUCTOR' && (
+        <button>for INSTRUCTOR</button>
+      )}
+
       <button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
     </div>
   )
