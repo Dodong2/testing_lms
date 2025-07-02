@@ -8,6 +8,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+//for sample task
 model Task {
   id        String   @id @default(cuid())
   title     String
@@ -15,6 +16,7 @@ model Task {
   updatedAt DateTime @updatedAt
 }
 
+//for users
 model User {
   id       String    @id @default(cuid())
   name     String
@@ -23,8 +25,13 @@ model User {
   image    String?
   accounts Account[]
   sessions Session[]
+
+  Program Program[]
+
+  ProgramMember ProgramMember[]
 }
 
+//account for google auth
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -43,16 +50,39 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+//roles
 enum Role {
   ADMIN
   INSTRUCTOR
   BENEFICIARY
 }
 
+//for sessions
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Program {
+  id          String          @id @default(cuid())
+  title       String
+  subtitle    String
+  explanation String
+  createdAt   DateTime        @default(now())
+  adminId     String
+  admin       User            @relation(fields: [adminId], references: [id])
+  members     ProgramMember[]
+}
+
+model ProgramMember {
+  id        String  @id @default(cuid())
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  programId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([programId, userId])
 }
