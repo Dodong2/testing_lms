@@ -2,6 +2,7 @@
 import Image from "next/image"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 type Program = {
   id: string
@@ -13,7 +14,7 @@ type Program = {
 export default function HomePage() {
   const { data: session, status } = useSession()
   const [programs, setPrograms] = useState<Program[]>([])
-  const [ selectedProgram, setSelectedProgram ] = useState<Program | null>(null)
+  // const [ selectedProgram, setSelectedProgram ] = useState<Program | null>(null)
   const [ formData, setFormData ] = useState({
     title: '',
     subtitle: '',
@@ -44,11 +45,6 @@ export default function HomePage() {
   }
 }
 
-
-
-
-
-
   if (status === "loading") return <div>Loading...</div>
 
   if (!session) {
@@ -73,6 +69,8 @@ export default function HomePage() {
       <Image src={session.user.image} alt="Profile" width={100} height={100} />
       )}
 
+      <button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
+
       {/* for beneficiary */}
       {session.user.role === 'BENEFICIARY' && (
         <button>for BENEFICIARY</button>
@@ -92,10 +90,11 @@ export default function HomePage() {
       <h2>Your Programs</h2>
       {programs.map(program => (
         <div key={program.id}>
-          <h3>{program.title}</h3>
+          <Link href={`/program/${program.id}`}>
+            <h3 className="cursor text-blue">{program.title}</h3>
+          </Link>
           
         {session.user.role === 'ADMIN' && (<>
-          <button onClick={() => setSelectedProgram(program)}>Enter</button>
           <input placeholder="Add emails to program" onKeyDown={async e => {
             if (e.key === 'Enter') {
               const emails = (e.currentTarget as HTMLInputElement).value
@@ -114,21 +113,13 @@ export default function HomePage() {
         </div>
       ))}
 
-      {selectedProgram && (
-        <div>
-          <h2>{selectedProgram.title}</h2>
-          <p>{selectedProgram.subtitle}</p>
-          <p>{selectedProgram.explanation}</p>
-          <p>Welcome, {name}!</p>
-        </div>
-      )}
 
       {/* for Instructors */}
       {session.user.role === 'INSTRUCTOR' && (
         <button>for INSTRUCTOR</button>
       )}
 
-      <button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
+      
     </div>
   )
 }
