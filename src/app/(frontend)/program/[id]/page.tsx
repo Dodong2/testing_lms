@@ -23,9 +23,9 @@ export default async function ProgramPage({ params }: Props) {
 
     return (
         <div>
-            <h1>{program.title}</h1>
-            <p>{program.subtitle}</p>
-            <p>{program.explanation}</p>
+            <h1>title: {program.title}</h1>
+            <p>subtitle: {program.subtitle}</p>
+            <p>explanation: {program.explanation}</p>
             <p>Welcome, {session.user.name}!</p>
         </div>
     )

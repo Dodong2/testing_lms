@@ -2,11 +2,18 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 // services
 import { getPrograms, createProgram, addProgramMembers } from "@/services/programServices"
 
+type Program = {
+  id: string
+  title: string
+  subtitle: string
+  explanation: string
+}
+
 export const useProgram = () => {
 
     // pang get ng program
     const usePrograms = () => {
-        return useQuery({
+        return useQuery<{ programs: Program[] }>({
             queryKey: ["programs"],
             queryFn: getPrograms
         })
