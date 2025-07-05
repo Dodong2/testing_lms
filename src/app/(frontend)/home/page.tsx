@@ -12,7 +12,7 @@ export default function HomePage() {
   const { usePrograms } = useProgram()
   
 
-  const { data: programData, isLoading} = usePrograms()
+  const { data: programData, isLoading } = usePrograms()
 
   if (status === "loading") return <div>Loading...</div>
 
