@@ -1,29 +1,31 @@
 'use client'
 import Image from "next/image"
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import CreateProgramForm from "@/components/admin/CreateProgramForm"
 import AddProgramMembers from "@/components/admin/AddProgramMembers"
 import { useProgram } from "@/hooks/program/useProgram"
 import Link from "next/link"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 
-export default function HomePage() {
+export default function UserHomePage() {
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
+  const router = useRouter()
   
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth")
+    }
+  }, [status, router])
 
   const { data: programData, isLoading } = usePrograms()
 
   if (status === "loading") return <div>Loading...</div>
+  if(!session) return null // Prevent render flicker
 
-  if (!session) {
-    return (
-      <div>
-        <h1>Welcome to the LMs</h1>
-        <button onClick={() => signIn("google", {prompt: "consent select_account"})}>Continue with Google</button>
-      </div>
-    )
-  }
 
   const { name, email, role } = session.user
 
