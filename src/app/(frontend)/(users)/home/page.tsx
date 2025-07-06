@@ -35,9 +35,9 @@ export default function UserHomePage() {
   return (
     <AuthGuard>
     <div>
-      {/* <h1>Welcome, {name}</h1>
+      <h1>Welcome, {name}</h1>
       <p>Email: {email}</p>
-      <p>Role: {role}</p> */}
+      <p>Role: {role}</p>
 
     {session.user.image && (
       <Image src={session.user.image} alt="Profile" width={100} height={100} />
