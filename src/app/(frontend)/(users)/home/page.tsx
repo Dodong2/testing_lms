@@ -1,8 +1,10 @@
 'use client'
 import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
+import AuthGuard from "@/components/AuthGuard"
 import CreateProgramForm from "@/components/admin/CreateProgramForm"
 import AddProgramMembers from "@/components/admin/AddProgramMembers"
+// import Loading from "@/components/Loading"
 import { useProgram } from "@/hooks/program/useProgram"
 import Link from "next/link"
 import { useEffect } from "react"
@@ -31,10 +33,11 @@ export default function UserHomePage() {
 
   /* main page */
   return (
+    <AuthGuard>
     <div>
-      <h1>Welcome, {name}</h1>
+      {/* <h1>Welcome, {name}</h1>
       <p>Email: {email}</p>
-      <p>Role: {role}</p>
+      <p>Role: {role}</p> */}
 
     {session.user.image && (
       <Image src={session.user.image} alt="Profile" width={100} height={100} />
@@ -42,19 +45,19 @@ export default function UserHomePage() {
 
       <button onClick={() => signOut({ callbackUrl: "/" })}>Sign Out</button>
 
-      {/* for beneficiary */}
-      {session.user.role === 'BENEFICIARY' && (
-        <button>for BENEFICIARY</button>
-      )}
-
       {session.user.role === 'ADMIN' && (
         <>
           <CreateProgramForm/>
         </>
       )}
-
+        
       <h2>Your Programs</h2>
-      {programData?.programs?.map(program => (
+       {/* Dashboard content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        programData?.programs?.map(program => (
         <div key={program.id}>
           <Link href={`/program/${program.id}`}>
             <h3 className="cursor text-blue">{program.title}</h3>
@@ -65,14 +68,12 @@ export default function UserHomePage() {
         </>)}
           
         </div>
-      ))}
-
-      {/* for Instructors */}
-      {session.user.role === 'INSTRUCTOR' && (
-        <button>for INSTRUCTOR</button>
+      ))
       )}
+      </div>
 
       
     </div>
+    </AuthGuard>
   )
 }
