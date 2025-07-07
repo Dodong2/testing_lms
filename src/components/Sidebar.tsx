@@ -5,6 +5,8 @@ import { useState, ReactNode } from "react";
 import Link from "next/link";
 /* icons */
 import { FiMenu } from "react-icons/fi";
+/* for session */
+import { useSession } from "next-auth/react";
 
 // -------- TYPES / INTERFACES --------
 
@@ -51,6 +53,9 @@ const ProgramItem = ({ text }: { text: string }) => (
 // dito babaguhin design ng sidebar
 const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen); // State para sa open/close ng sidebar (especially sa mobile)
+  const { data: session } = useSession()
+  if(!session) return null
+
 
   return (
     <>
@@ -92,7 +97,8 @@ const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) =>
 
           {/* Programs section - optional */}
           {/* dito na display yung text, programs, galing sa ibang page */}
-          {programs.length > 0 && (
+          {(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR') && (<>
+            {programs.length > 0 && (
             <>
               <div className="mt-4 mb-2 px-4 text-xs font-semibold text-gray-500">
                 PROGRAMS
@@ -102,6 +108,8 @@ const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) =>
               ))}
             </>
           )}
+          </>)}
+          
         </nav>
       </aside>
     </>
