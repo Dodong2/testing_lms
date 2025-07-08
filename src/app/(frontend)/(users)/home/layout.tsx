@@ -34,7 +34,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     ...(session.user.role === 'ADMIN' ? [
     { href: "/home/admin", icon: <FaChartBar />, text: "Dashboard" },
     { href: "/home/admin/usermanage", icon: <FaUsers />, text: "User management" },
-    { href: "/admin/programs", icon: <FaUsers />, text: "Program management" },
+    { href: "/home/admin/programManage", icon: <FaUsers />, text: "Program management" },
     { href: "/admin/activities", icon: <FaClipboardList />, text: "Activity logs" },
     { href: "/admin/notifications", icon: <IoNotifications />, text: "Notification" },
     { href: "/admin", icon: <MdOutlineFeedback />, text: "Feedback Management",},

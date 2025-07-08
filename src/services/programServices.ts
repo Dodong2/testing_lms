@@ -37,7 +37,13 @@ export const addProgramMembers = async(programId: string, emails: string[]) => {
     })
     if(!res.ok) {
         throw new Error('Failed to add members')
-        return res.json()
     }
+    return res.json()
 }
 
+//pang counts kung ilang beneficiary at instructors
+export const getAllProgramMemberCounts = async () => {
+  const res = await fetch(`/api/program/member-counts`)
+  if (!res.ok) throw new Error("Failed to fetch member counts")
+  return res.json()
+}

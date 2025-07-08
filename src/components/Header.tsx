@@ -1,6 +1,6 @@
 "use client"
 import { usePathname } from "next/navigation"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { useState } from "react"
 import Image from "next/image"
 
@@ -48,6 +48,7 @@ const Header = () => {
               <p>{name}</p>
               <p>{email}</p>
               <p>{role}</p>
+              <button className="bg-blue-50 p-1 cursor-pointer active:scale-95 transition-transform duration-75" onClick={() => signOut({ callbackUrl: "/" })} >Sign Out</button>
               </div>
             )}
       </header>

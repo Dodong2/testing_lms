@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 // services
-import { getPrograms, createProgram, addProgramMembers } from "@/services/programServices"
+import { getPrograms, createProgram, addProgramMembers, getAllProgramMemberCounts } from "@/services/programServices"
 
 type Program = {
   id: string
@@ -15,7 +15,7 @@ export const useProgram = () => {
     const usePrograms = () => {
         return useQuery<{ programs: Program[] }>({
             queryKey: ["programs"],
-            queryFn: getPrograms
+            queryFn: getPrograms,
         })
     }
 
@@ -41,6 +41,14 @@ export const useProgram = () => {
             }
         })
     }
+
+    //pang counts kung ilang beneficiary at instructors
+    const useAllProgramCounts = () => {
+        return useQuery({
+            queryKey: ['all-program-member-counts'],
+            queryFn: getAllProgramMemberCounts
+        })
+    }
     
-    return { usePrograms, useCreateProgram, useAddProgramMembers  }
+    return { usePrograms, useCreateProgram, useAddProgramMembers, useAllProgramCounts }
 }
