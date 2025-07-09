@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+/* get kung ilan ang kasali sa bawat program for beneficiary & instructors */
 export async function GET() {
     const session = await getServerSession(authOptions)
     if(!session || session.user.role !== 'ADMIN') {

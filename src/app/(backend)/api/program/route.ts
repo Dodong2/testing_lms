@@ -1,11 +1,12 @@
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 
-
-//Get yung mga programs
+//Get yung mga programs kahit sino sa roles makikita nitong mga programs.
 export async function GET() {
+try {
+
     const session = await getServerSession(authOptions)
     if(!session) return NextResponse.json({ programs:[] })
 
@@ -21,10 +22,16 @@ export async function GET() {
     })
 
     return NextResponse.json({ programs })
+    
+} catch(error) {
+        console.error('failed to get programs', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
 }
 
-// gagawa ng programs
+// gagawa ng programs admin lang ang makakagawa
 export async function POST(req: Request) {
+try{
     const session = await getServerSession(authOptions)
     if(!session || session.user.role !== 'ADMIN') 
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -61,4 +68,9 @@ export async function POST(req: Request) {
             skipDuplicates: true
         })
         return NextResponse.json({ success: true, program })
+
+    } catch(error) {
+        console.error('Failed to created Program', error)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
 }

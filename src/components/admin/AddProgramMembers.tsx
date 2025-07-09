@@ -4,13 +4,15 @@ import { AddMembers } from "@/hooks/program/AddMembers"
 
 interface AddProgramMembersProps {
   programId: string
+  title: string
 }
 
-const AddProgramMembers = ({ programId }: AddProgramMembersProps) => {
+const AddProgramMembers = ({ programId, title }: AddProgramMembersProps) => {
   const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit } = AddMembers({ programId })
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>added members on {title}</h1>
       <input type="email" placeholder="Add emails (comma separated)" value={emailInput} onChange={(e) => setEmailInput(e.target.value)}/>
       <button type="button" onClick={handleAddToList}>Add Learners</button>
 

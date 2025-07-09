@@ -1,8 +1,12 @@
 'use client'
+import { useState } from "react";
 import { useProgram } from "@/hooks/program/useProgram"
 import { useSession } from "next-auth/react"
 /* icons */
 import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
+/* components */
+import AddProgramMembers from "@/components/admin/AddProgramMembers";
+import AddMemberModal from "@/components/modals/AddMemberModal";
 
 type ProgramCounts = {
   programId: string
@@ -11,6 +15,7 @@ type ProgramCounts = {
 }
 
 export default function ProgramManage() {
+  const [ isModalOpen, setIsModalOpen ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { data: countsData } = useAllProgramCounts()
@@ -40,7 +45,8 @@ export default function ProgramManage() {
                 <h3 className="text-xl font-semibold text-gray-900">{program.title}</h3>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
+                onClick={() => setIsModalOpen(true)}>
                 <FiPlus className="inline-block mr-2" />
                 Add Learners
               </button>
@@ -54,10 +60,16 @@ export default function ProgramManage() {
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
+            
+            {/* Modal for Admin Add members to programs */}
+            {session.user.role === 'ADMIN' && (<>
+              {isModalOpen && (
+                <AddMemberModal onClose={() => setIsModalOpen(false)}>
+                  <AddProgramMembers programId={program.id} title={program.title}/>
+                </AddMemberModal>
+              )}
+              </>)}
 
-              {/* {session.user.role === 'ADMIN' && (<>
-          <AddProgramMembers programId={program.id}/>
-        </>)} */}
                 </div>
             </div>
           )
