@@ -1,12 +1,15 @@
 'use client'
 import { useState } from "react";
+/* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
+import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useSession } from "next-auth/react"
 /* icons */
 import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
 import AddProgramMembers from "@/components/admin/AddProgramMembers";
 import AddMemberModal from "@/components/modals/AddMemberModal";
+import CreateProgramForm from "@/components/admin/CreateProgramForm";
 
 type ProgramCounts = {
   programId: string
@@ -16,8 +19,10 @@ type ProgramCounts = {
 
 export default function ProgramManage() {
   const [ isModalOpen, setIsModalOpen ] = useState(false)
+  const [ createModal, setCreateModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
+  const { handleDelete } = DeletePrograms()
   const { data: countsData } = useAllProgramCounts()
 
   const getCounts = (programId: string) => 
@@ -27,6 +32,7 @@ export default function ProgramManage() {
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
+  
 
   return (
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
@@ -50,13 +56,20 @@ export default function ProgramManage() {
                 <FiPlus className="inline-block mr-2" />
                 Add Learners
               </button>
+              
+              {/* test create program can be deleted */}
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
+                onClick={() => setCreateModal(true)}>
+                <FiPlus className="inline-block mr-2" />
+                Add Program
+              </button>
               </div>
 
               <div className="space-x-2">
               <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
                 <FiEdit className="h-5 w-5" />
               </button>
-              <button className="text-red-500 hover:text-red-700 focus:outline-none">
+              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => handleDelete(program.id)}>
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
@@ -69,6 +82,12 @@ export default function ProgramManage() {
                 </AddMemberModal>
               )}
               </>)}
+
+              {createModal && (
+                <AddMemberModal onClose={() => setCreateModal(false)}>
+                  <CreateProgramForm/>
+                </AddMemberModal>
+              )}
 
                 </div>
             </div>

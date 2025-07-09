@@ -9,32 +9,6 @@ type Context = {
   };
 };
 
-// pang add ng members sa existing program for admin only
-export async function POST(req: NextRequest, context: Context) {
-  const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== "ADMIN") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const body = await req.json();
-  const { emails } = body;
-  const programId = context.params.id;
-
-  const users = await prisma.user.findMany({
-    where: { email: { in: emails } },
-  });
-
-  await prisma.programMember.createMany({
-    data: users.map((user) => ({
-      programId,
-      userId: user.id,
-    })),
-    skipDuplicates: true,
-  });
-
-  return NextResponse.json({ success: true });
-}
-
 // delete ang programs admin lang ang makaka-delete
 export async function DELETE(req: NextRequest, context: Context) {
 try {
@@ -44,8 +18,11 @@ try {
     if(!session || session.user.role !== 'ADMIN')
         return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
 
+    // Next15 Dynamic APIs are Asynchronous (required to do this)
+    const {id} = await context.params
+
     // 2. Get program ID from URL
-    const programId = context.params.id
+    const programId = id
 
     // 3. Find the program
     const programs = await prisma.program.findUnique({

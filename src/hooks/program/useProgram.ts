@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 // services
-import { getPrograms, createProgram, addProgramMembers, getAllProgramMemberCounts } from "@/services/programServices"
+import { getPrograms, createProgram, addProgramMembers, getAllProgramMemberCounts, deletePrograms } from "@/services/programServices"
 
 type Program = {
   id: string
@@ -49,6 +49,17 @@ export const useProgram = () => {
             queryFn: getAllProgramMemberCounts
         })
     }
+
+    // pang-delete ng programs
+    const useDeletePrograms = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: deletePrograms,
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['programs'] })
+            }
+        })
+    }
     
-    return { usePrograms, useCreateProgram, useAddProgramMembers, useAllProgramCounts }
+    return { usePrograms, useCreateProgram, useAddProgramMembers, useAllProgramCounts, useDeletePrograms }
 }
