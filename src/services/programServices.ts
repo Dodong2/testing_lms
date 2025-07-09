@@ -15,6 +15,7 @@ interface ProgramData {
     explanation: string
     emails: string[]
 }
+
 // para pang create ng Programs (for admin)
 export const createProgram = async(data: ProgramData) => {
     const res = await fetch('/api/program', {
@@ -57,6 +58,30 @@ export const deletePrograms = async (programId: string) => {
 
     if(!res.ok) {
         throw new Error('Failed to delete program')
+    }
+
+    return res.json()
+}
+
+// types ng update program
+interface UpdateProgramData {
+    programId: string
+    data: {
+        title: string
+        subtitle: string
+        explanation: string
+    }
+}
+
+// pang-update ng program (for admin)
+export const updateProgram = async ({programId, data}: UpdateProgramData) => {
+    const res = await fetch(`/api/program/${programId}/updateprograms`, {
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    if(!res.ok) {
+        throw new Error('Failed to update program')
     }
 
     return res.json()
