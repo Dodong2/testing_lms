@@ -10,6 +10,7 @@ import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 import AddProgramMembers from "@/components/admin/AddProgramMembers";
 import AddMemberModal from "@/components/modals/AddMemberModal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
+import UpdateProgamsForm from "@/components/admin/UpdateProgamsForm";
 
 type ProgramCounts = {
   programId: string
@@ -20,6 +21,7 @@ type ProgramCounts = {
 export default function ProgramManage() {
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ createModal, setCreateModal ] = useState(false)
+  const [ updateModal, setUpdateModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { handleDelete } = DeletePrograms()
@@ -37,6 +39,23 @@ export default function ProgramManage() {
   return (
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search bar */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="relative flex-grow">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <FiSearch className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search class..."
+            className="w-full pl-10 px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+          />
+        </div>
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4"
+        onClick={() => setCreateModal(true)}>
+          <FiPlus className="inline-block mr-2" />
+          Add New Program
+        </button>
+      </div>
 
       {/* Program Card 1 */}
       {isLoading ? (
@@ -56,17 +75,10 @@ export default function ProgramManage() {
                 <FiPlus className="inline-block mr-2" />
                 Add Learners
               </button>
-              
-              {/* test create program can be deleted */}
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
-                onClick={() => setCreateModal(true)}>
-                <FiPlus className="inline-block mr-2" />
-                Add Program
-              </button>
               </div>
 
               <div className="space-x-2">
-              <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
+              <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => setUpdateModal(true)}>
                 <FiEdit className="h-5 w-5" />
               </button>
               <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => handleDelete(program.id)}>
@@ -83,11 +95,27 @@ export default function ProgramManage() {
               )}
               </>)}
 
-              {createModal && (
+              {/* Modal for Admin create programs */}
+              {session.user.role === 'ADMIN' && (<>
+                {createModal && (
                 <AddMemberModal onClose={() => setCreateModal(false)}>
                   <CreateProgramForm/>
                 </AddMemberModal>
               )}
+              </>)}
+              
+              {/* Modal for Admin update existing programs */}
+              {session.user.role === 'ADMIN' && (<>
+                {updateModal && (
+                <AddMemberModal onClose={() => setUpdateModal(false)}>
+                  <UpdateProgamsForm programId={program.id} initialData={{
+                    title: program.title,
+                    subtitle: program.subtitle || '',
+                    explanation: program.explanation || ''
+                  }} />
+                </AddMemberModal>
+                )} 
+              </>)}
 
                 </div>
             </div>
