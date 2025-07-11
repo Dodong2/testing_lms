@@ -11,6 +11,7 @@ import AddProgramMembers from "@/components/admin/AddProgramMembers";
 import AddMemberModal from "@/components/modals/AddMemberModal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
 import UpdateProgamsForm from "@/components/admin/UpdateProgamsForm";
+import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
 
 type ProgramCounts = {
   programId: string
@@ -22,9 +23,10 @@ export default function ProgramManage() {
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ createModal, setCreateModal ] = useState(false)
   const [ updateModal, setUpdateModal ] = useState(false)
+  const [ deleteModal, setDeleteModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
-  const { handleDelete } = DeletePrograms()
+  const { confirmDelete, handleConfirm, handleCancel } = DeletePrograms()
   const { data: countsData } = useAllProgramCounts()
 
   const getCounts = (programId: string) => 
@@ -81,7 +83,7 @@ export default function ProgramManage() {
               <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => setUpdateModal(true)}>
                 <FiEdit className="h-5 w-5" />
               </button>
-              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => handleDelete(program.id)}>
+              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => {setDeleteModal(true); confirmDelete(program.id)}}>
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
@@ -115,6 +117,15 @@ export default function ProgramManage() {
                   }} />
                 </AddMemberModal>
                 )} 
+              </>)}
+
+              {/* Modal for Admin Delete Existing program */}
+              {session.user.role === 'ADMIN' && (<>
+                {deleteModal && (
+                  <AddMemberModal onClose={() => setDeleteModal(false)}>
+                    <DeleteProgramsForm handleCancel={handleCancel} handleConfirm={handleConfirm}/>
+                  </AddMemberModal>
+                )}
               </>)}
 
                 </div>

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from "react-hot-toast"
 // services
 import { getPrograms, createProgram, addProgramMembers, getAllProgramMemberCounts, deletePrograms, updateProgram } from "@/services/programServices"
 
@@ -38,6 +39,10 @@ export const useProgram = () => {
             addProgramMembers(programId, emails),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["programs"] })
+                toast.success("Member successfuly added to program")
+            },
+            onError: () => {
+                toast.error("Failed to add member")
             }
         })
     }
@@ -57,6 +62,10 @@ export const useProgram = () => {
             mutationFn: deletePrograms,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['programs'] })
+                toast.success("Program successfully deleted")
+            },
+            onError: () => {
+                toast.error("Failed to delete program")
             }
         })
     }
