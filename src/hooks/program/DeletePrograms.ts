@@ -4,7 +4,9 @@ import { useProgram } from "./useProgram"
 
 export const DeletePrograms = () => {
  const { useDeletePrograms } = useProgram()
- const deleteProgram = useDeletePrograms()
+ const { mutate: deleteProgram } = useDeletePrograms(() => {
+   setProgramToDelete(null)
+ })
  const [programToDelete, setProgramToDelete] = useState<string | null>(null)
 
  
@@ -15,8 +17,7 @@ export const DeletePrograms = () => {
 
  const handleConfirm = () => {
     if(programToDelete) {
-        deleteProgram.mutate(programToDelete)
-        setProgramToDelete(null)
+        deleteProgram(programToDelete)
     }
  }
 

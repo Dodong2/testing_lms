@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react"
 import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
 import AddProgramMembers from "@/components/admin/AddProgramMembers";
-import AddMemberModal from "@/components/modals/AddMemberModal";
+import Modal from "@/components/modals/Modal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
 import UpdateProgamsForm from "@/components/admin/UpdateProgamsForm";
 import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
@@ -91,40 +91,40 @@ export default function ProgramManage() {
             {/* Modal for Admin Add members to programs */}
             {session.user.role === 'ADMIN' && (<>
               {isModalOpen && (
-                <AddMemberModal onClose={() => setIsModalOpen(false)}>
+                <Modal onClose={() => setIsModalOpen(false)}>
                   <AddProgramMembers programId={program.id} title={program.title}/>
-                </AddMemberModal>
+                </Modal>
               )}
               </>)}
 
               {/* Modal for Admin create programs */}
               {session.user.role === 'ADMIN' && (<>
                 {createModal && (
-                <AddMemberModal onClose={() => setCreateModal(false)}>
+                <Modal onClose={() => setCreateModal(false)}>
                   <CreateProgramForm/>
-                </AddMemberModal>
+                </Modal>
               )}
               </>)}
               
               {/* Modal for Admin update existing programs */}
               {session.user.role === 'ADMIN' && (<>
                 {updateModal && (
-                <AddMemberModal onClose={() => setUpdateModal(false)}>
+                <Modal onClose={() => setUpdateModal(false)}>
                   <UpdateProgamsForm programId={program.id} initialData={{
                     title: program.title,
                     subtitle: program.subtitle || '',
                     explanation: program.explanation || ''
                   }} />
-                </AddMemberModal>
+                </Modal>
                 )} 
               </>)}
 
               {/* Modal for Admin Delete Existing program */}
               {session.user.role === 'ADMIN' && (<>
                 {deleteModal && (
-                  <AddMemberModal onClose={() => setDeleteModal(false)}>
-                    <DeleteProgramsForm handleCancel={handleCancel} handleConfirm={handleConfirm}/>
-                  </AddMemberModal>
+                  <Modal onClose={() => {setDeleteModal(false); handleCancel()}}>
+                    <DeleteProgramsForm handleCancel={() => { setDeleteModal(false); handleCancel()}} handleConfirm={handleConfirm} title={program.title}/>
+                  </Modal>
                 )}
               </>)}
 

@@ -39,7 +39,7 @@ export const useProgram = () => {
             addProgramMembers(programId, emails),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["programs"] })
-                toast.success("Member successfuly added to program")
+                toast.success("Member successfully added to program")
             },
             onError: () => {
                 toast.error("Failed to add member")
@@ -56,13 +56,14 @@ export const useProgram = () => {
     }
 
     // pang-delete ng programs
-    const useDeletePrograms = () => {
+    const useDeletePrograms = (onSuccessCallback:() => void) => {
         const queryClient = useQueryClient()
         return useMutation({
             mutationFn: deletePrograms,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['programs'] })
                 toast.success("Program successfully deleted")
+                if(onSuccessCallback) onSuccessCallback()
             },
             onError: () => {
                 toast.error("Failed to delete program")
