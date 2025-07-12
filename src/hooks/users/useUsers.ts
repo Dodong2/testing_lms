@@ -1,5 +1,5 @@
 'use client'
-import { getUsersLists } from "@/services/usersServices"
+import { getUsersLists, updateUsers } from "@/services/usersServices"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { usersLists } from "@/types/usersManagetypes"
 
@@ -13,12 +13,23 @@ export const useUsers = () => {
     })
     }
 
+    //pang update ng lahat ng User
+    const useUpdateUsers = () => {
+        const queryClient = useQueryClient()
+        return useMutation({ 
+            mutationFn: updateUsers,
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['users'] })
+            }
+         })
+    }
+
 
     
 
 
 
 
-    return { useUsersLists }
+    return { useUsersLists, useUpdateUsers }
 }
 
