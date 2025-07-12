@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+//pang get lahat ng users for admin only
 export async function GET() {
     try {
     const session = await getServerSession(authOptions)
