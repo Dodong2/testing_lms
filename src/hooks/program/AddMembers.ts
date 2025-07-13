@@ -4,13 +4,14 @@ import { useState } from "react"
 
 interface addProgramMembersProps {
     programId: string
+    onSuccess: () => void
 }
 
-export const AddMembers = ({ programId }: addProgramMembersProps) => {
+export const AddMembers = ({ programId, onSuccess }: addProgramMembersProps) => {
     const [ emailInput, setEmailInput ] = useState('')
     const [ emailLists, setEmailLists ] = useState<string[]>([])
     const { useAddProgramMembers } = useProgram()
-    const addMembers = useAddProgramMembers()
+    const {mutate: addMembers, isPending} = useAddProgramMembers()
 
     const handleAddToList = () => {
         const emails = emailInput
@@ -24,16 +25,17 @@ export const AddMembers = ({ programId }: addProgramMembersProps) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if(!emailLists.length) return
-        addMembers.mutate({ programId, emails: emailLists }, {
+        addMembers({ programId, emails: emailLists }, {
             onSuccess: () => {
                 alert('Emails added to program')
                 setEmailLists([])
+                onSuccess()
             }
         })
     }
     
 
- return { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit }
+ return { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending }
 }
 
 

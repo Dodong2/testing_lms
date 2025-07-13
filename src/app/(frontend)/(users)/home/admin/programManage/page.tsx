@@ -5,14 +5,16 @@ import { useSession } from "next-auth/react"
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useProgramModal } from "@/hooks/program/useProgramModal";
+import { useAddMemberModal } from "@/hooks/program/useAddMemberModal";
 /* icons */
 import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
-import AddProgramMembers from "@/components/admin/AddProgramMembers";
 import Modal from "@/components/modals/Modal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
+import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
+
 /* types */
 
 type ProgramCounts = {
@@ -29,6 +31,7 @@ export default function ProgramManage() {
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { confirmDelete, handleConfirm, handleCancel } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
+  const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
   const { data: countsData } = useAllProgramCounts()
 
   const getCounts = (programId: string) => 
@@ -75,7 +78,7 @@ export default function ProgramManage() {
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
-                onClick={() => setIsModalOpen(true)}>
+                onClick={() => openAddModal(program)}>
                 <FiPlus className="inline-block mr-2" />
                 Add Learners
               </button>
@@ -90,14 +93,7 @@ export default function ProgramManage() {
               </button>
             </div>
             
-            {/* Modal for Admin Add members to programs */}
-            {session.user.role === 'ADMIN' && (<>
-              {isModalOpen && (
-                <Modal onClose={() => setIsModalOpen(false)}>
-                  <AddProgramMembers programId={program.id} title={program.title}/>
-                </Modal>
-              )}
-              </>)}
+            
 
               {/* Modal for Admin create programs */}
               {session.user.role === 'ADMIN' && (<>
@@ -134,6 +130,17 @@ export default function ProgramManage() {
                     explanation: selectedProgram.explanation || ''
                   }} onSuccess={closeModalUpdate} onClose={closeModalUpdate} />
                 )} 
+              </>)}
+
+
+              {/* Modal for Admin Add members to programs */}
+            {session.user.role === 'ADMIN' && (<>
+              {addModal && selectedAdd && (
+                  <AddMemberModal programId={selectedAdd.programId}
+                    title={selectedAdd.title}
+                    onSuccess={closeAddModal}
+                    onClose={closeAddModal}/>
+              )}
               </>)}
     </div>
   )

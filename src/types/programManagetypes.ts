@@ -16,3 +16,9 @@ export interface updateProgramProps {
     }
     onSuccess?: () => void
 }
+
+//types for 
+export interface addMembersProps {
+    programId: string
+    title: string
+}
