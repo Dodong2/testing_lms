@@ -8,22 +8,26 @@ interface updateProgramProps {
         explanation: string
     }
     onSuccess?: () => void
+    onClose: () => void
 }
 
-const UpdateProgamsForm = ({ programId, initialData, onSuccess }: updateProgramProps) => {
+const UpdateProgamsModal = ({ programId, initialData, onClose, onSuccess }: updateProgramProps) => {
     const { formData, handleChange, handleSubmit, isPending } = UpdatePrograms({ programId, initialData, onSuccess })
 
   return (
-    <div>
+    <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
         <form onSubmit={handleSubmit} className="space-y-4">
             <input name="title" value={formData.title} onChange={handleChange} className="border p-2 w-full" required />
             <input name="subtitle" value={formData.subtitle} onChange={handleChange} className="border p-2 w-full" required />
             <label>Explanation</label>
             <textarea name="explanation" value={formData.explanation} onChange={handleChange} className="border p-2 w-full"/>
+            <button onClick={onClose}>cancel</button>
             <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" disabled={isPending}>{isPending ? 'Updating...' : 'Update Program'}</button>
         </form>
+        </div>
     </div>
   )
 }
 
-export default UpdateProgamsForm
+export default UpdateProgamsModal

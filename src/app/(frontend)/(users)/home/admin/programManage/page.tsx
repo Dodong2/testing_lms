@@ -1,17 +1,19 @@
 'use client'
 import { useState } from "react";
+import { useSession } from "next-auth/react"
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
-import { useSession } from "next-auth/react"
+import { useProgramModal } from "@/hooks/program/useProgramModal";
 /* icons */
 import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
 import AddProgramMembers from "@/components/admin/AddProgramMembers";
 import Modal from "@/components/modals/Modal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
-import UpdateProgamsForm from "@/components/admin/UpdateProgamsForm";
+import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
+/* types */
 
 type ProgramCounts = {
   programId: string
@@ -22,11 +24,11 @@ type ProgramCounts = {
 export default function ProgramManage() {
   const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ createModal, setCreateModal ] = useState(false)
-  const [ updateModal, setUpdateModal ] = useState(false)
   const [ deleteModal, setDeleteModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { confirmDelete, handleConfirm, handleCancel } = DeletePrograms()
+  const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { data: countsData } = useAllProgramCounts()
 
   const getCounts = (programId: string) => 
@@ -80,7 +82,7 @@ export default function ProgramManage() {
               </div>
 
               <div className="space-x-2">
-              <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => setUpdateModal(true)}>
+              <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => openModalUpdate(program)}>
                 <FiEdit className="h-5 w-5" />
               </button>
               <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => {setDeleteModal(true); confirmDelete(program.id)}}>
@@ -106,18 +108,7 @@ export default function ProgramManage() {
               )}
               </>)}
               
-              {/* Modal for Admin update existing programs */}
-              {session.user.role === 'ADMIN' && (<>
-                {updateModal && (
-                <Modal onClose={() => setUpdateModal(false)}>
-                  <UpdateProgamsForm programId={program.id} initialData={{
-                    title: program.title,
-                    subtitle: program.subtitle || '',
-                    explanation: program.explanation || ''
-                  }} />
-                </Modal>
-                )} 
-              </>)}
+              
 
               {/* Modal for Admin Delete Existing program */}
               {session.user.role === 'ADMIN' && (<>
@@ -133,6 +124,17 @@ export default function ProgramManage() {
           )
         })
       )}
+
+      {/* Modal for Admin update existing programs */}
+              {session.user.role === 'ADMIN' && (<>
+                {updateModal && selectedProgram && (
+                  <UpdateProgamsModal programId={selectedProgram.id} initialData={{
+                    title: selectedProgram.title,
+                    subtitle: selectedProgram.subtitle || '',
+                    explanation: selectedProgram.explanation || ''
+                  }} onSuccess={closeModalUpdate} onClose={closeModalUpdate} />
+                )} 
+              </>)}
     </div>
   )
 }

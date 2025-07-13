@@ -1,9 +1,12 @@
 'use client'
 import { useState } from "react"
-import { useUsers } from "@/hooks/users/useUsers"
-import EditUserModal from "@/components/modals/EditUserModal"
-import { usersLists } from "@/types/usersManagetypes"
 import { useSession } from "next-auth/react"
+/* hooks */
+import { useUsers } from "@/hooks/users/useUsers"
+/* components */
+import EditUserModal from "@/components/modals/EditUserModal"
+/* types */
+import { usersLists } from "@/types/usersManagetypes"
 
 export default function UserManage() {
     const { useUsersLists } = useUsers()

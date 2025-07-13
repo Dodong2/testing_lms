@@ -2,21 +2,14 @@
 import { useProgram } from "./useProgram";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { updateProgramProps } from "@/types/programManagetypes";
 
-interface updateProgramProps {
-    programId: string
-    initialData: {
-        title: string
-        subtitle: string
-        explanation: string
-    }
-    onSuccess?: () => void
-}
 
 export const UpdatePrograms = ({ programId, initialData, onSuccess }: updateProgramProps) => {
   const { useUpdatePrograms } = useProgram()
   const {mutate: updatePrograms, isPending} = useUpdatePrograms()
   const [formData, setFormData] = useState(initialData)
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
