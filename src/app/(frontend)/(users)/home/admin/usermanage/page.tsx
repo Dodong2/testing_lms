@@ -3,14 +3,17 @@ import { useState } from "react"
 import { useSession } from "next-auth/react"
 /* hooks */
 import { useUsers } from "@/hooks/users/useUsers"
+import { DeleteUser } from "@/hooks/users/DeleteUser"
 /* components */
 import EditUserModal from "@/components/modals/EditUserModal"
+import DeleteUserModal from "@/components/modals/user modal/DeleteUserModal"
 /* types */
 import { usersLists } from "@/types/usersManagetypes"
 
 export default function UserManage() {
     const { useUsersLists } = useUsers()
     const { data: users, isLoading } = useUsersLists()
+    const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting  } = DeleteUser()
     const [selectedUser, setSelectedUser] = useState<usersLists | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { data: session, status } = useSession()
@@ -39,9 +42,11 @@ export default function UserManage() {
             <li key={user.id}>
               {user.name} - {user.email} ({user.role})
               <button onClick={() => openModal(user)}>edit</button>
+              <button onClick={() => openDeleteModal(user)}>delete</button>
             </li>
           ))}
 
+          {/* update modal for admin */}
           {session.user.role === 'ADMIN' && (<>
           {isModalOpen && selectedUser && (
           <EditUserModal initialData={{
@@ -49,9 +54,19 @@ export default function UserManage() {
             email: selectedUser.email,
             role: selectedUser.role
           }} UserId={selectedUser.id} onSuccess={closeModal} onClose={closeModal}/>
-        )}
+          )}
         </>)}
           
+          {/* delete modal for admin */}
+          {session.user.role === 'ADMIN' && (<>
+            {deleteModal && selectedDeleteUser && (
+              <DeleteUserModal userName={selectedDeleteUser.name} 
+              onCancel={closeDeleteModal} 
+              onConfirm={handleConfirmDelete} 
+              isDeleting={isDeleting} />
+            )}
+          </>)}
+
         </div>
             )}
 

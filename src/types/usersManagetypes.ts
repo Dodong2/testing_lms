@@ -25,3 +25,11 @@ export interface UpdateUsersProps {
     }
     onSuccess: () => void
 }
+
+//types for DeleteUserModal components
+export interface DeleteUserModalProps {
+  userName: string
+  onConfirm: () => void
+  onCancel: () => void
+  isDeleting: boolean
+}

@@ -1,6 +1,9 @@
 'use client'
-import { getUsersLists, updateUsers } from "@/services/usersServices"
+/* services */
+import { getUsersLists, updateUsers, deleteUser } from "@/services/usersServices"
+/* react query */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+/* types */
 import { usersLists } from "@/types/usersManagetypes"
 
 export const useUsers = () => {
@@ -24,12 +27,20 @@ export const useUsers = () => {
          })
     }
 
+    //pang delete ng user
+    const useDeleteUsers = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: deleteUser,
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['users'] })
+            }
+        })
+    } 
 
-    
 
 
 
-
-    return { useUsersLists, useUpdateUsers }
+    return { useUsersLists, useUpdateUsers, useDeleteUsers }
 }
 

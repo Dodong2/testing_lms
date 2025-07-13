@@ -22,4 +22,16 @@ export const updateUsers = async({ UserId, data }: UpdateUsersData) => {
     return res.json()
 }
 
+//pang delte ng user (for admin)
+export const deleteUser = async(UserId: string) => {
+    const res = await fetch(`/api/users/${UserId}/deleteusers`, {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
+    })
 
+    if(!res.ok) {
+        throw new Error('Failed to delete User')
+    }
+
+    return res.json()
+}

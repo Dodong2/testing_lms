@@ -1,4 +1,4 @@
-// types for get user in useUsersLists hooks
+// types for useProgramModal hooks
 export interface programsTypes {
     id: string
     title:string
