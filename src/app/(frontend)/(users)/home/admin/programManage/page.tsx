@@ -12,8 +12,9 @@ import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 import Modal from "@/components/modals/Modal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
-import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
+// import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
 import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
+import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
 
 /* types */
 
@@ -24,12 +25,11 @@ type ProgramCounts = {
 }
 
 export default function ProgramManage() {
-  const [ isModalOpen, setIsModalOpen ] = useState(false)
   const [ createModal, setCreateModal ] = useState(false)
-  const [ deleteModal, setDeleteModal ] = useState(false)
+  // const [ deleteModal, setDeleteModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
-  const { confirmDelete, handleConfirm, handleCancel } = DeletePrograms()
+  const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
   const { data: countsData } = useAllProgramCounts()
@@ -88,7 +88,7 @@ export default function ProgramManage() {
               <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => openModalUpdate(program)}>
                 <FiEdit className="h-5 w-5" />
               </button>
-              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => {setDeleteModal(true); confirmDelete(program.id)}}>
+              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => openDeleteModal(program)}>
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
@@ -104,16 +104,6 @@ export default function ProgramManage() {
               )}
               </>)}
               
-              
-
-              {/* Modal for Admin Delete Existing program */}
-              {session.user.role === 'ADMIN' && (<>
-                {deleteModal && (
-                  <Modal onClose={() => {setDeleteModal(false); handleCancel()}}>
-                    <DeleteProgramsForm handleCancel={() => { setDeleteModal(false); handleCancel()}} handleConfirm={handleConfirm} title={program.title}/>
-                  </Modal>
-                )}
-              </>)}
 
                 </div>
             </div>
@@ -141,6 +131,16 @@ export default function ProgramManage() {
                     onSuccess={closeAddModal}
                     onClose={closeAddModal}/>
               )}
+              </>)}
+
+              {/* Modal for Admin Delete Existing program */}
+              {session.user.role === 'ADMIN' && (<>
+                {deleteModal && selectedDeleteProgram && (
+                  <DeleteProgramsModal title={selectedDeleteProgram.title}
+                    handleCancel={closeDeleteModal}
+                    handleConfirm={handleConfirmDelete}
+                    isDeleting={isDeleting}/>
+                )}
               </>)}
     </div>
   )

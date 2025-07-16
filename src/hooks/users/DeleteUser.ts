@@ -29,10 +29,6 @@ export const DeleteUser = () => {
         })
     }
 
-
-
-
-
  return { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting }
 }
 

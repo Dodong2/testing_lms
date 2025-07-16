@@ -56,14 +56,13 @@ export const useProgram = () => {
     }
 
     // pang-delete ng programs
-    const useDeletePrograms = (onSuccessCallback:() => void) => {
+    const useDeletePrograms = () => {
         const queryClient = useQueryClient()
         return useMutation({
             mutationFn: deletePrograms,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['programs'] })
                 toast.success("Program successfully deleted")
-                if(onSuccessCallback) onSuccessCallback()
             },
             onError: () => {
                 toast.error("Failed to delete program")
