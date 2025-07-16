@@ -6,7 +6,7 @@ import { getToken } from 'next-auth/jwt'
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const pathname = req.nextUrl.pathname
-
+  console.log("🛡️ Middleware running for:", pathname)
   // Always allow access to login and error pages
   const isPublicPath = pathname.startsWith('/auth') || pathname.startsWith('/error')
 
@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
     const userRole = token.role
 
     // Admin-only routes
-    if (pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+    if (pathname.startsWith('/home/admin') && userRole !== 'ADMIN') {
       return NextResponse.redirect(new URL('/error?code=unauthorized', req.url))
     }
 
@@ -43,7 +43,7 @@ export const config = {
   matcher: [
     '/',
     '/auth',
-    '/admin/:path*',
+    '/home/:path*',
     '/program/:path*',
     '/error',
   ],

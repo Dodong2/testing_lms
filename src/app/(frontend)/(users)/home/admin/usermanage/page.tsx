@@ -25,7 +25,7 @@ export default function UserManage() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <div>
+        <div>{session.user.role === 'ADMIN' && (<div>
           {users?.map((user) => (
             <li key={user.id}>
               {user.name} - {user.email} ({user.role})
@@ -59,7 +59,7 @@ export default function UserManage() {
       )}
 
 
-
+      </div>)}
     </div>
   )
 }
