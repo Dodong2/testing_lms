@@ -22,8 +22,8 @@ const UpdateProgamsModal = ({ programId, initialData, onClose, onSuccess }: upda
             <input name="subtitle" value={formData.subtitle} onChange={handleChange} className="border p-2 w-full" required />
             <label>Explanation</label>
             <textarea name="explanation" value={formData.explanation} onChange={handleChange} className="border p-2 w-full"/>
-            <button onClick={onClose}>cancel</button>
             <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" disabled={isPending}>{isPending ? 'Updating...' : 'Update Program'}</button>
+            <button onClick={onClose}>cancel</button>
         </form>
         </div>
     </div>
