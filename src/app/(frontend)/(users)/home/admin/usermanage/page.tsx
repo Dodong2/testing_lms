@@ -3,19 +3,27 @@ import { useSession } from "next-auth/react"
 /* hooks */
 import { useUsers } from "@/hooks/users/useUsers"
 import { DeleteUser } from "@/hooks/users/DeleteUser"
+import { useUpdateModal } from "@/hooks/users/useUpdateModal"
+import { useSearch } from "@/hooks/searchbar/useSearch"
 /* components */
 import EditUserModal from "@/components/modals/user modal/EditUserModal"
 import DeleteUserModal from "@/components/modals/user modal/DeleteUserModal"
-import { useUpdateModal } from "@/hooks/users/useUpdateModal"
+import { SearchBar } from "@/components/SearchBar"
 /* icons */
-import { FiUserPlus, FiSearch, FiTrash2 } from 'react-icons/fi';
+import { FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { MdEdit } from "react-icons/md";
+
+
+
 export default function UserManage() {
   const { useUsersLists } = useUsers()
   const { data: users, isLoading } = useUsersLists()
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
   const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateModal()
+  const { filteredUsers, handleFiltered } = useSearch()
   
+
+
   const { data: session, status } = useSession()
 
   if (status === "loading") return <div>Loading...</div>
@@ -25,16 +33,14 @@ export default function UserManage() {
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
-        <div className="relative flex-grow">
-          <input
-            type="text"
+        {users && (
+          <SearchBar
+            data={users}
+            onFiltered={handleFiltered}
+            keysToSearch={['name', 'email', 'role']}
             placeholder="Search users..."
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
           />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <FiSearch className="h-5 w-5 text-gray-400" />
-          </div>
-        </div>
+        )}
         <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4">
           <FiUserPlus className="inline-block mr-2" />
           Add New User
@@ -59,7 +65,7 @@ export default function UserManage() {
 
           {/* actual user data */}
           <tbody>
-          {users?.map((user) => (
+          {filteredUsers.map((user) => (
             <tr key={user.id}>
               <td className="py-2 px-4">{user.name}</td>
               <td className="py-2 px-4">{user.email}</td>
