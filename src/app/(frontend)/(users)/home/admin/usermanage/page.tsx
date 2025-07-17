@@ -77,7 +77,7 @@ export default function UserManage() {
             </tr>
           ))}
           </tbody>
-
+          </table>
           {/* update modal for admin */}
           {session.user.role === 'ADMIN' && (<>
             {isUpdateModal && selectedUser && (
@@ -98,7 +98,7 @@ export default function UserManage() {
                 isDeleting={isDeleting} />
             )}
           </>)}
-            </table>
+            
         </div>
       )}
 
