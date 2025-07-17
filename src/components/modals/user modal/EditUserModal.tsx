@@ -23,10 +23,10 @@ interface EditUserModalProps {
                 <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="name"/>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email"/>
                 <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Role"/>
-                <button type="button" onClick={onClose}>cancel</button><br/>
                 <button type="submit" disabled={isPending}>
                     {isPending ? 'Saving...' : 'Save' }
                 </button>
+                <button type="button" onClick={onClose}>cancel</button>
             </form>
         </div>
      </div>

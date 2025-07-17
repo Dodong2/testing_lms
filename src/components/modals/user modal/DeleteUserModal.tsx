@@ -8,10 +8,10 @@ import { DeleteUserModalProps } from "@/types/usersManagetypes"
             <h2 className="text-lg font-semibold mb-4">Delete Confirmation</h2>
             <p className="mb-4">Are you sure you want to delete <strong>{userName}</strong>?</p>
             <div className="flex justify-end space-x-2">
-                <button onClick={onCancel}>Cancel</button>
                 <button onClick={onConfirm} disabled={isDeleting}>
                     {isDeleting ? 'Deleting...' : 'Delete'}
                 </button>
+                <button onClick={onCancel}>Cancel</button>
             </div>
         </div>
     </div>
