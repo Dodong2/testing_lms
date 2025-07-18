@@ -27,6 +27,7 @@ export const useProgram = () => {
             mutationFn: createProgram,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["programs"] })
+                toast.success("Program added successfully!")
             }
         })
     }

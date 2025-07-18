@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+
 import { useSession } from "next-auth/react"
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
@@ -7,14 +7,13 @@ import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useProgramModal } from "@/hooks/program/useProgramModal";
 import { useAddMemberModal } from "@/hooks/program/useAddMemberModal";
 import { useSearch } from "@/hooks/searchbar/useSearch";
+import { useCreateProgramsModal } from "@/hooks/program/useCreateProgramsModal";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
-import Modal from "@/components/modals/Modal";
-import CreateProgramForm from "@/components/admin/CreateProgramForm";
-import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import { SearchBar } from "@/components/SearchBar";
-// import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
+import CreateProgramModal from "@/components/modals/programs modal/CreateProgramModal";
+import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
 
@@ -27,12 +26,13 @@ type ProgramCounts = {
 }
 
 export default function ProgramManage() {
-  const [ createModal, setCreateModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
+  const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
+  // for get counts of members in programs
   const { data: countsData } = useAllProgramCounts()
   const { handleFilteredProgram, filteredPrograms} = useSearch()
 
@@ -57,8 +57,8 @@ export default function ProgramManage() {
             placeholder="Search users..."
             />
         )}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4"
-        onClick={() => setCreateModal(true)}>
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4" onClick={openCreateModal}
+        >
           <FiPlus className="inline-block mr-2" />
           Add New Program
         </button>
@@ -93,24 +93,18 @@ export default function ProgramManage() {
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
-            
-            
-
-              {/* Modal for Admin create programs */}
-              {session.user.role === 'ADMIN' && (<>
-                {createModal && (
-                <Modal onClose={() => setCreateModal(false)}>
-                  <CreateProgramForm/>
-                </Modal>
-              )}
-              </>)}
-              
-
                 </div>
             </div>
           )
         })
-      )}</>)}
+      )}
+      </>)}
+
+      {session.user.role === 'ADMIN' && (<>
+        {createModal && (
+          <CreateProgramModal onClose={closeCreateModal} onSuccess={closeCreateModal}/>
+        )}
+      </>)}
 
       {/* Modal for Admin update existing programs */}
               {session.user.role === 'ADMIN' && (<>
