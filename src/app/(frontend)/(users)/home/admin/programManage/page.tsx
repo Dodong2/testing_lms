@@ -6,12 +6,14 @@ import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useProgramModal } from "@/hooks/program/useProgramModal";
 import { useAddMemberModal } from "@/hooks/program/useAddMemberModal";
+import { useSearch } from "@/hooks/searchbar/useSearch";
 /* icons */
-import { FiSearch, FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 /* components */
 import Modal from "@/components/modals/Modal";
 import CreateProgramForm from "@/components/admin/CreateProgramForm";
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
+import { SearchBar } from "@/components/SearchBar";
 // import DeleteProgramsForm from "@/components/admin/DeleteProgramsForm";
 import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
@@ -26,13 +28,13 @@ type ProgramCounts = {
 
 export default function ProgramManage() {
   const [ createModal, setCreateModal ] = useState(false)
-  // const [ deleteModal, setDeleteModal ] = useState(false)
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
   const { data: countsData } = useAllProgramCounts()
+  const { handleFilteredProgram, filteredPrograms} = useSearch()
 
   const getCounts = (programId: string) => 
     countsData?.find((c: ProgramCounts) => c.programId === programId) ?? { instructors: 0, beneficiaries: 0 }
@@ -47,16 +49,14 @@ export default function ProgramManage() {
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search bar */}
       <div className="flex items-center justify-between mb-4">
-        <div className="relative flex-grow">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <FiSearch className="h-5 w-5 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search class..."
-            className="w-full pl-10 px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-          />
-        </div>
+        {programData && (
+          <SearchBar
+            data={programData.programs}
+            onFiltered={handleFilteredProgram}
+            keysToSearch={['title']}
+            placeholder="Search users..."
+            />
+        )}
         <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4"
         onClick={() => setCreateModal(true)}>
           <FiPlus className="inline-block mr-2" />
@@ -68,7 +68,8 @@ export default function ProgramManage() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        programData?.programs?.map(program => {
+      <>{session.user.role === 'ADMIN' && (
+        filteredPrograms?.map(program => {
           const counts = getCounts(program.id)
           return (
             <div key={program.id} className="bg-white rounded-md shadow mb-4 p-4">
@@ -109,7 +110,7 @@ export default function ProgramManage() {
             </div>
           )
         })
-      )}
+      )}</>)}
 
       {/* Modal for Admin update existing programs */}
               {session.user.role === 'ADMIN' && (<>
