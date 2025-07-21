@@ -1,4 +1,3 @@
-
 // pang get lahat ng programs (for all roles)
 export const getPrograms = async() => {
     const res = await fetch('/api/program')
@@ -26,6 +25,7 @@ export const createProgram = async(data: ProgramData) => {
     if(!res.ok) {
         throw new Error('Failed to create program')
     }
+    
     return res.json()
 }
 

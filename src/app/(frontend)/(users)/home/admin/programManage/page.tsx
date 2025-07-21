@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from "next-auth/react"
+import { useSocketEvents } from "@/hooks/useSocketEvents";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
@@ -16,6 +17,7 @@ import CreateProgramModal from "@/components/modals/programs modal/CreateProgram
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
+import { useEffect } from "react";
 
 /* types */
 
@@ -26,25 +28,33 @@ type ProgramCounts = {
 }
 
 export default function ProgramManage() {
+  useSocketEvents()
   const { data: session, status } = useSession()
   const { useAllProgramCounts, usePrograms } = useProgram()
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
+
   // for get counts of members in programs
   const { data: countsData } = useAllProgramCounts()
   const { handleFilteredProgram, filteredPrograms} = useSearch()
-
+  
   const getCounts = (programId: string) => 
     countsData?.find((c: ProgramCounts) => c.programId === programId) ?? { instructors: 0, beneficiaries: 0 }
 
   const { data: programData, isLoading } = usePrograms()
 
+    useEffect(() => {
+  if (programData?.programs) {
+    handleFilteredProgram(programData.programs)
+  }
+}, [programData?.programs, handleFilteredProgram])
+
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
   
-
+  
   return (
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search bar */}

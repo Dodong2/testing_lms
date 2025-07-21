@@ -8,11 +8,11 @@ export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
   console.log("🛡️ Middleware running for:", pathname)
   // Always allow access to login and error pages
-  const isPublicPath = pathname.startsWith('/auth') || pathname.startsWith('/error')
+  const isPublicPath = pathname.startsWith('/') || pathname.startsWith('/error')
 
   // Not logged in? Redirect to login
   if (!token && !isPublicPath) {
-    return NextResponse.redirect(new URL('/auth', req.url))
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
   // Logged in? Restrict roles for certain routes
@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
     }
 
     // Already logged in? Prevent access to login page
-    if (pathname === '/auth') {
+    if (pathname === '/') {
       return NextResponse.redirect(new URL('/', req.url))
     }
   }
@@ -41,7 +41,6 @@ export async function middleware(req: NextRequest) {
 // Apply to protected paths only
 export const config = {
   matcher: [
-    '/',
     '/auth',
     '/home/:path*',
     '/program/:path*',
