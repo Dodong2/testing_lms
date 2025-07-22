@@ -1,4 +1,4 @@
-//step 1 for realtime
+//step 1 for realtime. ang step 2 ay nasa lib
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
   })
 })
 
-/*step 4: Ito ang tagatanggap ng request mula sa Next.js backend (emitSocketEvent()), at nagba-broadcast ng event sa lahat ng connected clients.
+/*step 3: Ito ang tagatanggap ng request mula sa Next.js backend (emitSocketEvent()), at nagba-broadcast ng event sa lahat ng connected clients.
  nasa backend yung step 3 create program*/
 // Centralized emit events for program changes
 app.post("/emit-program", express.json(), (req, res) => {

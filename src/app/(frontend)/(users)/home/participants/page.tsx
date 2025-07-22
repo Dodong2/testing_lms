@@ -3,8 +3,10 @@ import Link from "next/link"
 import { FiArrowRight } from "react-icons/fi"
 import { useProgram } from "@/hooks/program/useProgram"
 import { useSession } from "next-auth/react"
+import { useSocketEvents } from "@/hooks/useSocketEvents"
 
 export default function Programs() {
+  useSocketEvents()
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
 

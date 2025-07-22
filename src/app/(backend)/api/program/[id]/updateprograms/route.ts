@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context = {
   params: {
@@ -31,6 +32,8 @@ export async function PATCH(req: NextRequest, context: Context ) {
                 explanation
             },
         })
+
+        await emitSocketEvent("program-updated", { updatedProgram: updatedPrograms })
 
         return NextResponse.json({ success: true, program: updatedPrograms })
 

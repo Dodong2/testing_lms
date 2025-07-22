@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-// import { emitSocketEvent } from "@/lib/emitSocketEvent";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context = {
   params: {
@@ -39,7 +39,7 @@ try {
         where: { id: programId }
     })
 
-    // await emitSocketEvent("program-deleted", { id: programId })
+    await emitSocketEvent("program-deleted", { id: programId })
     // 5. Return success response
     return NextResponse.json({ success: true, message: 'Program deleted' })
 

@@ -1,4 +1,4 @@
-/* step: 5
+/* step: 5 real-time
 Ito ang Socket.IO client ng frontend. Dito nakakonekta ang Next.js browser client sa Socket.IO server. */
 import { io } from "socket.io-client";
 
