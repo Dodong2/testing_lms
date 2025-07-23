@@ -45,6 +45,9 @@ app.post("/emit-program", express.json(), (req, res) => {
     case "member-added":
       io.emit("member-added", payload);
       break;
+    case "members-counts":
+      io.emit("members-counts", payload)
+      break;
     default:
       console.log("Unknown event type");
   }

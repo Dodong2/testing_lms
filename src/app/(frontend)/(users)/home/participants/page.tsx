@@ -39,10 +39,6 @@ export default function Programs() {
             </div>
           </Link>
           
-        {/* {session.user.role === 'ADMIN' && (<>
-          <AddProgramMembers programId={program.id}/>
-        </>)} */}
-          
         </div>
       ))
       )}

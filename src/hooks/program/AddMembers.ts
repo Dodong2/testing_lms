@@ -27,7 +27,6 @@ export const AddMembers = ({ programId, onSuccess }: addProgramMembersProps) => 
         if(!emailLists.length) return
         addMembers({ programId, emails: emailLists }, {
             onSuccess: () => {
-                alert('Emails added to program')
                 setEmailLists([])
                 onSuccess()
             }

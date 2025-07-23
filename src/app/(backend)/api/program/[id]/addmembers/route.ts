@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context = {
   params: {
@@ -32,6 +33,16 @@ export async function POST(req: NextRequest, context: Context) {
     })),
     skipDuplicates: true,
   });
+
+  await emitSocketEvent('member-added', {
+  programId,
+  newMembers: users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role
+  }))
+})
 
   return NextResponse.json({ success: true });
 }

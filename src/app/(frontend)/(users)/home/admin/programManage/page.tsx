@@ -19,30 +19,15 @@ import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
 import { useEffect } from "react";
 
-/* types */
-
-type ProgramCounts = {
-  programId: string
-  instructors: number
-  beneficiaries: number
-}
-
 export default function ProgramManage() {
   useSocketEvents()
   const { data: session, status } = useSession()
-  const { useAllProgramCounts, usePrograms } = useProgram()
+  const { usePrograms } = useProgram()
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
-
-  // for get counts of members in programs
-  const { data: countsData } = useAllProgramCounts()
   const { handleFilteredProgram, filteredPrograms} = useSearch()
-  
-  const getCounts = (programId: string) => 
-    countsData?.find((c: ProgramCounts) => c.programId === programId) ?? { instructors: 0, beneficiaries: 0 }
-
   const { data: programData, isLoading } = usePrograms()
 
     useEffect(() => {
@@ -80,7 +65,7 @@ export default function ProgramManage() {
       ) : (
       <>{session.user.role === 'ADMIN' && (
         filteredPrograms?.map(program => {
-          const counts = getCounts(program.id)
+          const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0 }
           return (
             <div key={program.id} className="bg-white rounded-md shadow mb-4 p-4">
               <div className="flex justify-between items-start">

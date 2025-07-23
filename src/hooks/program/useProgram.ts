@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-hot-toast"
 // services
-import { getPrograms, createProgram, addProgramMembers, getAllProgramMemberCounts, deletePrograms, updateProgram } from "@/services/programServices"
+import { getPrograms, createProgram, addProgramMembers, deletePrograms, updateProgram } from "@/services/programServices"
 
 type Program = {
   id: string
@@ -48,13 +48,13 @@ export const useProgram = () => {
         })
     }
 
-    //pang counts kung ilang beneficiary at instructors
-    const useAllProgramCounts = () => {
-        return useQuery({
-            queryKey: ['all-program-member-counts'],
-            queryFn: getAllProgramMemberCounts
-        })
-    }
+    // //pang counts kung ilang beneficiary at instructors
+    // const useAllProgramCounts = () => {
+    //     return useQuery({
+    //         queryKey: ['all-program-member-counts'],
+    //         queryFn: getAllProgramMemberCounts
+    //     })
+    // }
 
     // pang-delete ng programs
     const useDeletePrograms = () => {
@@ -82,5 +82,5 @@ export const useProgram = () => {
         })
     }
 
-    return { usePrograms, useCreateProgram, useAddProgramMembers, useAllProgramCounts, useDeletePrograms, useUpdatePrograms }
+    return { usePrograms, useCreateProgram, useAddProgramMembers, useDeletePrograms, useUpdatePrograms }
 }

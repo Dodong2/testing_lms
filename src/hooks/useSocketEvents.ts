@@ -2,6 +2,7 @@
 import { useEffect } from "react"
 import socket from "@/lib/socket"
 import { useQueryClient } from "@tanstack/react-query"
+import { useSession } from "next-auth/react"
 
 type Program = {
   id: string
@@ -17,13 +18,9 @@ type Member = {
   role: string
 }
 
-type MemberPayload = {
-  programId: string
-  newMember: Member
-}
-
 export const useSocketEvents = () => {
   const queryClient = useQueryClient()
+  const { data: session } = useSession()
 
   useEffect(() => {
     console.log("🧲 useSocketEvents mounted")
@@ -33,16 +30,20 @@ export const useSocketEvents = () => {
       console.log("✅ Socket connected:", socket.id)
     })
 
-    // for program created
-    socket.on("program-created", (newProgram: Program) => {
+    socket.on("program-created", (newProgram: Program & { adminId: string }) => {
       console.log("🔥 REALTIME RECEIVED:", newProgram)
+      const currentUserId = session?.user?.id
+
+      const isMember = newProgram.adminId === currentUserId
+
+      if(!isMember) return
 
       queryClient.setQueryData<{ programs: Program[] }>(
         ["programs"],
         (oldData) => {
           if (!oldData) return { programs: [newProgram] }
           return {
-            programs: [newProgram, ...oldData.programs],
+            programs: [newProgram, ...oldData.programs]
           }
         }
       )
@@ -80,24 +81,17 @@ export const useSocketEvents = () => {
     })
 
     // for member-added
-    socket.on("member-added", (payload: MemberPayload) => {
-      console.log("👤 Member added to program:", payload.programId)
+    socket.on("member-added", (payload: { programId: string, newMembers: [] }) => {
+      const { programId, newMembers } = payload
+      const currentUserId = session?.user?.id
 
-      // Update member cache
-      queryClient.setQueryData<Member[]>(
-        ["program-members", payload.programId],
-        (oldMembers) => {
-          if (!oldMembers) return [payload.newMember]
-          const alreadyExists = oldMembers.some(m => m.id === payload.newMember.id)
-          if (alreadyExists) return oldMembers
-          return [...oldMembers, payload.newMember]
-        }
-      )
+      const isNewMember = newMembers.some((member: Member) => member.id === currentUserId) 
 
-      // Optionally: refresh program detail too
-      queryClient.invalidateQueries({
-        queryKey: ["program", payload.programId],
-      })
+      if(!isNewMember) return
+
+      queryClient.invalidateQueries({ queryKey: ["programs"] })
+
+      queryClient.invalidateQueries({ queryKey: ["program", programId] })
     })
 
     return () => {
@@ -108,36 +102,3 @@ export const useSocketEvents = () => {
     }
   }, [queryClient])
 }
-
-
-// // hooks/useSocketEvents.ts
-// 'use client'
-
-// import { useEffect } from "react"
-// import socket from "@/lib/socket"
-// import { useQueryClient } from "@tanstack/react-query"
-
-// export const useSocketEvents = () => {
-//   const queryClient = useQueryClient()
-
-//   useEffect(() => {
-//     //Kapag may broadcast na "program-created" galing sa server, mag-iinvalidate ang cache (["programs"]) para magre-fetch via React Query. 💥
-//     const handleProgramCreated = () => {
-//       console.log("🧲 Program created event received")
-//       queryClient.invalidateQueries({ queryKey: ["programs"] })
-//     }
-
-//     const handleProgramDeleted = () => {
-//       console.log("🧲 Program deleted event received")
-//       queryClient.invalidateQueries({ queryKey: ["programs"] })
-//     }
-
-//     socket.on("program-created", handleProgramCreated)
-//     socket.on("program-deleted", handleProgramDeleted)
-
-//     return () => {
-//       socket.off("program-created", handleProgramCreated)
-//       socket.off("program-deleted", handleProgramDeleted)
-//     }
-//   }, [queryClient])
-// }

@@ -4,6 +4,12 @@ export interface programsTypes {
     title:string
     subtitle: string
     explanation: string
+    memberCounts?: ProgramCounts
+}
+//types extend ng programsTypes
+export interface ProgramCounts {
+  instructors: number
+  beneficiaries: number
 }
 
 //types for UpdatePrograms.ts hooks
