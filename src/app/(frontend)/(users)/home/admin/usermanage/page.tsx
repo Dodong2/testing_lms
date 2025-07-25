@@ -5,7 +5,9 @@ import { useUsers } from "@/hooks/users/useUsers"
 import { DeleteUser } from "@/hooks/users/DeleteUser"
 import { useUpdateModal } from "@/hooks/users/useUpdateModal"
 import { useSearch } from "@/hooks/searchbar/useSearch"
+import { useCreateUserModal } from "@/hooks/users/useCreateUserModal"
 /* components */
+import CreateUserModal from "@/components/modals/user modal/CreateUserModal"
 import EditUserModal from "@/components/modals/user modal/EditUserModal"
 import DeleteUserModal from "@/components/modals/user modal/DeleteUserModal"
 import { SearchBar } from "@/components/SearchBar"
@@ -18,9 +20,11 @@ import { MdEdit } from "react-icons/md";
 export default function UserManage() {
   const { useUsersLists } = useUsers()
   const { data: users, isLoading } = useUsersLists()
+  const { openCreateUser, handleCloseCreateUser, handleOpenCreateUser } = useCreateUserModal()
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
   const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateModal()
   const { filteredUsers, handleFiltered } = useSearch()
+  
   
 
 
@@ -41,7 +45,7 @@ export default function UserManage() {
             placeholder="Search users..."
           />
         )}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4">
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4" onClick={handleOpenCreateUser}>
           <FiUserPlus className="inline-block mr-2" />
           Add New User
         </button>
@@ -96,6 +100,12 @@ export default function UserManage() {
                 onCancel={closeDeleteModal}
                 onConfirm={handleConfirmDelete}
                 isDeleting={isDeleting} />
+            )}
+          </>)}
+
+          {session.user.role === 'ADMIN' && (<>
+            {openCreateUser && (
+              <CreateUserModal onSuccess={handleCloseCreateUser} onClose={handleCloseCreateUser}/>
             )}
           </>)}
             

@@ -1,7 +1,6 @@
 'use client'
 import { useProgram } from "./useProgram";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { updateProgramProps } from "@/types/programManagetypes";
 
 
@@ -21,7 +20,6 @@ export const UpdatePrograms = ({ programId, initialData, onSuccess }: updateProg
     updatePrograms(
         { programId, data: formData },
         { onSuccess: () => {
-            toast.success("Program updated successfully!")
             onSuccess?.()
         } }
     )

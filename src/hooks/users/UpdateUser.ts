@@ -2,7 +2,6 @@
 import React, { useState } from "react"
 import { useUsers } from "./useUsers"
 import { UpdateUsersProps } from "@/types/usersManagetypes"
-import toast from "react-hot-toast"
 
 export const UpdateUsers = ({ UserId, initialData, onSuccess }: UpdateUsersProps) => {
     const { useUpdateUsers } = useUsers()
@@ -19,7 +18,6 @@ export const UpdateUsers = ({ UserId, initialData, onSuccess }: UpdateUsersProps
         updateUser(
             { UserId, data: formData },
             { onSuccess: () => {
-                toast.success('User updated successfully!')
                 onSuccess?.()
             } }
         )

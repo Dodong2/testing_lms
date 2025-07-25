@@ -1,3 +1,21 @@
+// for services fetch addUser
+export interface CreateUserData {
+    email: string
+    name: string
+    role: 'ADMIN' | 'INSTRUCTOR' | 'BENEFICIARY'
+}
+
+//pang promise since ang return sa api register ay newUser
+export interface CreateUserResponse {
+  success: boolean
+  user: {
+    id: string
+    email: string
+    name: string
+    role: 'ADMIN' | 'INSTRUCTOR' | 'BENEFICIARY'
+  }
+}
+
 // types for get user in useUsersLists hooks
 export interface usersLists {
     id: string
