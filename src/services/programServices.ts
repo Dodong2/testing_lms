@@ -42,13 +42,6 @@ export const addProgramMembers = async(programId: string, emails: string[]) => {
     return res.json()
 }
 
-// //pang counts kung ilang beneficiary at instructors (for admin)
-// export const getAllProgramMemberCounts = async () => {
-//   const res = await fetch(`/api/program/member-counts`)
-//   if (!res.ok) throw new Error("Failed to fetch member counts")
-//   return res.json()
-// }
-
 // pang-delete ng programs (for admin)
 export const deletePrograms = async (programId: string) => {
     const res = await fetch(`/api/program/${programId}/deleteprograms`, {

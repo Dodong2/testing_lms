@@ -11,11 +11,9 @@ type Program = {
   explanation: string
 }
 
-type Member = {
-  id: string
-  name: string
-  email: string
-  role: string
+interface MemberAddedPayload {
+  programId: string
+  newMembers: { id: string; email: string; name?: string }[]
 }
 
 export const useSocketEvents = () => {
@@ -81,17 +79,21 @@ export const useSocketEvents = () => {
     })
 
     // for member-added
-    socket.on("member-added", (payload: { programId: string, newMembers: [] }) => {
-      const { programId, newMembers } = payload
+    socket.on("member-added", async(payload: MemberAddedPayload) => {
+      const { newMembers } = payload
       const currentUserId = session?.user?.id
 
-      const isNewMember = newMembers.some((member: Member) => member.id === currentUserId) 
+      console.log("📩 member-added received:", payload)
+      console.log("🔍 currentUserId:", currentUserId)
+      
+      const isCurrentUserAdded = newMembers.some(
+        (member) => member.id === currentUserId
+      )
+      console.log("✅ Is current user added?", isCurrentUserAdded)
+      
+      await queryClient.invalidateQueries({ queryKey: ["programs"], refetchType: "active" }) 
 
-      if(!isNewMember) return
-
-      queryClient.invalidateQueries({ queryKey: ["programs"] })
-
-      queryClient.invalidateQueries({ queryKey: ["program", programId] })
+      console.log("✅ Programs refetch triggered")
     })
 
     return () => {
@@ -100,5 +102,5 @@ export const useSocketEvents = () => {
       socket.off("program-deleted")
       socket.off("member-added")
     }
-  }, [queryClient])
+  }, [queryClient, session?.user?.id])
 }

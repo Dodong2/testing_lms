@@ -17,6 +17,7 @@ export const useProgram = () => {
         return useQuery<{ programs: Program[] }>({
             queryKey: ["programs"],
             queryFn: getPrograms,
+            refetchInterval: 2000
         })
     }
 
@@ -47,14 +48,6 @@ export const useProgram = () => {
             }
         })
     }
-
-    // //pang counts kung ilang beneficiary at instructors
-    // const useAllProgramCounts = () => {
-    //     return useQuery({
-    //         queryKey: ['all-program-member-counts'],
-    //         queryFn: getAllProgramMemberCounts
-    //     })
-    // }
 
     // pang-delete ng programs
     const useDeletePrograms = () => {
