@@ -1,7 +1,8 @@
 'use client'
 
 import { useSession } from "next-auth/react"
-import { useSocketEvents } from "@/hooks/useSocketEvents";
+// import { useSocketEvents } from "@/hooks/useSocketEvents";
+import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
@@ -20,7 +21,7 @@ import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgra
 import { useEffect } from "react";
 
 export default function ProgramManage() {
-  useSocketEvents()
+  useProgramEvents()
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()

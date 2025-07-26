@@ -16,7 +16,7 @@ interface MemberAddedPayload {
   newMembers: { id: string; email: string; name?: string }[]
 }
 
-export const useSocketEvents = () => {
+export const useProgramEvents = () => {
   const queryClient = useQueryClient()
   const { data: session } = useSession()
 
@@ -29,7 +29,7 @@ export const useSocketEvents = () => {
     })
 
     socket.on("program-created", (newProgram: Program & { adminId: string }) => {
-      console.log("🔥 REALTIME RECEIVED:", newProgram)
+      // console.log("🔥 REALTIME RECEIVED:", newProgram)
       const currentUserId = session?.user?.id
 
       const isMember = newProgram.adminId === currentUserId
@@ -80,20 +80,20 @@ export const useSocketEvents = () => {
 
     // for member-added
     socket.on("member-added", async(payload: MemberAddedPayload) => {
-      const { newMembers } = payload
+      // const { newMembers } = payload
       const currentUserId = session?.user?.id
 
       console.log("📩 member-added received:", payload)
       console.log("🔍 currentUserId:", currentUserId)
       
-      const isCurrentUserAdded = newMembers.some(
-        (member) => member.id === currentUserId
-      )
-      console.log("✅ Is current user added?", isCurrentUserAdded)
+      // const isCurrentUserAdded = newMembers.some(
+      //   (member) => member.id === currentUserId
+      // )
+      // console.log("✅ Is current user added?", isCurrentUserAdded)
       
       await queryClient.invalidateQueries({ queryKey: ["programs"], refetchType: "active" }) 
 
-      console.log("✅ Programs refetch triggered")
+      // console.log("✅ Programs refetch triggered")
     })
 
     return () => {
