@@ -39,7 +39,7 @@ try {
         where: { id: programId }
     })
 
-    await emitSocketEvent("program-deleted", { id: programId })
+    await emitSocketEvent('program',"program-deleted", { id: programId })
     // 5. Return success response
     return NextResponse.json({ success: true, message: 'Program deleted' })
 

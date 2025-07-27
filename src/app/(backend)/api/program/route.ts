@@ -107,7 +107,7 @@ try{
         });
 
         //Kapag tapos na gumawa ng bagong program, tatawagin ang emitSocketEvent() para sabihan ang Socket.IO server na "Uy may bagong program!"
-       await emitSocketEvent("program-created", program)
+       await emitSocketEvent('program',"program-created", program)
         
         return NextResponse.json({ success: true, program })
 

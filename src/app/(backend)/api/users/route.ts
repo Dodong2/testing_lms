@@ -17,16 +17,16 @@ export async function GET() {
             name: true,
             email: true,
             role: true,
-            // ProgramMember: {
-            //     select: {
-            //         program: {
-            //             select: {
-            //                 id: true,
-            //                 title: true
-            //             }
-            //         }
-            //     }
-            // }
+            ProgramMember: {
+                select: {
+                    program: {
+                        select: {
+                            id: true,
+                            title: true
+                        }
+                    }
+                }
+            }
         }
     })
 

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, context: Context) {
   
   //for real-time await for trigger member-add
   await new Promise((res) => setTimeout(res, 300))
-  await emitSocketEvent('member-added', {
+  await emitSocketEvent('program','member-added', {
   programId,
   newMembers: users.map((user) => ({
     id: user.id,

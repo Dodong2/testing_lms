@@ -22,6 +22,12 @@ export interface usersLists {
     name:string
     email: string
     role: string
+    ProgramMember: {
+      program: {
+        id: string
+        title: string
+      }
+    }[]
 }
 
 //type for update in services

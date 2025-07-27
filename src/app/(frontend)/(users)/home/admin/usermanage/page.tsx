@@ -89,7 +89,7 @@ export default function UserManage() {
                 name: selectedUser.name,
                 email: selectedUser.email,
                 role: selectedUser.role
-              }} UserId={selectedUser.id} onSuccess={closeUpdateModal} onClose={closeUpdateModal} />
+              }} UserId={selectedUser.id} programs={selectedUser.ProgramMember} onSuccess={closeUpdateModal} onClose={closeUpdateModal} />
             )}
           </>)}
 

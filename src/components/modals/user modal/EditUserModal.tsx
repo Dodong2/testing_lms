@@ -10,9 +10,18 @@ interface EditUserModalProps {
   }
   onClose: () => void
   onSuccess: () => void
+  programs: ProgramMembership[]
+  
 }
 
- const EditUserModal = ({ UserId, initialData, onClose, onSuccess }: EditUserModalProps) => {
+type ProgramMembership = {
+  program: {
+    id: string;
+    title: string;
+  };
+};
+
+ const EditUserModal = ({ UserId, initialData, onClose, onSuccess, programs }: EditUserModalProps) => {
     const { formData,handleChange, handleSubmit, isPending } = UpdateUsers({
         UserId, initialData, onSuccess,
     })
@@ -28,6 +37,19 @@ interface EditUserModalProps {
                 </button>
                 <button type="button" onClick={onClose}>cancel</button>
             </form>
+            {/* user program are in */}
+            <div className="mt-4">
+              <h3 className="font-semibold text-gray-700 mb-2">Programs:</h3>
+              <ul className="list-disc list-inside text-gray-600">
+                {programs.length > 0 ? (
+                  programs.map(({ program }) => (
+                    <li key={program.id}>{program.title}</li>
+                  ))
+                ): (
+                  <li>No assigned programs</li>
+                )}
+              </ul>
+            </div>
         </div>
      </div>
    )

@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest, context: Context ) {
             },
         })
 
-        await emitSocketEvent("program-updated", { updatedProgram: updatedPrograms })
+        await emitSocketEvent('program',"program-updated", { updatedProgram: updatedPrograms })
 
         return NextResponse.json({ success: true, program: updatedPrograms })
 
