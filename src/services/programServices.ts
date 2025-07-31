@@ -79,3 +79,45 @@ export const updateProgram = async ({programId, data}: UpdateProgramData) => {
 
     return res.json()
 }
+
+export const removeProgramMember = async(programId: string, email: string) => {
+    const res = await fetch(`/api/program/${programId}/removemember`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    })
+
+    if(!res.ok) {
+        throw new Error("Failed to remove member")
+    }
+
+    return res.json()
+}
+
+//types ng getProgramId
+export interface ProgramWithMembers {
+  id: string
+  title: string
+  description?: string | null
+  createdAt: string
+  updatedAt: string
+  members: {
+    user: {
+      id: string
+      email: string
+      name: string
+      role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY"
+    }
+  }[]
+}
+// pang get ng program pero per ID
+export const getProgramById = async(programId: string): Promise<ProgramWithMembers> => {
+    const res = await fetch(`/api/program/${programId}`)
+
+    if(!res.ok) {
+        throw new Error("Failed to fetch program with members") 
+    }
+
+    const data: ProgramWithMembers = await res.json()
+    return data
+}

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-hot-toast"
 // services
-import { getPrograms, createProgram, addProgramMembers, deletePrograms, updateProgram } from "@/services/programServices"
+import { getPrograms, createProgram, addProgramMembers, deletePrograms, updateProgram, removeProgramMember, getProgramById } from "@/services/programServices"
 
 type Program = {
   id: string
@@ -76,5 +76,28 @@ export const useProgram = () => {
         })
     }
 
-    return { usePrograms, useCreateProgram, useAddProgramMembers, useDeletePrograms, useUpdatePrograms }
+    const useRemoveProgramMember = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: ({ programId, email }: { programId:string, email: string }) => 
+                removeProgramMember(programId, email),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['programs'] })
+                toast.success("Member removed successfully")
+            },
+            onError: () => {
+                toast.error("Failed to remove member")
+            }
+        })
+    }
+
+    const useProgramById = (programId: string) => {
+        return useQuery({
+            queryKey: ['program', programId],
+            queryFn: () => getProgramById(programId),
+            enabled: !!programId
+        })
+    }
+
+    return { usePrograms, useCreateProgram, useAddProgramMembers, useDeletePrograms, useUpdatePrograms, useRemoveProgramMember, useProgramById }
 }

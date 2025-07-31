@@ -1,24 +1,24 @@
 'use client'
 
 import { useSession } from "next-auth/react"
+import { useEffect } from "react";
 // import { useSocketEvents } from "@/hooks/useSocketEvents";
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useProgramModal } from "@/hooks/program/useProgramModal";
-import { useAddMemberModal } from "@/hooks/program/useAddMemberModal";
+import { useViewMemberModal } from "@/hooks/program/useViewMemberModal";
 import { useSearch } from "@/hooks/searchbar/useSearch";
 import { useCreateProgramsModal } from "@/hooks/program/useCreateProgramsModal";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
-/* components */
+import { FaList } from "react-icons/fa";/* components */
 import { SearchBar } from "@/components/SearchBar";
 import CreateProgramModal from "@/components/modals/programs modal/CreateProgramModal";
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
-import AddMemberModal from "@/components/modals/programs modal/AddMemberModal";
+import ViewMemberModal from "@/components/modals/programs modal/ViewMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
-import { useEffect } from "react";
 
 export default function ProgramManage() {
   useProgramEvents()
@@ -27,7 +27,7 @@ export default function ProgramManage() {
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
-  const { selectedAdd, addModal, openAddModal, closeAddModal } = useAddMemberModal()
+  const { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers } = useViewMemberModal()
   const { handleFilteredProgram, filteredPrograms} = useSearch()
   const { data: programData, isLoading } = usePrograms()
 
@@ -74,10 +74,10 @@ export default function ProgramManage() {
                 <h3 className="text-xl font-semibold text-gray-900">{program.title}</h3>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
+                <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
                 onClick={() => openAddModal(program)}>
-                <FiPlus className="inline-block mr-2" />
-                Add Learners
+                <FaList className="inline-block mr-2" />
+                <p>View Members</p>
               </button>
               </div>
 
@@ -117,13 +117,14 @@ export default function ProgramManage() {
               {/* Modal for Admin Add members to programs */}
             {session.user.role === 'ADMIN' && (<>
               {addModal && selectedAdd && (
-                  <AddMemberModal programId={selectedAdd.programId}
+                  <ViewMemberModal programId={selectedAdd.programId}
+                    existingMembers={existingMembers}
                     title={selectedAdd.title}
                     onSuccess={closeAddModal}
                     onClose={closeAddModal}/>
               )}
               </>)}
-
+              
               {/* Modal for Admin Delete Existing program */}
               {session.user.role === 'ADMIN' && (<>
                 {deleteModal && selectedDeleteProgram && (
