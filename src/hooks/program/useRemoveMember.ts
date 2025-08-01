@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useProgram } from "./useProgram"
 import toast from "react-hot-toast"
 
-export const useRemoveMember = (programId: string, onSuccess: () => void) => {
+export const useRemoveMember = (programId: string) => {
     const { mutate: removeMember, isPending } = useProgram().useRemoveProgramMember()
 
     const [selectedEmails, setSelectedEmails] = useState<string[]>([])
@@ -21,10 +21,14 @@ export const useRemoveMember = (programId: string, onSuccess: () => void) => {
         }
         setSelectedEmails([])
         setRemovingEmails([])
-        onSuccess()
+        //for counts
+        const counts = selectedEmails.length
+        toast.success(`${counts} Members removed successfully`)
+
+
         
         if(selectedEmails.length === 0) {
-            toast.error("Nothing to remove")
+            toast.error(`Nothing to remove`)
              return
         }
     }

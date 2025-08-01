@@ -13,7 +13,7 @@ interface AddProgramMembersProps {
 
 const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMembers }: AddProgramMembersProps) => {
   const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
-  const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId, onSuccess)
+  const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 
   
 

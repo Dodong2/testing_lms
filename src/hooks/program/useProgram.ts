@@ -83,7 +83,6 @@ export const useProgram = () => {
                 removeProgramMember(programId, email),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['programs'] })
-                toast.success("Member removed successfully")
             },
             onError: () => {
                 toast.error("Failed to remove member")
