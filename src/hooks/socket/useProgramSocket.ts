@@ -16,6 +16,16 @@ interface MemberAddedPayload {
   newMembers: { id: string; email: string; name?: string }[]
 }
 
+interface ProgramType {
+  id: string
+  members: {
+    user: {
+      id: string
+      email: string
+    }
+  }[]
+}
+
 export const useProgramEvents = () => {
   const queryClient = useQueryClient()
   const { data: session } = useSession()
@@ -80,20 +90,42 @@ export const useProgramEvents = () => {
 
     // for member-added
     socket.on("member-added", async(payload: MemberAddedPayload) => {
-      // const { newMembers } = payload
       const currentUserId = session?.user?.id
 
       console.log("📩 member-added received:", payload)
       console.log("🔍 currentUserId:", currentUserId)
       
-      // const isCurrentUserAdded = newMembers.some(
-      //   (member) => member.id === currentUserId
-      // )
-      // console.log("✅ Is current user added?", isCurrentUserAdded)
-      
       await queryClient.invalidateQueries({ queryKey: ["programs"], refetchType: "active" }) 
 
-      // console.log("✅ Programs refetch triggered")
+    })
+
+    //for remove member
+    socket.on("remove-member", async({ programId, removedUserId }) => {
+      const currentUserId = session?.user?.id
+
+      queryClient.setQueryData<ProgramType>(["program", programId], (oldData) => {
+        if(!oldData) return oldData
+
+        const updatedMembers = oldData.members.filter(
+          (member) => member.user.id !== removedUserId
+        )
+
+        return {
+          ...oldData, 
+          members: updatedMembers
+        }
+      })
+
+      if (currentUserId === removedUserId) {
+        queryClient.setQueryData<{ programs: Program[] }>(["programs"], (oldData) => {
+          if(!oldData) return { programs: [] }
+          return {
+            programs: oldData.programs.filter(p => p.id !== programId)
+          }
+        })
+      }
+
+
     })
 
     return () => {
@@ -101,6 +133,7 @@ export const useProgramEvents = () => {
       socket.off("program-updated")
       socket.off("program-deleted")
       socket.off("member-added")
+      socket.off("remove-member")
     }
   }, [queryClient, session?.user?.id])
 }

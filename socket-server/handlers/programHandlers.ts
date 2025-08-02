@@ -14,6 +14,9 @@ export const handleProgramEvents = (io: Server, type: string, payload: unknown) 
     case "member-added":
       io.emit("member-added", payload);
       break;
+    case "remove-member":
+      io.emit("remove-member", payload)
+      break;
     default:
       console.log("Unknown event type");
     }

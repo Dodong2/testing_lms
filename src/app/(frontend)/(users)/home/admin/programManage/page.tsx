@@ -114,7 +114,7 @@ export default function ProgramManage() {
               </>)}
 
 
-              {/* Modal for Admin Add members to programs */}
+              {/* Modal for Admin view members in existing programs */}
             {session.user.role === 'ADMIN' && (<>
               {addModal && selectedAdd && (
                   <ViewMemberModal programId={selectedAdd.programId}

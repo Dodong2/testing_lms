@@ -1,7 +1,8 @@
 'use client'
-/* para sa pag add ng Learners & Members */
+/* para sa pag add at remove ng Learners & Members */
 import { AddMembers } from "@/hooks/program/AddMembers"
 import { useRemoveMember } from "@/hooks/program/useRemoveMember"
+import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 
 interface AddProgramMembersProps {
   programId: string
@@ -12,6 +13,7 @@ interface AddProgramMembersProps {
 } 
 
 const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMembers }: AddProgramMembersProps) => {
+  useProgramEvents()
   const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
   const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 
@@ -42,6 +44,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMember
 
         <hr />
 
+    {/* for list ng members */}
     <h3>Existing Members</h3>
     <button type="button" onClick={handleRemove} disabled={isRemoving}>
                 {isRemoving ? 'Removing...' : `Remove (${selectedEmails.length})` }

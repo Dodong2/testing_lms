@@ -1,15 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState, useMemo } from "react"
 import { addMembersProps } from "@/types/programManagetypes"
 import { useProgram } from "./useProgram"
-
-interface Member {
-  user: {
-    email: string
-    name: string
-    role: string
-  }
-}
-
 interface ProgramWithMembers {
   id: string
   title: string
@@ -19,20 +10,17 @@ interface ProgramWithMembers {
 export const useViewMemberModal = () => {
   const [selectedAdd, setSelectedAdd] = useState<addMembersProps | null>(null)
   const [addModal, setAddModal] = useState(false)
-  const [existingMembers, setExistingMembers] = useState<Member['user'][]>([])
   const {useProgramById} = useProgram()
-  const { data, refetch } = useProgramById(selectedAdd?.programId || "")
+  const { data: program, refetch } = useProgramById(selectedAdd?.programId || "")
 
-  useEffect(() => {
-    if(data?.members) {
-      const formatted = data.members.map((m) => ({
-        email: m.user.email,
-        name: m.user.name,
-        role: m.user.role
-      }))
-      setExistingMembers(formatted)
-    }
-  }, [data])
+  const existingMembers = useMemo(() => {
+    if(!program?.members) return []
+    return program.members.map((m) => ({
+      email: m.user.email,
+      name: m.user.name,
+      role: m.user.role
+    }))
+  }, [program?.members])
 
 
 
@@ -45,7 +33,6 @@ export const useViewMemberModal = () => {
   const closeAddModal = () => {
     setAddModal(false)
     setSelectedAdd(null)
-    setExistingMembers([])
   }
 
   return { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers }

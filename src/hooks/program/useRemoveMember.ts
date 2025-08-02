@@ -15,22 +15,22 @@ export const useRemoveMember = (programId: string) => {
     }
 
     const handleRemove = async () => {
-        setRemovingEmails(selectedEmails)
-        for (const email of selectedEmails) {
-            await removeMember({ programId, email })
-        }
-        setSelectedEmails([])
-        setRemovingEmails([])
-        //for counts
-        const counts = selectedEmails.length
-        toast.success(`${counts} Members removed successfully`)
-
-
-        
+        // if wealang re-remove
         if(selectedEmails.length === 0) {
             toast.error(`Nothing to remove`)
              return
         }
+
+        setRemovingEmails(selectedEmails)
+
+        for (const email of selectedEmails) {
+            await removeMember({ programId, email })
+        }
+
+        //for counts
+        toast.success(`${selectedEmails.length} Members removed successfully`)
+        setSelectedEmails([])
+        setRemovingEmails([])
     }
     
 

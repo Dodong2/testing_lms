@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context = {
     params: { id: string }
@@ -33,6 +34,10 @@ export async function DELETE(req: NextRequest, context: Context) {
             userId: user.id
         }
     })
+
+    emitSocketEvent("program", "remove-member", {
+            programId, removedUserId: user.id
+        })
 
     return NextResponse.json({ success: true })
 
