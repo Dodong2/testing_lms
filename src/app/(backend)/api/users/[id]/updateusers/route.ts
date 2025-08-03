@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context ={
     params: {
@@ -30,6 +31,8 @@ export async function PATCH(req: NextRequest, context: Context ) {
                 role
             }
         })
+
+        await emitSocketEvent("user", "user-updated", updatedUsers)
 
         return NextResponse.json({ success: true, user: updatedUsers })
 

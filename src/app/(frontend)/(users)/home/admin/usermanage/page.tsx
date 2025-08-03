@@ -1,11 +1,13 @@
 'use client'
 import { useSession } from "next-auth/react"
+import { useEffect } from "react"
 /* hooks */
 import { useUsers } from "@/hooks/users/useUsers"
 import { DeleteUser } from "@/hooks/users/DeleteUser"
-import { useUpdateModal } from "@/hooks/users/useUpdateModal"
+import { useUpdateUserModal } from "@/hooks/users/useUpdateUserModal"
 import { useSearch } from "@/hooks/searchbar/useSearch"
 import { useCreateUserModal } from "@/hooks/users/useCreateUserModal"
+import { useUserEvents } from "@/hooks/socket/useUserSocket"
 /* components */
 import CreateUserModal from "@/components/modals/user modal/CreateUserModal"
 import EditUserModal from "@/components/modals/user modal/EditUserModal"
@@ -15,20 +17,21 @@ import { SearchBar } from "@/components/SearchBar"
 import { FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { MdEdit } from "react-icons/md";
 
-
-
 export default function UserManage() {
+  useUserEvents()
+  const { data: session, status } = useSession()
   const { useUsersLists } = useUsers()
-  const { data: users, isLoading } = useUsersLists()
+  const { data: usersData, isLoading } = useUsersLists()
   const { openCreateUser, handleCloseCreateUser, handleOpenCreateUser } = useCreateUserModal()
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
-  const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateModal()
+  const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateUserModal()
   const { filteredUsers, handleFiltered } = useSearch()
-  
-  
 
-
-  const { data: session, status } = useSession()
+  useEffect(() => {
+    if(usersData) {
+      handleFiltered(usersData)
+    }
+  }, [usersData, handleFiltered])
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
@@ -37,9 +40,9 @@ export default function UserManage() {
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
-        {users && (
+        {usersData && (
           <SearchBar
-            data={users}
+            data={usersData}
             onFiltered={handleFiltered}
             keysToSearch={['name', 'email', 'role']}
             placeholder="Search users..."
@@ -82,6 +85,7 @@ export default function UserManage() {
           ))}
           </tbody>
           </table>
+          
           {/* update modal for admin */}
           {session.user.role === 'ADMIN' && (<>
             {isUpdateModal && selectedUser && (
@@ -89,7 +93,10 @@ export default function UserManage() {
                 name: selectedUser.name,
                 email: selectedUser.email,
                 role: selectedUser.role
-              }} UserId={selectedUser.id} programs={selectedUser.ProgramMember} onSuccess={closeUpdateModal} onClose={closeUpdateModal} />
+              }} UserId={selectedUser.id} 
+              programs={selectedUser.ProgramMember} 
+              onSuccess={closeUpdateModal} 
+              onClose={closeUpdateModal} />
             )}
           </>)}
 

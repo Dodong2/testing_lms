@@ -2,12 +2,11 @@
 
 import { useSession } from "next-auth/react"
 import { useEffect } from "react";
-// import { useSocketEvents } from "@/hooks/useSocketEvents";
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
-import { useProgramModal } from "@/hooks/program/useProgramModal";
+import { useUpdateProgramsModal } from "@/hooks/program/useUpdateProgramsModal";
 import { useViewMemberModal } from "@/hooks/program/useViewMemberModal";
 import { useSearch } from "@/hooks/searchbar/useSearch";
 import { useCreateProgramsModal } from "@/hooks/program/useCreateProgramsModal";
@@ -26,7 +25,7 @@ export default function ProgramManage() {
   const { usePrograms } = useProgram()
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
-  const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useProgramModal()
+  const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useUpdateProgramsModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers } = useViewMemberModal()
   const { handleFilteredProgram, filteredPrograms} = useSearch()
   const { data: programData, isLoading } = usePrograms()

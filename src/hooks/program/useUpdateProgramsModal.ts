@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { programsTypes } from "@/types/programManagetypes"
 
-export const useProgramModal = () => {
+export const useUpdateProgramsModal = () => {
   const [selectedProgram, setSelectedProgram] = useState<programsTypes | null>(null)
   const [updateModal, setUpdateModal] = useState(false)
 

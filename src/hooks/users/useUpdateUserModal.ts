@@ -1,12 +1,15 @@
 import { useState } from "react"
 import { usersLists } from "@/types/usersManagetypes"
 
-export const useUpdateModal = () => {
+export const useUpdateUserModal = () => {
     const [selectedUser, setSelectedUser] = useState<usersLists | null>(null)
     const [isUpdateModal, setIsUpdateModal] = useState(false)
 
     const openUpdateModal = (user: usersLists) => {
-        setSelectedUser(user)
+        setSelectedUser({
+            ...user,
+            ProgramMember: user.ProgramMember ?? [],
+        })
         setIsUpdateModal(true)
     }
 

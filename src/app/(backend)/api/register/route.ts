@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 
 const registerSchema = z.object({
@@ -29,6 +30,9 @@ export async function POST(req: Request) {
     const newUser = await prisma.user.create({
         data: { email, name, role },
     })
+
+    // for real-time
+    await emitSocketEvent("user", "user-created", newUser)
 
     return NextResponse.json({ success: true, user: newUser })
 } catch(error) {
