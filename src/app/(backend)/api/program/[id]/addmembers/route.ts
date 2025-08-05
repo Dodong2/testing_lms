@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
+import { sendProgramInviteEmail } from "@/lib/email/sendProgramInvite";
 
 type Context = {
   params: {
@@ -26,6 +27,14 @@ export async function POST(req: NextRequest, context: Context) {
     where: { email: { in: emails } },
   });
 
+    const program = await prisma.program.findUnique({
+    where: { id: programId },
+  })
+
+  if(!program) {
+    return NextResponse.json({ error: 'Program not found' }, { status: 404 })
+  }
+
   await prisma.programMember.createMany({
     data: users.map((user) => ({
       programId,
@@ -33,6 +42,8 @@ export async function POST(req: NextRequest, context: Context) {
     })),
     skipDuplicates: true,
   });
+
+
   
   //for real-time await for trigger member-add
   await new Promise((res) => setTimeout(res, 300))
@@ -45,6 +56,18 @@ export async function POST(req: NextRequest, context: Context) {
     role: user.role
   }))
 })
+
+  // for sending email to notif user
+  await Promise.all(
+    users.map((member) => 
+      sendProgramInviteEmail({
+        email: member.email,
+        name: member.name,
+        programName: program.title,
+        role: member.role
+      })
+    )
+  )
 
   return NextResponse.json({ success: true });
 }

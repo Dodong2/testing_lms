@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
+import { sendProgramRemovalEmail } from "@/lib/email/sendProgramRemoval";
 
 type Context = {
     params: { id: string }
@@ -24,9 +25,15 @@ export async function DELETE(req: NextRequest, context: Context) {
         select: { id: true }
     })
 
+    const program = await prisma.program.findUnique({
+        where: { id: programId },
+        select: { title: true }
+    })
+
     if(!user) {
         return NextResponse.json({ error: 'User not found' },{ status: 404 })
     }
+
 
     await prisma.programMember.deleteMany({
         where: {
@@ -34,6 +41,11 @@ export async function DELETE(req: NextRequest, context: Context) {
             userId: user.id
         }
     })
+
+    // for sending email to notif user
+    if(program) {
+        await sendProgramRemovalEmail({ email, programName: program.title })
+    }
 
     emitSocketEvent("program", "remove-member", {
             programId, removedUserId: user.id
