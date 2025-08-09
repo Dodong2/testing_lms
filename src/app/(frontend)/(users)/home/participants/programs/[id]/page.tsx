@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
+import ProgramClient from "../pages/ProgramClient";
 
 interface Props {
     params: {
@@ -15,18 +16,15 @@ export default async function ProgramPage({ params }: Props) {
 
     if(!session) redirect("/")
 
+    const { id } = await params
+
     const program = await prisma.program.findUnique({
-        where: { id: params.id }
+        where: { id }
     })
 
     if (!program) return <div>Program not found</div>
 
     return (
-        <div>
-            <h1>title: {program.title}</h1>
-            <p>subtitle: {program.subtitle}</p>
-            <p>explanation: {program.explanation}</p>
-            <p>Welcome, {session.user.name}!</p>
-        </div>
+        <ProgramClient program={program} username={session.user.name || 'User'}/>
     )
 }

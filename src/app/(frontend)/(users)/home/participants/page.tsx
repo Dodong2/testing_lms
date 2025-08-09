@@ -27,7 +27,7 @@ export default function Programs() {
       ) : (
         programData?.programs?.map(program => (
         <div key={program.id}  className="bg-white rounded-lg shadow overflow-hidden">
-          <Link href={`/programs/${program.id}`}>
+          <Link href={`/home/participants/programs/${program.id}`}>
             {/* Top gray box */}
             <div className="bg-gray-300 h-32 w-full"></div>
 
