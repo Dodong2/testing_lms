@@ -19,7 +19,13 @@ export default async function ProgramPage({ params }: Props) {
     const { id } = await params
 
     const program = await prisma.program.findUnique({
-        where: { id }
+        where: { id },
+        select: {
+            id: true,
+            title: true,
+            subtitle: true,
+            explanation: true
+        }
     })
 
     if (!program) return <div>Program not found</div>

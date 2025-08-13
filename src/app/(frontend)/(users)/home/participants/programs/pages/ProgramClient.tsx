@@ -2,12 +2,20 @@
 import { useNavbarTabs } from "@/hooks/useNavbarTabs"
 import Navbar from "@/components/Navbar"
 
+interface Program {
+    id: string
+    title: string
+    explanation: string
+    subtitle: string
+}
+
 interface ProgramClientProps {
-    program: {
-        title: string
-        subtitle: string
-        explanation: string
-    }
+    program: Program
+    username: string
+}
+
+interface ProgramClientProps {
+    program: Program
     username: string
 }
 
@@ -18,7 +26,13 @@ const meeting = [
 ];
 
 const ProgramClient = ({ program, username }: ProgramClientProps) => {
-    const { activeTab, setActiveTab, renderContent } = useNavbarTabs()
+    const { activeTab, setActiveTab, renderContent } = useNavbarTabs({ program: {
+      id: program.id,
+      title: program.title,
+      explanation: program.explanation,
+      subtitle: program.subtitle
+
+    }, username })
 
   return (
     <div className="w-full">

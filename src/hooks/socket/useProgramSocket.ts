@@ -31,7 +31,7 @@ export const useProgramEvents = () => {
   const { data: session } = useSession()
 
   useEffect(() => {
-    console.log("🧲 useSocketEvents mounted")
+    console.log("🧲 useProgramSocket mounted")
     /* step: 4 real-time
     Kapag may broadcast na "program-created" galing sa server, mag-iinvalidate ang cache (["programs"]) para magre-fetch via React Query. 💥*/
     socket.on("connect", () => {

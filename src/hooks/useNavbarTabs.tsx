@@ -6,17 +6,31 @@ import UpdatesContent from "@/app/(frontend)/(users)/home/participants/programs/
 import InstructorsContent from "@/app/(frontend)/(users)/home/participants/programs/pages/InstructorsContent"
 import FilesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/FilesContent"
 
-export const useNavbarTabs = () => {
+interface Program {
+    id: string
+    title: string
+    explanation: string
+    subtitle: string
+}
+
+interface ProgramClientProps {
+    program: Program
+    username: string
+}
+
+export const useNavbarTabs = ({ program, username }: ProgramClientProps) => {
     const [activeTab, setActiveTab] = useState("updates")
 
     const renderContent = () => {
         switch (activeTab) {
             case 'updates':
-                return <UpdatesContent/>
+                return <UpdatesContent programId={program.id} />
             case 'files':
                 return <FilesContent/>
             case 'instructors':
                 return <InstructorsContent/>
+            default:
+                return <UpdatesContent programId={program.id}/>
 
         }
     }

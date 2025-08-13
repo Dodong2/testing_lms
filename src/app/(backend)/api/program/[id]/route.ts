@@ -9,6 +9,7 @@ type Context = {
     }
 }
 
+// ito yung pang get ng programs by ID
 export async function GET(req: NextRequest, context: Context) {
     try {
         const session = await getServerSession(authOptions)

@@ -29,6 +29,9 @@ model User {
   Program Program[]
 
   ProgramMember ProgramMember[]
+
+  posts    Post[]    @relation("UserPosts")
+  comments Comment[] @relation("UserComments")
 }
 
 //account for google auth
@@ -75,6 +78,7 @@ model Program {
   adminId     String
   admin       User            @relation(fields: [adminId], references: [id])
   members     ProgramMember[]
+  posts       Post[]
 }
 
 model ProgramMember {
@@ -85,4 +89,25 @@ model ProgramMember {
   userId    String
 
   @@unique([programId, userId])
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  content   String
+  programId String
+  authorId  String
+  program   Program   @relation(fields: [programId], references: [id])
+  author    User      @relation("UserPosts", fields: [authorId], references: [id])
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation("UserComments", fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
 }
