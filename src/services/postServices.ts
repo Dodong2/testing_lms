@@ -30,11 +30,11 @@ export const createPost = async (programId: string, content: string) => {
 }
 
 //create comment
-export const createComment = async(postId: string, content: string) => {
-    const res = await fetch(`/api/program/comments/${postId}`, {
+export const createComment = async(programId: string, postId: string, content: string) => {
+    const res = await fetch(`/api/program/${programId}/posts/${postId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content })
+        body: JSON.stringify({ content})
     })
 
     if(!res.ok) {

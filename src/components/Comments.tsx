@@ -17,18 +17,20 @@ interface Comment {
 }
 
 interface CommentsProps {
+  programId: string
+  postId: string
   comments: Comment[]
-  onAddComment: (comment: string) => void
+  onAddComment: (programId: string, postId: string, comment: string) => void
 }
 
 
-const Comments: React.FC<CommentsProps> = ({ comments =[], onAddComment }) => {
+const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], onAddComment }) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("")
 
   const handleSubmitComment = () => {
     if(!newComment.trim()) return
-    onAddComment(newComment)
+    onAddComment(programId, postId, newComment)
     setNewComment("")
   }
 
@@ -62,6 +64,7 @@ const Comments: React.FC<CommentsProps> = ({ comments =[], onAddComment }) => {
                     <Image
                     src={comment.author.image} 
                     alt={comment.author.name}
+                    width={40} height={40}
                     className="w-full h-full rounded-full object-cover"
                   />
                   )}

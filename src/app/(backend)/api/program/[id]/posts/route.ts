@@ -45,7 +45,7 @@ export async function GET(req: NextRequest, context: Context) {
         include: {
             author: { select: { id: true, name: true, image: true } },
             comments: {
-                include: { author: { select: { id: true, name: true, image: true } } }
+                include: { author: { select: { id: true, name: true, image: true, } } }
             }
         },
         orderBy: { createdAt: 'desc' }

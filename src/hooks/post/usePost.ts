@@ -54,10 +54,10 @@ export const usePost = (programId: string) => {
     const useCreateComment = () => {
         const queryClient = useQueryClient()
         return useMutation({
-            mutationFn: ({ postId, content }: { postId: string, content: string }) => 
-                createComment(postId, content),
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["posts", programId] })
+            mutationFn: ({ programId , postId, content }: { programId: string, postId: string, content: string }) => 
+                createComment( programId , postId, content),
+            onSuccess: (__data, variables) => {
+                queryClient.invalidateQueries({ queryKey: ["posts", variables.programId] })
                 toast.success("Comment added successfully!")
             },
             onError: () => {

@@ -70,7 +70,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
 
             {/* Comments */}
-            <Comments comments={post.comments} onAddComment={(content) => createComment({ postId: post.id, content })}/>
+            <Comments programId={programId} postId={post.id} comments={post.comments} onAddComment={(programId, postId, content) => createComment({ programId, postId: post.id, content })}/>
 
           </div>
         ))}
