@@ -23,12 +23,30 @@ export const authOptions: AuthOptions = {
     error: "/error",
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       const existingUser = await prisma.user.findUnique({
         where: { email: user.email ?? undefined },
       });
 
-      if (!existingUser) return false;
+      if(!user.email) return false // if walang email, reject login
+      if(!existingUser) return false // if walang email, reject login
+
+      // Kung wala pa sa DB, gumawa ng bago with image from Google
+      if (!existingUser) {
+        await prisma.user.create({
+          data: {
+          name: user.name ?? '',
+          email: user.email,
+          image: (profile as ExtendedProfile)?.picture || null,
+          role: 'BENEFICIARY'
+          }
+        })
+      } else if (!existingUser.image && (profile as ExtendedProfile)?.picture) {
+        await prisma.user.update({
+          where: { id: existingUser.id },
+          data: { image: (profile as ExtendedProfile)?.picture }
+        })
+      }
 
       const existingAccount = await prisma.account.findFirst({
         where: {
@@ -36,6 +54,8 @@ export const authOptions: AuthOptions = {
           providerAccountId: account?.providerAccountId,
         },
       });
+
+      
 
       if (!existingAccount && account) {
         await prisma.account.create({
