@@ -1,5 +1,6 @@
 "use client";
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 /* components */
 import Comments from '@/components/Comments';
 import PostModal from '@/components/modals/post modal/PostModal';
@@ -12,6 +13,7 @@ import { usePostModal } from '@/hooks/post/usePostModal';
 
 
 export default function UpdatesContent({ programId }: { programId: string }) {
+  const { data: session } = useSession()
   const { openPost, OpenPostModal, ClosePostModal } = usePostModal()
   const { usePosts, useCreateComment } = usePost(programId)
   const { data: posts, isLoading } = usePosts()
@@ -34,7 +36,11 @@ export default function UpdatesContent({ programId }: { programId: string }) {
       {/* Post input area to pre tangina */}
       <div className="p-2 bg-gray-100 mt-2 rounded-md">
         <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full" onClick={OpenPostModal}>
-          <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-300">
+            {session?.user.image && (
+              <Image src={session.user.image} alt='Profile' width={40} height={40} className="w-10 h-10 rounded-full"/>
+            )}
+          </div>
           <p>Post something</p>
         </div>
       </div>
@@ -46,7 +52,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             {/* Post Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full overflow-hidden ">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
                   {post.author.image && (
                     <Image src={post.author.image} alt="Profile" width={40} height={40} className="w-10 h-10 rounded-full"/>
                   )}

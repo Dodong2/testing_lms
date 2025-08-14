@@ -32,17 +32,21 @@ export const usePostEvents = (programId: string) => {
 
     useEffect(() => {
 
+        socket.on("connect", () => {
+      console.log("✅ Socket connected:", socket.id)
+    })
+
         socket.on('post-created', (newPost) => {
             if(newPost.programId !== programId) return
             
-            queryClient.setQueryData<Post[]>(['posts', programId], (oldData) => {
+            queryClient.setQueryData<Post[]>(['post', programId], (oldData) => {
                 if(!oldData) return [newPost]
                 return [newPost, ...oldData]
             })
         })
 
         socket.on('comment-created', (newComment) => {
-            queryClient.setQueryData(['posts', programId], (oldData: Post[]) => {
+            queryClient.setQueryData(['post', programId], (oldData: Post[]) => {
                 if(!oldData) return oldData
 
                 return oldData.map(post => {
