@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { BsChatSquareTextFill } from "react-icons/bs";
+import { usePostEvents } from "@/hooks/socket/usePostSocket";
 
 interface Comment {
   id: string
@@ -25,6 +26,7 @@ interface CommentsProps {
 
 
 const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], onAddComment }) => {
+  usePostEvents(programId)
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("")
 

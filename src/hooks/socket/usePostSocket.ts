@@ -32,10 +32,6 @@ export const usePostEvents = (programId: string) => {
 
     useEffect(() => {
 
-        socket.on("connect", () => {
-      console.log("✅ Socket connected:", socket.id)
-    })
-
         socket.on('post-created', (newPost) => {
             if(newPost.programId !== programId) return
             
@@ -51,9 +47,14 @@ export const usePostEvents = (programId: string) => {
 
                 return oldData.map(post => {
                     if(post.id === newComment.postId) {
+
+                        const comments = post.comments ?? []
+                        const exists = post.comments.some(c => c.id === newComment.id)
+                        if(exists) return post
+
                         return {
                             ...post,
-                            comments: [...post.comments, newComment]
+                            comments: [...comments, newComment]
                         }
                     }
                     return post

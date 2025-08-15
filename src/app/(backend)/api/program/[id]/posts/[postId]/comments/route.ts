@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 type Context = {
     params: {
@@ -67,6 +68,8 @@ export async function POST(req: NextRequest, context: Context) {
             author: { select: { id: true, name: true, image: true } }
         }
     })
+
+    await emitSocketEvent('post', 'comment-created', comment)
 
     return NextResponse.json(comment)
 
