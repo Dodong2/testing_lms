@@ -31,16 +31,19 @@ export const usePostEvents = (programId: string) => {
     const { data: session } = useSession()
 
     useEffect(() => {
-
+        //get lahat ng post
         socket.on('post-created', (newPost) => {
             if(newPost.programId !== programId) return
             
             queryClient.setQueryData<Post[]>(['post', programId], (oldData) => {
                 if(!oldData) return [newPost]
+                const exists = oldData.some(p => String(p.id) === String(newPost.id))
+                if(exists) return oldData
                 return [newPost, ...oldData]
             })
         })
 
+        //get lahat ng comments sa post
         socket.on('comment-created', (newComment) => {
             queryClient.setQueryData(['post', programId], (oldData: Post[]) => {
                 if(!oldData) return oldData
@@ -49,7 +52,7 @@ export const usePostEvents = (programId: string) => {
                     if(post.id === newComment.postId) {
 
                         const comments = post.comments ?? []
-                        const exists = post.comments.some(c => c.id === newComment.id)
+                        const exists = comments.some(c => String(c.id) === String(newComment.id))
                         if(exists) return post
 
                         return {

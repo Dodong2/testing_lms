@@ -92,7 +92,6 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
 
         {/* comments input */}
         <div className="flex items-center gap-2 mt-4">
-          <div className="w-8 h-8 rounded-full bg-gray-300"></div>
           <input
             type="text" value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
