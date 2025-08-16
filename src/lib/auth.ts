@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       const existingUser = await prisma.user.findUnique({
-        where: { email: user.email ?? undefined },
+        where: { email: user.email },
       });
 
       if(!user.email) return false // if walang email, reject login
@@ -77,6 +77,16 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async jwt({ token, user, profile}) {
+      if(!token.email) return token
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: token.email as string }
+      })
+
+      if(!existingUser) {
+        return {} as typeof token
+      }
+      
       const ExtendedProfile = profile as ExtendedProfile
       if (user) {
         const dbUser = await prisma.user.findUnique({
@@ -92,9 +102,22 @@ export const authOptions: AuthOptions = {
         }
       }
 
+      token.id = existingUser.id
+      token.role = existingUser.role
+
       return token;
     },
     async session({ session, token }) {
+      if(!token?.email) {
+        return {} as typeof session
+      }
+
+      session.user = {
+        ...session.user,
+        id: token.id as string,
+        role: token.role,
+      };
+
       if (session.user) {
         session.user.name = token.name!;
         session.user.email = token.email!;

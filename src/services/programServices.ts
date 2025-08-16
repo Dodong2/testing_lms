@@ -1,10 +1,8 @@
+import { apiFetch } from "./apiClient"
+
 // pang get lahat ng programs (for all roles)
 export const getPrograms = async() => {
-    const res = await fetch('/api/program',)
-    if(!res.ok) {
-        throw new Error('Failed to fetch programs')
-    }
-    return res.json()
+    return apiFetch('/api/program')
 }
 
 // types ng create Program
@@ -17,43 +15,25 @@ interface ProgramData {
 
 // para pang create ng Programs (for admin)
 export const createProgram = async(data: ProgramData) => {
-    const res = await fetch('/api/program', {
+    return apiFetch('/api/program', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    if(!res.ok) {
-        throw new Error('Failed to create program')
-    }
-    
-    return res.json()
 }
 
 // pang add ng members sa existing program (for admin)
 export const addProgramMembers = async(programId: string, emails: string[]) => {
-    const res = await fetch(`/api/program/${programId}/addmembers`, {
+    return apiFetch(`/api/program/${programId}/addmembers`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ emails })
     })
-    if(!res.ok) {
-        throw new Error('Failed to add members')
-    }
-    return res.json()
 }
 
 // pang-delete ng programs (for admin)
 export const deletePrograms = async (programId: string) => {
-    const res = await fetch(`/api/program/${programId}/deleteprograms`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+    return apiFetch(`/api/program/${programId}/deleteprograms`, {
+        method: 'DELETE'
     })
-
-    if(!res.ok) {
-        throw new Error('Failed to delete program')
-    }
-
-    return res.json()
 }
 
 // types ng update program
@@ -68,30 +48,17 @@ interface UpdateProgramData {
 
 // pang-update ng program (for admin)
 export const updateProgram = async ({programId, data}: UpdateProgramData) => {
-    const res = await fetch(`/api/program/${programId}/updateprograms`, {
+    return apiFetch(`/api/program/${programId}/updateprograms`, {
         method: 'PATCH',
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-    if(!res.ok) {
-        throw new Error('Failed to update program')
-    }
-
-    return res.json()
 }
 
 export const removeProgramMember = async(programId: string, email: string) => {
-    const res = await fetch(`/api/program/${programId}/removemember`, {
+    return apiFetch(`/api/program/${programId}/removemember`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
     })
-
-    if(!res.ok) {
-        throw new Error("Failed to remove member")
-    }
-
-    return res.json()
 }
 
 //types ng getProgramId
@@ -112,12 +79,5 @@ export interface ProgramWithMembers {
 }
 // pang get ng program pero per ID
 export const getProgramById = async(programId: string): Promise<ProgramWithMembers> => {
-    const res = await fetch(`/api/program/${programId}`)
-
-    if(!res.ok) {
-        throw new Error("Failed to fetch program with members") 
-    }
-
-    const data: ProgramWithMembers = await res.json()
-    return data
+    return apiFetch<ProgramWithMembers>(`/api/program/${programId}`)
 }

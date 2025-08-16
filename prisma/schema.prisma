@@ -76,7 +76,7 @@ model Program {
   explanation String
   createdAt   DateTime        @default(now())
   adminId     String
-  admin       User            @relation(fields: [adminId], references: [id])
+  admin       User            @relation(fields: [adminId], references: [id], onDelete: Cascade)
   members     ProgramMember[]
   posts       Post[]
 }
@@ -96,8 +96,8 @@ model Post {
   content   String
   programId String
   authorId  String
-  program   Program   @relation(fields: [programId], references: [id])
-  author    User      @relation("UserPosts", fields: [authorId], references: [id])
+  program   Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
+  author    User      @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]
   createdAt DateTime  @default(now())
 }
@@ -107,7 +107,7 @@ model Comment {
   content   String
   postId    String
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
-  author    User     @relation("UserComments", fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation("UserComments", fields: [authorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
