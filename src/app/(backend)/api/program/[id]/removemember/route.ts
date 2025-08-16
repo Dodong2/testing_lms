@@ -5,18 +5,16 @@ import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 import { sendProgramRemovalEmail } from "@/lib/email/sendProgramRemoval";
 
-type Context = {
-    params: { id: string }
-}
 
-export async function DELETE(req: NextRequest, context: Context) {
+
+export async function DELETE(req: NextRequest, { params }: { params: { id:string } }) {
     try{
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {
         return NextResponse.json({error: "Unauthorized" }, { status: 401 })
     }
 
-    const { id } = await context.params
+    const { id } = params
     const programId = id
     const { email } = await req.json()
 

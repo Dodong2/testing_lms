@@ -4,14 +4,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
 
 // delete ang programs admin lang ang makaka-delete
-export async function DELETE(req: NextRequest, context: Context) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
 try {
     const session = await getServerSession(authOptions)
 
@@ -20,7 +15,7 @@ try {
         return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
 
     // Next15 Dynamic APIs are Asynchronous (required to do this)
-    const {id} = await context.params
+    const {id} = params
 
     // 2. Get program ID from URL
     const programId = id

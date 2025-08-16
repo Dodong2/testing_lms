@@ -4,20 +4,15 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
-type Context = {
-    params: {
-        id: string
-    }
-}
 
-export async function DELETE(req: NextRequest, context: Context) {
+export async function DELETE(req: NextRequest, { params }: { params: { id:string } }) {
     try {
         const session = await getServerSession(authOptions)
         if(!session || session.user.role !== 'ADMIN') {
             return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
         }
 
-        const { id } = await context.params
+        const { id } = params
         const UserId = id
 
         const users = await prisma.user.findUnique({

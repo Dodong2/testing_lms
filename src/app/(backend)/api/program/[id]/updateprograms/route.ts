@@ -4,14 +4,9 @@ import { prisma } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
 
 // update ng mga programs para lang sa admin 
-export async function PATCH(req: NextRequest, context: Context ) {
+export async function PATCH(req: NextRequest, { params }: { params: { id:string } } ) {
     try {
 
         const session = await getServerSession(authOptions)
@@ -19,7 +14,7 @@ export async function PATCH(req: NextRequest, context: Context ) {
             return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
         }
 
-        const { id } = await context.params
+        const { id } = params
         const programId = id
         const body = await req.json()
         const { title, subtitle, explanation } = body

@@ -46,7 +46,7 @@ try {
         })
         }
 
-        const { members, ...rest } = program
+        const { ...rest } = program
         return {
             ...rest,
             memberCounts: {

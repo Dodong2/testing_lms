@@ -5,14 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
-type Context = {
-    params: {
-        id: string
-        postId: string
-    }
-}
 
-export async function POST(req: NextRequest, context: Context) {
+export async function POST(req: NextRequest, { params }: { params: { id: string, postId: string } }) {
     try {
     const session = await getServerSession(authOptions)
     if(!session?.user?.email) {
@@ -27,7 +21,7 @@ export async function POST(req: NextRequest, context: Context) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const { id: programId, postId } = await context.params
+    const { id: programId, postId } = params
     const { content } = await req.json()
 
     if(typeof content !== 'string' || !content.trim()) {

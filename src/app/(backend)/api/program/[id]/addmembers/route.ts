@@ -5,11 +5,6 @@ import { authOptions } from "@/lib/auth";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 import { sendProgramInviteEmail } from "@/lib/email/sendProgramInvite";
 
-type Context = {
-  params: {
-    id: string;
-  };
-};
 
 // pang add ng members sa existing program for admin only
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
@@ -20,7 +15,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   const body = await req.json();
   const { emails } = body;
-  const programId = params.id;
+  const { id } = params
+  const programId = id;
 
   const users = await prisma.user.findMany({
     where: { email: { in: emails } },
