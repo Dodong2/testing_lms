@@ -6,7 +6,7 @@ import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 
 // update ng mga programs para lang sa admin 
-export async function PATCH(req: NextRequest, { params }: { params: { id:string } } ) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
 
         const session = await getServerSession(authOptions)
@@ -14,7 +14,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id:string 
             return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
         }
 
-        const { id } = params
+        const { id } = await context.params
         const programId = id
         const body = await req.json()
         const { title, subtitle, explanation } = body

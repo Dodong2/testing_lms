@@ -7,7 +7,7 @@ import { sendProgramInviteEmail } from "@/lib/email/sendProgramInvite";
 
 
 // pang add ng members sa existing program for admin only
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   const body = await req.json();
   const { emails } = body;
-  const { id } = params
+  const { id } = await context.params
   const programId = id;
 
   const users = await prisma.user.findMany({

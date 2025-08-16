@@ -5,14 +5,14 @@ import { authOptions } from "@/lib/auth";
 
 
 // ito yung pang get ng programs by ID
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await getServerSession(authOptions)
         if(!session || session.user.role !== 'ADMIN') {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const { id } = params
+        const { id } = await context.params
         const programId = id
 
         const program = await prisma.program.findUnique({

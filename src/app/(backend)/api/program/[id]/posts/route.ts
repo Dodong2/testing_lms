@@ -6,7 +6,7 @@ import { emitSocketEvent } from '@/lib/emitSocketEvent';
 
 
 //pang get ng mga sa specific programs post
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
     const session = await getServerSession(authOptions)
 
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         return NextResponse.json({ error: 'User not found' }, { status: 401 })
     }
 
-    const { id } = params
+    const { id } = await context.params
     const programId = id
 
     const member = await prisma.programMember.findFirst({
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 //for create ng post sa programs
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try{
     const session = await getServerSession(authOptions)
 
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 
 
-    const { id } = params
+    const { id } = await context.params
     const programId = id
     
     const { content } = await req.json()
