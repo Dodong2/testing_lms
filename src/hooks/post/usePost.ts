@@ -2,32 +2,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { getPosts, createPost, createComment } from "@/services/postServices";
 
-interface Post {
-    id: string,
-    content: string
-    authorId: string
-    programId: string
-    createdAt: string
-    author: {
-        id: string
-        name: string
-        image: string
-    }
-    comments: {
-        id: string
-        content: string
-        author: {
-            id: string
-            name: string
-            image: string
-        }
-    }[]
-}
+
 
 export const usePost = (programId: string) => {
     // get posts for program
     const usePosts = () => {
-        return useQuery<Post[]>({
+        return useQuery({
             queryKey: ["post", programId],
             queryFn: () => getPosts(programId),
             enabled: !!programId

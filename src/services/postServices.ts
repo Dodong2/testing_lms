@@ -1,8 +1,9 @@
 import { apiFetch } from "./apiClient"
+import { PostGetTypes } from "@/types/postManagetypes"
 
 //get posts
 export const getPosts = async (programId: string) => {
-    return apiFetch(`/api/program/${programId}/posts`, {
+    return apiFetch<PostGetTypes[]>(`/api/program/${programId}/posts`, {
         method: 'GET',
         credentials: 'include'
     })
