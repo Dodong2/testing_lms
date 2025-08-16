@@ -7,8 +7,10 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   const pathname = req.nextUrl.pathname
   console.log("🛡️ Middleware running for:", pathname)
+  
   // Always allow access to login and error pages
-  const isPublicPath = pathname.startsWith('/') || pathname.startsWith('/error')
+  const publicPaths = ['/', '/error']
+  const isPublicPath = publicPaths.includes(pathname)
 
   // Not logged in? Redirect to login
   if (!token && !isPublicPath) {
@@ -31,7 +33,7 @@ export async function middleware(req: NextRequest) {
 
     // Already logged in? Prevent access to login page
     if (pathname === '/') {
-      return NextResponse.redirect(new URL('/', req.url))
+      return NextResponse.redirect(new URL('/home', req.url))
     }
   }
 
