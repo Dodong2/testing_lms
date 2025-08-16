@@ -20,8 +20,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   const body = await req.json();
   const { emails } = body;
-  const { id } = await params
-  const programId = id;
+  const programId = params.id;
 
   const users = await prisma.user.findMany({
     where: { email: { in: emails } },
