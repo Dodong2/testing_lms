@@ -3,18 +3,11 @@ import { toast } from "react-hot-toast"
 // services
 import { getPrograms, createProgram, addProgramMembers, deletePrograms, updateProgram, removeProgramMember, getProgramById } from "@/services/programServices"
 
-type Program = {
-  id: string
-  title: string
-  subtitle: string
-  explanation: string
-}
-
 export const useProgram = () => {
 
     // pang get ng program
     const usePrograms = () => {
-        return useQuery<{ programs: Program[] }>({
+        return useQuery({
             queryKey: ["programs"],
             queryFn: getPrograms,
             refetchInterval: 2000

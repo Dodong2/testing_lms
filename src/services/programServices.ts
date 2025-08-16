@@ -1,8 +1,14 @@
 import { apiFetch } from "./apiClient"
+import { ProgramGetTypes } from "@/types/programManagetypes"
+
+export interface ProgramResponse {
+  programs: ProgramGetTypes[]
+}
+
 
 // pang get lahat ng programs (for all roles)
-export const getPrograms = async() => {
-    return apiFetch('/api/program')
+export const getPrograms = async (): Promise<ProgramResponse> => {
+  return apiFetch<ProgramResponse>('/api/program')
 }
 
 // types ng create Program

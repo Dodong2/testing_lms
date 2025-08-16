@@ -34,7 +34,7 @@ export default function ProgramManage() {
   if (programData?.programs) {
     handleFilteredProgram(programData.programs)
   }
-}, [programData?.programs, handleFilteredProgram])
+}, [programData, handleFilteredProgram])
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
@@ -44,7 +44,7 @@ export default function ProgramManage() {
     <div className="bg-gray-100 p-6 rounded-md shadow-md">
       {/* search bar */}
       <div className="flex items-center justify-between mb-4">
-        {programData && (
+        {programData?.programs && (
           <SearchBar
             data={programData.programs}
             onFiltered={handleFilteredProgram}

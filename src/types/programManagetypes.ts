@@ -28,3 +28,14 @@ export interface addMembersProps {
     programId: string
     title: string
 }
+
+export interface ProgramGetTypes {
+  id: string
+  title: string
+  subtitle: string
+  explanation: string
+  memberCounts?: {
+    instructors: number
+    beneficiaries: number
+  }
+}
