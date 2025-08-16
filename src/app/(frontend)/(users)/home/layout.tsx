@@ -41,8 +41,6 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     ]: []) 
   ];
 
-  
-
   // Optional section ng "Programs"
   // ito yung mga contexts o values sa text na ipapasa sa sidebar para ma-display
   const programs = ["Topic", "Topic", "Finance"];
