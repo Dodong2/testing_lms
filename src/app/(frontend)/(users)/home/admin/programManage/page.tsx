@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react"
 import { useEffect } from "react";
+import Link from "next/link";
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
@@ -14,6 +15,8 @@ import { useCreateProgramsModal } from "@/hooks/program/useCreateProgramsModal";
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { FaList } from "react-icons/fa";/* components */
 import { SearchBar } from "@/components/SearchBar";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
+/* components */
 import CreateProgramModal from "@/components/modals/programs modal/CreateProgramModal";
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import ViewMemberModal from "@/components/modals/programs modal/ViewMemberModal";
@@ -73,11 +76,19 @@ export default function ProgramManage() {
                 <h3 className="text-xl font-semibold text-gray-900">{program.title}</h3>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
+                {/* buttons */}
+                <div className="flex gap-1.5">
                 <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
                 onClick={() => openAddModal(program)}>
                 <FaList className="inline-block mr-2" />
                 <p>View Members</p>
               </button>
+              <Link href={`/home/participants/programs/${program.id}`}>
+              <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"> 
+                <FaRegArrowAltCircleRight className="inline-block mr-2"/>
+                <p>View Programs</p></button>
+              </Link>
+              </div>
               </div>
 
               <div className="space-x-2">
