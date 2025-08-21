@@ -3,10 +3,10 @@ import { toast } from "react-hot-toast";
 import { createFeedback, FeedbackPayload, getFeedbacks } from "@/services/feedbackServices";
 
 export const useFeedback = () => {
-    const queryClient = useQueryClient()
 
     // create feedback
     const useCreateFeedback = () => {
+        const queryClient = useQueryClient()
         return useMutation({
             mutationFn: (payload: FeedbackPayload) => createFeedback(payload),
             onSuccess: () => {
