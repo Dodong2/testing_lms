@@ -27,7 +27,7 @@ export const useLocalStorageAdmin = () => {
 
     // save localStorage if na open nayung feedbackId
         useEffect(() => {
-            console.log("Saving to localStorage:", Array.from(readIds));
+            // console.log("Saving to localStorage:", Array.from(readIds));
             localStorage.setItem("readFeedbackIds", JSON.stringify(Array.from(readIds)))
         }, [readIds])
 
