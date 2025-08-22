@@ -8,7 +8,8 @@ import { IoClose } from "react-icons/io5";
 
 export default function FeedbackManagePage() {
     const { data: feedbacksData, isLoading } = useFeedback().useGetFeedbacks()
-    const { openId, readIds, handleToggle } = useLocalStorageAdmin()
+    const feedbackIds = feedbacksData?.map(f => f.id) || []
+    const { openId, handleToggle, isIdRead } = useLocalStorageAdmin(feedbackIds)
     
     return (
         <div className="p-4 space-x-4">
@@ -18,10 +19,11 @@ export default function FeedbackManagePage() {
             {!isLoading && feedbacksData?.map((f) => {
                 const isAnon = f.visibility === 'Anonymous'
                 const isOpen = openId === f.id
-                const isRead = readIds.has(f.id)
+                const isRead = isIdRead(f.id)
+                
 
                 return (
-                    <div key={f.id} className={`border w-full rounded-lg shadow-sm p-4 ${isRead ? "bg-white" : "bg-yellow-50"}`}>
+                    <div key={f.id} className={`border w-full rounded-lg shadow-sm p-4 ${isRead ? "bg-white" : "bg-amber-600"}`}>
                         {/* Summary row */}
                         <div onClick={() => handleToggle(f.id, isOpen)}  className="flex gap-2 justify-between items-center">
                             <div>

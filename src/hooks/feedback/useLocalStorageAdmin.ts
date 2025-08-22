@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
+import { hashId } from "@/lib/hash"
 
-export const useLocalStorageAdmin = () => {
+export const useLocalStorageAdmin = (feedbackId: string[] = []) => {
     const [openId, setOpenId] = useState<string | null>(null)
     const [readIds, setReadIds] = useState<Set<string>>(() => {
         if(typeof window !== "undefined") {
@@ -11,6 +12,8 @@ export const useLocalStorageAdmin = () => {
         }
         return new Set();
     })
+
+    const [readStatusMap, setReadStatusMap] = useState<Map<string, boolean>>(new Map())
 
     // Load localStorage para update
         useEffect(() => {
@@ -31,19 +34,43 @@ export const useLocalStorageAdmin = () => {
             localStorage.setItem("readFeedbackIds", JSON.stringify(Array.from(readIds)))
         }, [readIds])
 
-        const handleToggle = (id: string, isOpen: boolean) => {
+        // Update read status map when feedbackIds or readIds change
+        useEffect(() => {
+            if(feedbackId.length > 0) {
+                const updateReadStatusMap = async() => {
+                    const statusMap = new Map<string, boolean>()
+
+                    await Promise.all(
+                        feedbackId.map(async (id) => {
+                            const hashed = await hashId(id)
+                            statusMap.set(id, readIds.has(hashed))
+                        })
+                    )
+                    setReadStatusMap(statusMap)
+                }
+                updateReadStatusMap()
+            }
+        }, [feedbackId, readIds])
+
+
+        const handleToggle = async(id: string, isOpen: boolean) => {
         if(isOpen) {
             setOpenId(null)
         } else {
             setOpenId(id)
+            const hashed = await hashId(id)
             setReadIds(prev => {
                 const updated = new Set(prev)
-                updated.add(id)
+                updated.add(hashed)
                 return updated
             })
         }
     }
 
-    return { openId, readIds, handleToggle }
+    const isIdRead = (id: string): boolean => {
+        return readStatusMap.get(id) || false
+    }
+
+    return { openId, handleToggle, isIdRead }
 }
 
