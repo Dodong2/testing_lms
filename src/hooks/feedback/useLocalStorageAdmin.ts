@@ -32,6 +32,7 @@ export const useLocalStorageAdmin = (feedbackId: string[] = []) => {
         useEffect(() => {
             // console.log("Saving to localStorage:", Array.from(readIds));
             localStorage.setItem("readFeedbackIds", JSON.stringify(Array.from(readIds)))
+            window.dispatchEvent(new CustomEvent('localStorageUpdate'))
         }, [readIds])
 
         // Update read status map when feedbackIds or readIds change

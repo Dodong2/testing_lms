@@ -2,6 +2,8 @@
 /* components */
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+/* hooks */
+import { useNewFeedbackIndicator } from "@/hooks/feedback/useNewFeedbackIndicator";
 /* icons */
 import { HiHome } from "react-icons/hi";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -17,6 +19,7 @@ import { IoNotifications } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 
 export default function BeneficiaryLayout({ children }: { children: React.ReactNode }) {
+  const { hasNewFeedback } = useNewFeedbackIndicator()
     const { data: session } = useSession()
     if(!session) return null
   // Mga items para sa sidebar (may icon at text)
@@ -37,7 +40,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     { href: "/home/admin/programManage", icon: <FaUsers />, text: "Program management" },
     { href: "/home/admin/activities", icon: <FaClipboardList />, text: "Activity logs" },
     { href: "/home/admin/notifications", icon: <IoNotifications />, text: "Notification" },
-    { href: "/home/admin/feedbackManage", icon: <MdOutlineFeedback />, text: "Feedback Management",},
+    { href: "/home/admin/feedbackManage", icon: <MdOutlineFeedback />, text: "Feedback Management", hasNewIndicator: hasNewFeedback },
     ]: []) 
   ];
 
