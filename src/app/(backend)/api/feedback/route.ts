@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 // create feedback by user
-export async function POST(req: NextResponse) {
+export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions)
         if(!session?.user?.email) {
