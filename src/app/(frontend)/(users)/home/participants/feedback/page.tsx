@@ -1,15 +1,13 @@
 "use client"
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram";
-import { useFeedback } from "@/hooks/feedback/useFeedback";
 import { useCreateFeedback } from "@/hooks/feedback/useCreateFeedback";
 /* icons */
 import { FiAlertTriangle, FiBell } from "react-icons/fi";
 
 export default function Feedback() {
-  const { data: createFeedback, isPending } = useFeedback().useCreateFeedback()
   const { data: programData, isLoading } = useProgram().usePrograms()
-  const { handleSubmit, programId, setProgramId, visibility, setVisibility, type, setType, subject, setSubject, description, setDescription } = useCreateFeedback()
+  const { handleSubmit, programId, setProgramId, visibility, setVisibility, type, setType, subject, setSubject, description, setDescription, isPending } = useCreateFeedback()
 
   return (
     <div className="bg-gray-100 rounded-md shadow-md p-6">
@@ -27,6 +25,7 @@ export default function Feedback() {
               value={programId}
               onChange={(e) => setProgramId(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
             >
               <option value=''>Select program</option>
               {isLoading ? (<p>Loading</p>) : (
@@ -56,6 +55,7 @@ export default function Feedback() {
                 value="Anonymous"
                 checked={visibility === "Anonymous"}
                 onChange={() => setVisibility("Anonymous")}
+                required
               />
               <FiAlertTriangle className="ml-1 h-5 w-5" />
               <span className="ml-2">Anonymous</span>
@@ -69,6 +69,7 @@ export default function Feedback() {
                 value="Identified"
                 checked={visibility === "Identified"}
                 onChange={() => setVisibility("Identified")}
+                required
               />
               <FiBell className="ml-1 h-5 w-5" />
               <span className="ml-2">Identified</span>
@@ -87,6 +88,7 @@ export default function Feedback() {
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required
             >
               <option>Bug Report</option>
               <option>User Report</option>
@@ -112,6 +114,7 @@ export default function Feedback() {
             onChange={(e) => setSubject(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Brief description of your feedback"
+            required
           />
         </div>
 
@@ -127,6 +130,7 @@ export default function Feedback() {
             onChange={(e) => setDescription(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Provide detailed information about your feedback..."
+            required
           />
         </div>
         <button
