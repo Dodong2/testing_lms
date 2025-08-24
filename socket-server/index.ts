@@ -7,6 +7,7 @@ import cors from 'cors'
 import { handleProgramEvents } from './handlers/programHandlers'
 import { handleUserEvent } from './handlers/userHandlers'
 import { handlePostEvents } from './handlers/postHandlers'
+import { handlefeedbackEvents } from './handlers/feedbackHandlers'
 
 const app = express()
 app.use(cors())
@@ -45,6 +46,9 @@ app.post("/emit", express.json(), (req, res) => {
       break
     case 'post':
       handlePostEvents(io, type, payload)
+      break
+    case 'feedback':
+      handlefeedbackEvents(io, type, payload)
       break
     default:
       console.log("❓ Unknown category:", category)

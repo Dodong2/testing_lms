@@ -28,7 +28,7 @@ export default function Feedback() {
               required
             >
               <option value=''>Select program</option>
-              {isLoading ? (<p>Loading</p>) : (
+              {isLoading ? (<option>Loading</option>) : (
                 <>{programData?.programs?.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.title}

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { NextResponse, NextRequest } from "next/server";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 // create feedback by user
 export async function POST(req: NextRequest) {
@@ -32,6 +33,8 @@ export async function POST(req: NextRequest) {
             }
         })
 
+        await emitSocketEvent('feedback', 'feedback-created', feedback)
+
         return NextResponse.json(feedback)
     } catch(error) {
         console.error('Failed to create feedback', error)
@@ -42,11 +45,6 @@ export async function POST(req: NextRequest) {
 // get feedback for admin
 export async function GET() {
     try {
-        const session = await getServerSession(authOptions)
-        if(!session || session.user.role !== 'ADMIN') {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        }
-
         const feedbacks = await prisma.feedback.findMany({
             include: {
                 user: true,

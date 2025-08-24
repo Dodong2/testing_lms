@@ -15,7 +15,6 @@ interface SidebarItem {
   href: string // URL ng link
   icon: ReactNode // icon component
   text:string // label ng link
-  hasNewIndicator?: boolean
 }
 
 // Props para sa buong Sidebar component
@@ -30,18 +29,13 @@ interface SidebarProps {
 // Component para sa bawat item ng sidebar
 // dito nangyayari yung pag-pasa ng href, icon, text para display galing sa ibang page
 // dito babaguhin
-const SidebarItem = ({ href, icon, text, hasNewIndicator = false }: SidebarItem) => (
+const SidebarItem = ({ href, icon, text }: SidebarItem) => (
   <Link
     href={href}
     className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-md transition-colors"
   >
     <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
     <span className="whitespace-nowrap">{text}</span>
-    {hasNewIndicator && (
-      <span className="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-semibold">
-        new
-      </span>
-    )}
   </Link>
 );
 
@@ -98,7 +92,7 @@ const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) =>
           {/* Main sidebar items (links) */}
           {/* ito yung components, dito na display yung href, icon, text galing sa ibang page */}
           {items.map((item, idx) => (
-            <SidebarItem key={idx} href={item.href} icon={item.icon} text={item.text} hasNewIndicator={item.hasNewIndicator} />
+            <SidebarItem key={idx} href={item.href} icon={item.icon} text={item.text} />
           ))}
 
           {/* Programs section - optional */}
