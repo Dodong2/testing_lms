@@ -65,6 +65,7 @@ export const usePostEvents = (programId: string) => {
             })
         })
 
+        // delete ng comments
         socket.on('comment-deleted', (deleted: {id: string, postId: string}) => {
             queryClient.setQueryData(['post', programId], (oldData: Post[] | undefined) => {
                 if(!oldData) return oldData
