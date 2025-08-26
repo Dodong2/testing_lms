@@ -5,6 +5,8 @@ import { useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { BsChatSquareTextFill } from "react-icons/bs";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
+import { usePost } from "@/hooks/post/usePost";
+import { useSession } from "next-auth/react";
 
 interface Comment {
   id: string
@@ -29,11 +31,17 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
   usePostEvents(programId)
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("")
+  const { mutate: deleteComment } = usePost(programId).useDeleteComments()
+  const { data: session } = useSession()
 
   const handleSubmitComment = () => {
     if(!newComment.trim()) return
     onAddComment(programId, postId, newComment)
     setNewComment("")
+  }
+
+  const handleDelete = (commentId: string) => {
+    deleteComment({ postId, commentId })
   }
 
   const formatDate = (dateString?: string) => {
@@ -71,6 +79,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
                   />
                   )}
               </div>
+
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-sm">{comment.author.name}</span>
@@ -84,7 +93,11 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
                     </div>
                     <p className="text-sm text-gray-700 mt-1">{comment.content}</p>
                   </div>
-              
+
+                  {/* show delete only if user is author */}
+                  {session?.user?.id == comment.author.id && (
+                    <button onClick={() => handleDelete(comment.id)} className="ml-2 text-red-500 hover:text-red-700">delete</button>
+                  )}
             </div>
           ))}
 
@@ -96,9 +109,11 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
             type="text" value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Add Comment"
+            required
             className="flex-1 p-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
           />
-          <button onClick={handleSubmitComment} disabled={!newComment.trim()} className={`text-gray-600 hover:text-gray-800 active:scale-95 transition-transform ${!newComment.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}>
+          <button className={`text-gray-600 hover:text-gray-800 active:scale-95 transition-transform ${!newComment.trim() ? 'opacity-50 cursor-not-allowed' : ''}`} 
+          onClick={handleSubmitComment} disabled={!newComment.trim()} >
             <FiSend />
           </button>
         </div>

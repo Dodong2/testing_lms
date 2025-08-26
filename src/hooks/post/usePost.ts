@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getPosts, createPost, createComment } from "@/services/postServices";
+import { getPosts, createPost, createComment, deleteComment } from "@/services/postServices";
 
 
 
@@ -46,6 +46,22 @@ export const usePost = (programId: string) => {
         })
     }
 
-    return { usePosts, useCreatePost, useCreateComment }
+    // for delete comments
+    const useDeleteComments = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: ({ postId, commentId }: { postId: string, commentId: string }) =>
+                deleteComment(programId, postId, commentId),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["posts", programId] })
+                toast.success("Comment deleted successfully!")
+            },
+            onError: () => {
+                toast.error("Failed to delete comment")
+            }
+        })
+    }
+
+    return { usePosts, useCreatePost, useCreateComment, useDeleteComments  }
 
 }

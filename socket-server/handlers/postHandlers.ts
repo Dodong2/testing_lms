@@ -8,6 +8,9 @@ export const handlePostEvents = (io: Server, type: string, payload: unknown) => 
         case 'comment-created':
             io.emit("comment-created", payload)
             break
+        case 'comment-deleted':
+            io.emit("comment-deleted", payload)
+            break
         default:
             console.log("Unknown post event type")
     }

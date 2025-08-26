@@ -65,9 +65,26 @@ export const usePostEvents = (programId: string) => {
             })
         })
 
+        socket.on('comment-deleted', (deleted: {id: string, postId: string}) => {
+            queryClient.setQueryData(['post', programId], (oldData: Post[] | undefined) => {
+                if(!oldData) return oldData
+
+                return oldData.map((post) => {
+                    if(post.id === deleted.postId) {
+                        return {
+                            ...post,
+                            comments: post.comments.filter((c) => String(c.id) !== String(deleted.id))
+                        }
+                    }
+                    return post
+                })
+            })
+        })
+
         return () => {
             socket.off("post-created")
             socket.off("comment-created")
+            socket.off("comment-deleted")
         }
 
     },[queryClient, programId, session?.user?.id])

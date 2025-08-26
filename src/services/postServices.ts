@@ -25,3 +25,13 @@ export const createComment = async(programId: string, postId: string, content: s
         body: JSON.stringify({ content })
     })
 }
+
+
+
+// delete comment
+export const deleteComment = async(programId: string, postId: string, commentId: string) => {
+    return apiFetch(`/api/program/${programId}/posts/${postId}/comments`, {
+        method: 'DELETE',
+        body: JSON.stringify({ commentId })
+    })
+}

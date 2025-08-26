@@ -72,3 +72,68 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     return NextResponse.json({ error: 'Internal Server Error' },{ status: 500 })
   }
 }
+
+// Delete a comment
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string, postId: string }> }) {
+    try {
+        const session = await getServerSession(authOptions)
+        if(!session?.user?.email) {
+            return NextResponse.json({ error: 'Unauthorized' },{ status: 401 })
+        }
+        
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email }
+        })
+
+        if(!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 })
+        }
+
+        const { id: programId, postId } = await context.params
+        const { commentId } = await req.json()
+
+        if(!commentId || typeof commentId !== "string") {
+            return NextResponse.json({ error: 'Comment ID required' },{ status: 400 })
+        }
+
+        // find comment
+        const comment = await prisma.comment.findUnique({
+            where: { id: commentId },
+            include: {
+                post: { include: { program: true } }
+            }
+        })
+
+        // check if user is author
+        if(comment?.authorId !== user.id) {
+            return NextResponse.json({ error: 'Forbidden: Not your comment' }, { status: 403 })
+        }
+
+        // check membership in the program
+        const member = await prisma.programMember.findUnique({
+            where: {
+                programId_userId: {
+                    programId,
+                    userId: user.id
+                }
+            }
+        })
+
+        if(!member) {
+            return NextResponse.json({ error: 'Not a member of this program' },{ status: 403 })
+        }
+
+        // delete comment
+        const deletedComment = await prisma.comment.delete({
+            where: { id: commentId }
+        })
+
+        await emitSocketEvent('post', 'comment-deleted', { id: deletedComment.id, postId })
+
+        return NextResponse.json({ success: true, id: deletedComment.id })
+
+    } catch(error) {
+        console.error(error, 'Failed to delete comment!')
+        return NextResponse.json({ error: 'Internal Server Error' },{ status: 500 })
+    }
+}
