@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
-
+// create a comment
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string, postId: string }> }) {
     try {
     const session = await getServerSession(authOptions)

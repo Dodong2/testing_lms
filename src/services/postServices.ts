@@ -18,6 +18,23 @@ export const createPost = async (programId: string, content: string) => {
     })
 }
 
+
+// update Post
+export const updatePosts = async(programId: string, postId: string, content: string) => {
+    return apiFetch(`/api/program/${programId}/posts/${postId}/updateposts`, {
+        method: 'PATCH',
+        credentials: 'include',
+        body: JSON.stringify({ content })
+    })
+}
+
+export const deletePost = async(programId: string, postId:string) => {
+    return apiFetch(`/api/program/${programId}/posts/${postId}/deleteposts`, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+}
+
 //create comment
 export const createComment = async(programId: string, postId: string, content: string) => {
     return apiFetch(`/api/program/${programId}/posts/${postId}/comments`, {

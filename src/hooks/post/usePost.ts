@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getPosts, createPost, createComment, deleteComment } from "@/services/postServices";
+import { getPosts, createPost, updatePosts, deletePost, createComment, deleteComment } from "@/services/postServices";
 
 
 
@@ -26,6 +26,38 @@ export const usePost = (programId: string) => {
             },
             onError: () => {
                 toast.error("Failed to create post")
+            }
+        })
+    }
+
+    // for update post
+    const useUpdatePost = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: ({ postId, content }: { postId: string, content: string } ) => 
+                updatePosts(programId, postId, content),
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ["post", programId] })
+                    toast.success("Post updated successfully!")
+                },
+                onError: () => {
+                    toast.error("Failed to update post")
+                }
+        })
+    }
+
+    // for delete
+    const useDeletePost = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: ({ postId }: { postId: string }) =>
+                deletePost(programId, postId),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["post", programId] })
+                toast.success("Post deleted successfully!")
+            }, 
+            onError: () => {
+                toast.error("Failed to delete post");
             }
         })
     }
@@ -62,6 +94,6 @@ export const usePost = (programId: string) => {
         })
     }
 
-    return { usePosts, useCreatePost, useCreateComment, useDeleteComments  }
+    return { usePosts, useCreatePost, useUpdatePost, useDeletePost ,useCreateComment, useDeleteComments  }
 
 }
