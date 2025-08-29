@@ -5,6 +5,12 @@ export const handlePostEvents = (io: Server, type: string, payload: unknown) => 
         case 'post-created':
             io.emit("post-created", payload)
             break
+        case 'post-updated':
+            io.emit("post-updated", payload)
+            break
+        case 'post-deleted':
+            io.emit("post-deleted", payload)
+            break
         case 'comment-created':
             io.emit("comment-created", payload)
             break

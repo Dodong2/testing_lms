@@ -31,10 +31,9 @@ export const usePostEvents = (programId: string) => {
     const { data: session } = useSession()
 
     useEffect(() => {
-        //get lahat ng post
-        socket.on('post-created', (newPost) => {
-            if(newPost.programId !== programId) return
-            
+        {/* POST SECTION */}
+        // create post real-time
+        socket.on('post-created', (newPost) => {            
             queryClient.setQueryData<Post[]>(['post', programId], (oldData) => {
                 if(!oldData) return [newPost]
                 const exists = oldData.some(p => String(p.id) === String(newPost.id))
@@ -43,7 +42,26 @@ export const usePostEvents = (programId: string) => {
             })
         })
 
-        //get lahat ng comments sa post
+        // update post real-time
+        socket.on("post-updated", (updatedPost: Post) => {
+            queryClient.setQueryData<Post[]>(["post", programId], (oldData) => {
+                if(!oldData) return oldData
+                return oldData.map((post) => 
+                    String(post.id) === String(updatedPost.id) ? { ...post, updatedPost } : post
+                )
+            })
+        })
+
+        // delete post real-time
+        socket.on("post-deleted", (deleted: { id: string, programId: string }) => {
+            queryClient.setQueryData<Post[]>(["post", programId], (oldData) => {
+                if(!oldData) return oldData
+                return oldData.filter((post) => String(post.id) !== String(deleted.id))
+            })
+        })
+
+        {/* COMMENT SECTION */}
+        // create comment real-time 
         socket.on('comment-created', (newComment) => {
             queryClient.setQueryData(['post', programId], (oldData: Post[]) => {
                 if(!oldData) return oldData
@@ -65,7 +83,7 @@ export const usePostEvents = (programId: string) => {
             })
         })
 
-        // delete ng comments
+        // delete comment real-time
         socket.on('comment-deleted', (deleted: {id: string, postId: string}) => {
             queryClient.setQueryData(['post', programId], (oldData: Post[] | undefined) => {
                 if(!oldData) return oldData

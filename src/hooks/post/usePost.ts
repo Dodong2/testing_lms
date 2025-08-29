@@ -21,7 +21,7 @@ export const usePost = (programId: string) => {
             mutationFn: ({ content }: { content: string }) =>
                 createPost(programId, content),
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ["posts", programId] })
+                queryClient.invalidateQueries({ queryKey: ["post", programId] })
                 toast.success("Post created successfully!")
             },
             onError: () => {
