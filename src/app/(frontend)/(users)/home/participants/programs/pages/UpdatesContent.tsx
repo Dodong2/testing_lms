@@ -11,9 +11,9 @@ import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePostModal } from "@/hooks/post/usePostModal";
 import { useOpenPostModal } from "@/hooks/post/useOpenPostModal";
-
 /* icons */
-// import { FiDownload } from 'react-icons/fi';
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+
 
 export default function UpdatesContent({ programId }: { programId: string }) {
   const { data: session } = useSession();
@@ -26,7 +26,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
     OpenUpdate,
     selectedPost,
     handleToggleDeleteModal,
-    OpenDelete,
+    OpenDelete
   } = useOpenPostModal();
 
   usePostEvents(programId);
@@ -94,18 +94,20 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                         </p>
                       </div>
                     </div>
-                    <div className="text-gray-500 cursor-pointer">...</div>
 
-                    {session?.user.id === post.author.id && (
-                      <div className="flex gap-2">
-                        <button onClick={() => handleToggleUpdateModal(post)}>
-                          Edit
-                        </button>
-                        <button onClick={() => handleToggleDeleteModal(post)}>
-                          Delete
-                        </button>
-                      </div>
-                    )}
+                    {/* edit side */}
+                      {session?.user.id === post.author.id && (
+                        <div className=" flex gap-4 text-lg ml-4">
+                          <button onClick={() => handleToggleUpdateModal(post)} className="relative group flex flex-col items-center">
+                            <FiEdit className="text-yellow-500 transform transition-transform duration-200 hover:scale-135"/>
+                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Edit</span>
+                          </button>
+                          <button onClick={() => handleToggleDeleteModal(post)} className="relative group flex flex-col items-center">
+                            <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135"/>
+                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Delete</span>
+                          </button>
+                        </div>
+                      )}
                   </div>
 
                   {/* Post Content */}

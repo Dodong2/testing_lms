@@ -3,7 +3,6 @@ import Link from "next/link"
 import { FiArrowRight } from "react-icons/fi"
 import { useProgram } from "@/hooks/program/useProgram"
 import { useSession } from "next-auth/react"
-// import { useSocketEvents } from "@/hooks/useSocketEvents"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 
 export default function Programs() {
@@ -26,7 +25,7 @@ export default function Programs() {
         <p>Loading...</p>
       ) : (
         programData?.programs?.map(program => (
-        <div key={program.id}  className="bg-white rounded-lg shadow overflow-hidden">
+        <div key={program.id}  className="bg-white rounded-lg shadow overflow-hidden border border-transparent hover:border-blue-500 transition-all">
           <Link href={`/home/participants/programs/${program.id}`}>
             {/* Top gray box */}
             <div className="bg-gray-300 h-32 w-full"></div>

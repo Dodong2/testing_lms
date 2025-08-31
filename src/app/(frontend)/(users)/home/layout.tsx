@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import { useFeedbackEvents } from "@/hooks/socket/useFeedbackSocket";
 /* icons */
 import { HiHome } from "react-icons/hi";
-import { FaCalendarAlt } from "react-icons/fa";
 // import { IoMdPeople } from "react-icons/io";
 import { LuFileSpreadsheet } from "react-icons/lu";
 // import { MdOutlineHelpOutline } from "react-icons/md";
@@ -27,9 +26,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
   const sidebarItems = [
     ...(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR' ? [
     { href: "/home/participants", icon: <HiHome />, text: "Programs" },
-    { href: "/calendar", icon: <FaCalendarAlt />, text: "Calendar" },
     { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
-    // { href: "/beneficiary/files", icon: <MdOutlineHelpOutline  />, text: "Help" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
   ]: []),
     

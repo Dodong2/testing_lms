@@ -32,26 +32,17 @@ interface SidebarProps {
 const SidebarItem = ({ href, icon, text }: SidebarItem) => (
   <Link
     href={href}
-    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-md transition-colors"
+    className="group flex items-center gap-3 px-4 py-2 font-medium text-1xl text-gray-700 hover:bg-[#2ECC40] hover:text-white rounded-md transition-colors hover:animate-pulse"
   >
-    <span className="w-5 h-5 flex items-center justify-center">{icon}</span>
+    <span className="w-5 h-5 flex items-center justify-center transform transition-transform duration-200 group-hover:scale-135">{icon}</span>
     <span className="whitespace-nowrap">{text}</span>
   </Link>
 );
 
-// Component para sa bawat program name
-// dito nangyayari yung pag-pasa ng text para display galing sa ibang page
-// dito babaguhin
-const ProgramItem = ({ text }: { text: string }) => (
-  <div className="flex items-center gap-3 px-4 py-2">
-    <div className="w-2 h-2 bg-gray-500 rounded-full" />
-    <span className="text-gray-700 whitespace-nowrap">{text}</span>
-  </div>
-);
 
 // Main Sidebar component
 // dito babaguhin design ng sidebar
-const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) => {
+const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen); // State para sa open/close ng sidebar (especially sa mobile)
   const { data: session } = useSession()
   if(!session) return null
@@ -78,13 +69,13 @@ const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) =>
 
       {/* SIDEBAR: Main navigation panel */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-gray-100 border-r border-gray-200 z-30 overflow-auto
+        className={`fixed top-0 left-0 h-full bg-[#E3FDE7] border-r border-gray-200 z-30 overflow-auto
         transition-transform duration-300 ease-in-out w-60
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Sidebar header */}
-        <div className="p-4 font-bold border-b border-gray-200 whitespace-nowrap">
-         <p className="ml-15">4Ps Portal</p> 
+        <div className="p-4 font-bold border-b bg-[#2ECC40] border-gray-200 whitespace-nowrap">
+         <p className="ml-13 text-white">Extenstion Portal</p> 
         </div>
 
         {/* NAVIGATION LINKS */}
@@ -93,23 +84,7 @@ const Sidebar = ({ defaultOpen = false, items, programs = [] }: SidebarProps) =>
           {/* ito yung components, dito na display yung href, icon, text galing sa ibang page */}
           {items.map((item, idx) => (
             <SidebarItem key={idx} href={item.href} icon={item.icon} text={item.text} />
-          ))}
-
-          {/* Programs section - optional */}
-          {/* dito na display yung text, programs, galing sa ibang page */}
-          {(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR') && (<>
-            {programs.length > 0 && (
-            <>
-              <div className="mt-4 mb-2 px-4 text-xs font-semibold text-gray-500">
-                PROGRAMS
-              </div>
-              {programs.map((program, index) => (
-                <ProgramItem key={index} text={program} />
-              ))}
-            </>
-          )}
-          </>)}
-          
+          ))}          
         </nav>
       </aside>
     </>
