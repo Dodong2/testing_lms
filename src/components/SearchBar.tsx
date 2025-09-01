@@ -40,17 +40,15 @@ export function SearchBar<T>({
   }, [debouncedSearch])
 
   return (
-    <div className="relative flex-grow">
+    <div  className=" bg-white flex items-center rounded-md px-3 w-64 focus-within:w-96 shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out border-b border-transparent hover:border-b-blue-500 focus-within:border-blue-500 ">
       <input
         type="text"
         placeholder={placeholder}
         value={search}
         onChange={handleChange}
-        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+        className="flex-grow bg-transparent py-2 focus:outline-none"
       />
-      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-        <FiSearch className="h-5 w-5 text-gray-400" />
-      </div>
-    </div>
+      <FiSearch className="h-5 w-5 text-gray-400 ml-2" />
+</div>
   )
 }

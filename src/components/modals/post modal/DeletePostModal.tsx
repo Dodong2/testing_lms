@@ -1,3 +1,4 @@
+'use client'
 import { DeletePost } from "@/hooks/post/DeletePost"
 /* icons */
 import { IoMdAlert } from "react-icons/io";

@@ -37,7 +37,7 @@ export default function UserManage() {
   if (!session) return null
 
   return (
-    <div className="bg-gray-100 p-6 rounded-md shadow-md">
+    <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
         {usersData && (
@@ -48,79 +48,103 @@ export default function UserManage() {
             placeholder="Search users..."
           />
         )}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4" onClick={handleOpenCreateUser}>
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={handleOpenCreateUser}>
           <FiUserPlus className="inline-block mr-2" />
           Add New User
         </button>
       </div>
 
-      {/* tables */}
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>{session.user.role === 'ADMIN' && (
+     {isLoading ? (
+  <p className="text-center py-4 text-gray-500">Loading...</p>
+) : (
+  <>
+    {session.user.role === 'ADMIN' && (
+      <div className="bg-white rounded-xl shadow-lg p-6">
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-md shadow">
-            <thead className="bg-gray-200">
-            <tr>
-              <th className="py-2 px-4 text-left text-gray-700 font-semibold">USER</th>
-              <th className="py-2 px-4 text-left text-gray-700 font-semibold">GMAIL</th>
-              <th className="py-2 px-4 text-left text-gray-700 font-semibold">ROLE</th>
-              <th className="py-2 px-4 text-right text-gray-700 font-semibold">ACTION</th>
-            </tr>
-          </thead>
-
-          {/* actual user data */}
-          <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user.id}>
-              <td className="py-2 px-4">{user.name}</td>
-              <td className="py-2 px-4">{user.email}</td>
-              <td className="py-2 px-4">({user.role})</td>
-              <td className="py-2 px-4 text-right">
-              <button onClick={() => openUpdateModal(user)} className="text-gray-500 hover:text-gray-700 mr-2 focus:outline-none"><MdEdit className="h-5 w-5" /></button>
-              <button onClick={() => openDeleteModal(user)} className="text-red-500 hover:text-red-700 focus:outline-none"><FiTrash2 className="h-5 w-5" /></button>  
-              </td>              
-            </tr>
-          ))}
-          </tbody>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#E3FDE7]">
+              <tr>
+                <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  USER
+                </th>
+                <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  EMAIL
+                </th>
+                <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  ROLE
+                </th>
+                <th className="py-3 px-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  ACTION
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-[#E3FDE7] transition-colors duration-150">
+                    <td className="py-3 px-4 whitespace-nowrap text-gray-700">{user.name}</td>
+                    <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
+                    <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.role}</td>
+                    <td className="py-3 px-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                        onClick={() => openUpdateModal(user)}
+                        className="text-yellow-500 hover:text-yellow-700 duration-200 focus:outline-none mr-2 cursor-pointer active:scale-65 transition-transform"
+                        title="Edit User"
+                      >
+                        <MdEdit className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => openDeleteModal(user)}
+                        className="text-red-500 hover:text-red-700 duration-200 focus:outline-none cursor-pointer active:scale-65 transition-transform"
+                        title="Delete User"
+                      >
+                        <FiTrash2 className="h-5 w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="py-4 text-center text-gray-500 italic">No users found.</td>
+                </tr>
+              )}
+            </tbody>
           </table>
-          
-          {/* update modal for admin */}
-          {session.user.role === 'ADMIN' && (<>
-            {isUpdateModal && selectedUser && (
-              <EditUserModal initialData={{
-                name: selectedUser.name,
-                email: selectedUser.email,
-                role: selectedUser.role
-              }} UserId={selectedUser.id} 
-              programs={selectedUser.ProgramMember} 
-              onSuccess={closeUpdateModal} 
-              onClose={closeUpdateModal} />
-            )}
-          </>)}
-
-          {/* delete modal for admin */}
-          {session.user.role === 'ADMIN' && (<>
-            {deleteModal && selectedDeleteUser && (
-              <DeleteUserModal userName={selectedDeleteUser.name}
-                onCancel={closeDeleteModal}
-                onConfirm={handleConfirmDelete}
-                isDeleting={isDeleting} />
-            )}
-          </>)}
-
-          {session.user.role === 'ADMIN' && (<>
-            {openCreateUser && (
-              <CreateUserModal onSuccess={handleCloseCreateUser} onClose={handleCloseCreateUser}/>
-            )}
-          </>)}
-            
         </div>
-      )}
 
+        {/* --- Modals --- */}
+        {/* update modal for admin */}
+        {isUpdateModal && selectedUser && (
+          <EditUserModal
+            initialData={{
+              name: selectedUser.name,
+              email: selectedUser.email,
+              role: selectedUser.role,
+            }}
+            UserId={selectedUser.id}
+            programs={selectedUser.ProgramMember}
+            onSuccess={closeUpdateModal}
+            onClose={closeUpdateModal}
+          />
+        )}
 
-      </>)}
+        {/* delete modal for admin */}
+        {deleteModal && selectedDeleteUser && (
+          <DeleteUserModal
+            userName={selectedDeleteUser.name}
+            onCancel={closeDeleteModal}
+            onConfirm={handleConfirmDelete}
+            isDeleting={isDeleting}
+          />
+        )}
+
+        {openCreateUser && (
+          <CreateUserModal onSuccess={handleCloseCreateUser} onClose={handleCloseCreateUser} />
+        )}
+      </div>
+    )}
+  </>
+)}
     </div>
   )
 }

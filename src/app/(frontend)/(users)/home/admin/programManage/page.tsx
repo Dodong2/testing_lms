@@ -44,7 +44,7 @@ export default function ProgramManage() {
   
   
   return (
-    <div className="bg-gray-100 p-6 rounded-md shadow-md">
+    <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
       {/* search bar */}
       <div className="flex items-center justify-between mb-4">
         {programData?.programs && (
@@ -52,10 +52,10 @@ export default function ProgramManage() {
             data={programData.programs}
             onFiltered={handleFilteredProgram}
             keysToSearch={['title']}
-            placeholder="Search users..."
+            placeholder="Search program title..."
             />
         )}
-        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4" onClick={openCreateModal}
+        <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={openCreateModal}
         >
           <FiPlus className="inline-block mr-2" />
           Add New Program
@@ -66,17 +66,20 @@ export default function ProgramManage() {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-      <>{session.user.role === 'ADMIN' && (
-        filteredPrograms?.map(program => {
+      <div>{session.user.role === 'ADMIN' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {filteredPrograms?.map(program => {
           const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0 }
           return (
-            <div key={program.id} className="bg-white rounded-md shadow mb-4 p-4">
+            <div key={program.id} className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.02]">
               <div className="flex justify-between items-start">
               <div>
                 <h3 className="text-xl font-semibold text-gray-900">{program.title}</h3>
-                <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
+                <div className="flex items-center text-gray-600 text-sm mt-2"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners</div>
                 <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
+
                 {/* buttons */}
+                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex gap-1.5">
                 <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2"
                 onClick={() => openAddModal(program)}>
@@ -90,21 +93,24 @@ export default function ProgramManage() {
               </Link>
               </div>
               </div>
+              
+              </div>
 
-              <div className="space-x-2">
-              <button className="text-gray-500 hover:text-gray-700 focus:outline-none" onClick={() => openModalUpdate(program)}>
+            {/* Edit / Delete */}
+              <div className="flex items-center gap-3">
+              <button onClick={() => openModalUpdate(program)} className="text-yellow-500 hover:text-yellow-700 duration-200 focus:outline-none mr-2 cursor-pointer active:scale-65 transition-transform" title="Edit program">
                 <FiEdit className="h-5 w-5" />
               </button>
-              <button className="text-red-500 hover:text-red-700 focus:outline-none" onClick={() => openDeleteModal(program)}>
+              <button onClick={() => openDeleteModal(program)} className="text-red-500 hover:text-red-700 duration-200 focus:outline-none cursor-pointer active:scale-65 transition-transform" title="Delete program">
                 <FiTrash2 className="h-5 w-5" />
               </button>
             </div>
                 </div>
             </div>
           )
-        })
-      )}
-      </>)}
+        })}
+      </div>)}
+      </div>)}
 
       {session.user.role === 'ADMIN' && (<>
         {createModal && (

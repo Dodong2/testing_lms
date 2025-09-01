@@ -8,10 +8,12 @@ export const UpdateUsers = ({ UserId, initialData, onSuccess }: UpdateUsersProps
     const { mutate: updateUser, isPending } = useUpdateUsers()
     const [formData, setFormData] = useState(initialData)
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target
         setFormData(prev =>  ({ ...prev, [name]: value }))
     }
+
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
