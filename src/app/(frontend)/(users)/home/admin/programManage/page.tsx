@@ -97,7 +97,7 @@ export default function ProgramManage() {
               </div>
 
             {/* Edit / Delete */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
               <button onClick={() => openModalUpdate(program)} className="text-yellow-500 hover:text-yellow-700 duration-200 focus:outline-none mr-2 cursor-pointer active:scale-65 transition-transform" title="Edit program">
                 <FiEdit className="h-5 w-5" />
               </button>
