@@ -68,7 +68,8 @@ export default function ProgramManage() {
       ) : (
       <div>{session.user.role === 'ADMIN' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredPrograms?.map(program => {
+        {filteredPrograms.length > 0 ? (
+          filteredPrograms?.map(program => {
           const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0 }
           return (
             <div key={program.id} className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.02]">
@@ -108,7 +109,13 @@ export default function ProgramManage() {
                 </div>
             </div>
           )
-        })}
+        })
+        ) : (
+          <div className="col-span-full flex justify-center items-center py-10">
+            <p className="text-gray-500 italic">No programs found.</p>
+          </div>
+        )}
+        
       </div>)}
       </div>)}
 

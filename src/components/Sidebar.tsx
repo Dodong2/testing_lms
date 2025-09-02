@@ -3,6 +3,7 @@
 import { useState, ReactNode } from "react";
 /* links */
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 /* icons */
 import { FiMenu } from "react-icons/fi";
 /* for session */
@@ -29,15 +30,23 @@ interface SidebarProps {
 // Component para sa bawat item ng sidebar
 // dito nangyayari yung pag-pasa ng href, icon, text para display galing sa ibang page
 // dito babaguhin
-const SidebarItem = ({ href, icon, text }: SidebarItem) => (
+const SidebarItem = ({ href, icon, text }: SidebarItem) => {
+  const pathname = usePathname()
+  const isActive = pathname === href
+
+  return (
   <Link
     href={href}
-    className="group flex items-center gap-3 px-4 py-2 font-medium text-1xl text-gray-700 hover:bg-[#2ECC40] hover:text-white rounded-md transition-colors hover:animate-pulse"
-  >
+    className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-[#2ECC40]" : "text-gray-700 hover:text-[#2ECC40]"}`}>
+      {/* 🔵 Active indicator bar (left side lang) */}
+      {isActive && (
+        <div className="absolute right-0 top-0 h-full w-1 bg-blue-500 rounded-l-md"></div>
+      )}
     <span className="w-5 h-5 flex items-center justify-center transform transition-transform duration-200 group-hover:scale-135">{icon}</span>
     <span className="whitespace-nowrap">{text}</span>
   </Link>
-);
+  )
+};
 
 
 // Main Sidebar component

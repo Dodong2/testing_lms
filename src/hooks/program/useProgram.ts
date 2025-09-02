@@ -10,7 +10,6 @@ export const useProgram = () => {
         return useQuery({
             queryKey: ["programs"],
             queryFn: getPrograms,
-            refetchInterval: 2000
         })
     }
 

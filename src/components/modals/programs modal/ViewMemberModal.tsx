@@ -34,6 +34,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMember
                                 placeholder="Add emails (comma separated)"
                                 value={emailInput}
                                 onChange={(e) => setEmailInput(e.target.value)}
+                                required
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 mb-4"
                             />
                             
