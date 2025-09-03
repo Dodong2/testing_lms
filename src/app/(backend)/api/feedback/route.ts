@@ -42,21 +42,38 @@ export async function POST(req: NextRequest) {
     }
 }
 
-// get feedback for admin
-export async function GET() {
+
+// get feedback for admin with pagination
+export async function GET(req: NextRequest) {
     try {
-        const feedbacks = await prisma.feedback.findMany({
-            include: {
-                user: true,
-                program: true,
-            },
-            orderBy: { createdAt: 'desc' }
+        const { searchParams } = new URL(req.url)
+        const page = parseInt(searchParams.get("page") || "1", 10)
+        const limit = parseInt(searchParams.get("limit") || "5", 10)
+
+        const skip = (page - 1) * limit
+
+        const [feedbacks, total] = await Promise.all([
+            prisma.feedback.findMany({
+                include: {
+                    user: true,
+                    program: true,
+                },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+            prisma.feedback.count(),
+        ])
+
+        return NextResponse.json({
+            feedbacks,
+            total,
+            page,
+            totalPages: Math.ceil(total / limit)
         })
 
-        return NextResponse.json(feedbacks)
-
-    } catch(error) {
-        console.error('Failed to get feedbacks', error)
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    } catch (error) {
+        console.error("Failed to get feedbacks", error)
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
     }
 }

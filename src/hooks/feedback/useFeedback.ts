@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { createFeedback, FeedbackPayload, getFeedbacks } from "@/services/feedbackServices";
 
@@ -20,10 +20,11 @@ export const useFeedback = () => {
     }
 
     // get feedback for admin
-    const useGetFeedbacks = () => {
+    const useGetFeedbacks = (page: number, limit = 5) => {
         return useQuery({
-            queryKey: ['feedbacks'],
-            queryFn: getFeedbacks
+            queryKey: ['feedbacks', page],
+            queryFn: () => getFeedbacks(page, limit),
+            placeholderData: keepPreviousData
         })
     }
 

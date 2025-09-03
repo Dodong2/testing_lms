@@ -38,10 +38,18 @@ export const createFeedback = async(data: FeedbackPayload): Promise<FeedbackResp
     })
 }
 
-// get feedback for admin
-export const getFeedbacks = async (): Promise<FeedbackResponse[]> => {
-    return apiFetch<FeedbackResponse[]>('/api/feedback', {
+interface FeedbackPagination {
+    feedbacks: FeedbackResponse[]
+    total: number
+    page: number
+    totalPages: number
+}
+
+
+// get feedback for admin (paginated)
+export const getFeedbacks = async(page = 1, limit = 5) => {
+    return apiFetch<FeedbackPagination>(`/api/feedback?page=${page}&limit=${limit}`, {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include'
     })
 }

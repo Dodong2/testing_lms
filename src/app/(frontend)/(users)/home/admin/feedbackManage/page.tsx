@@ -1,6 +1,7 @@
 'use client'
-import { useFeedback } from "@/hooks/feedback/useFeedback"
+import { useState } from "react";
 /* hooks */
+import { useFeedback } from "@/hooks/feedback/useFeedback"
 import { useLocalStorageAdmin } from "@/hooks/feedback/useLocalStorageAdmin";
 import { useFeedbackEvents } from "@/hooks/socket/useFeedbackSocket";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -11,14 +12,18 @@ import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 
 export default function FeedbackManagePage() {
     useFeedbackEvents()
-    const { data: feedbacksData, isLoading } = useFeedback().useGetFeedbacks()
+    const [page, setPage] = useState(1)
+    const { data, isLoading } = useFeedback().useGetFeedbacks(page, 5)
     const { openId, readIds, handleToggle } = useLocalStorageAdmin()
+
+    const feedbacksData = data?.feedbacks || []
+    const totalPages = data?.totalPages || 1
 
 
     return (
         <div className="p-2 md:p-5">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">Feedback Management</h1>
-            {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : (
+            {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : (<>
                 <div className="space-y-4">
                 {feedbacksData?.map((f) => {
 
@@ -86,7 +91,19 @@ export default function FeedbackManagePage() {
                     )
                 })}
                 </div>
-            )}
+
+                {/* Pagination Controls */}
+                <div className="flex justify-center items-center gap-4 mt-6">
+                    <button onClick={() => setPage((prev) => Math.max(prev - 1, 1) )} disabled={page === 1} className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
+                        Previous
+                    </button>
+                    <span className="text-gray-700">Page {page} of {totalPages}</span>
+                    <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
+                        Next
+                    </button>
+                </div>
+
+            </>)}
 
         </div>
     )
