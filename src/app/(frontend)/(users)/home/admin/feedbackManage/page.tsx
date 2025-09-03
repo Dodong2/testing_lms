@@ -3,61 +3,89 @@ import { useFeedback } from "@/hooks/feedback/useFeedback"
 /* hooks */
 import { useLocalStorageAdmin } from "@/hooks/feedback/useLocalStorageAdmin";
 import { useFeedbackEvents } from "@/hooks/socket/useFeedbackSocket";
+import { FaRegUserCircle } from "react-icons/fa";
 /* icon */
-import { FiPlus } from 'react-icons/fi';
-import { IoClose } from "react-icons/io5";
+import { FiGlobe, FiTag } from 'react-icons/fi';
+import { MdOutlineDescription } from "react-icons/md";
+import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
 
 export default function FeedbackManagePage() {
     useFeedbackEvents()
     const { data: feedbacksData, isLoading } = useFeedback().useGetFeedbacks()
     const { openId, readIds, handleToggle } = useLocalStorageAdmin()
-    
-    
-    return (
-        <div className="p-4 space-y-4">
-            <h1 className="text-xl font-bold">Feedbacks</h1>
-            {isLoading ? (<p>Loading...</p>) : (
 
-             feedbacksData?.map((f) => {
-               
-                const isAnon = f.visibility === 'Anonymous'
-                const isOpen = openId === f.id
-                const isRead = readIds.has(f.id)
-                
-                //para sa callbacks
-                const userName = f.user?.name || 'Unknown User'
-                const userRole = f.user?.role || 'Unknown Role'
-                const programTitle = f.program?.title || 'Unknown Program'
-                
-                return (
-                    <div key={f.id} className={`border w-full rounded-lg shadow-sm p-4 ${isRead ? "bg-white" : "bg-amber-600"}`}>
-                        {/* Summary row */}
-                        <div onClick={() => handleToggle(f.id, isOpen)}  className="flex gap-2 justify-between items-center">
-                            <div>
-                                {isAnon
-                                    ? `${programTitle} (${userRole})`
-                                    : `${userName} - ${programTitle} (${userRole})`
-                                }
-                                <span className="ml-2 text-sm text-gray-500">Date: { f.createdAt ? new Date(f.createdAt).toLocaleDateString() : 'Unknown Date'}</span>
+
+    return (
+        <div className="p-2 md:p-5">
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">Feedback Management</h1>
+            {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : (
+                <div className="space-y-4">
+                {feedbacksData?.map((f) => {
+
+                    const isAnon = f.visibility === 'Anonymous'
+                    const isOpen = openId === f.id
+                    const isRead = readIds.has(f.id)
+
+                    //para sa callbacks
+                    const userName = f.user?.name || 'Unknown User'
+                    const userRole = f.user?.role || 'Unknown Role'
+                    const programTitle = f.program?.title || 'Unknown Program'
+                    const createdAt = f.createdAt ? new Date(f.createdAt).toLocaleDateString() : 'Unknown Date'
+
+                    return (
+                        <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-amber-500" : ""}`}>
+                            {/* Summary row */}
+                            <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-amber-50" : "hover:bg-[#E3FDE7]"} ${isOpen ? 'bg-[#F8E0C4]': ''}`}>
+                                <div className="flex-1 min-w-0">
+                                    <div className={`font-semibold ${!isRead ? "text-amber-800" : "text-gray-900"} truncate`}>
+                                        {isAnon ? `Anonymous Feedback` : `${userName}`}
+                                    </div>
+                                    <div className="text-sm text-gray-500 truncate">
+                                        {`${programTitle} • ${userRole}`}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center text-sm text-gray-500 ml-4">
+                                    <span className="hidden md:inline-block mr-2">Date: {createdAt}</span>
+                                    <button className={`p-1 rounded-full text-center transition ${isOpen ? 'text-red-500 hover:text-red-700' : 'text-[#2ECC40] hover:text-green-700'}`}>
+                                        {isOpen ? <FaChevronDown size={20} /> : <FaChevronLeft size={20} />}
+                                    </button>
+                                </div>
                             </div>
 
-                            <button  className="p-1 rounded-full hover:bg-gray-100 transition">
-                                {isOpen ? <IoClose size={18}/> : <FiPlus size={18}/> }
-                             </button>
+                            {/* Expanded details */}
+                            {isOpen && (
+                                <div className={`p-4 border-t border-white bg-[#F8E0C4]`}>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                        <div className="flex items-center">
+                                            <FiGlobe className="mr-2 text-green-500" />
+                                            <span className="font-medium">Visibility:</span> <span className="ml-1">{f.visibility || 'Unknown'}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <FiTag className="mr-2 text-yellow-500" />
+                                            <span className="font-medium">Type:</span> <span className="ml-1">{f.type || 'Unknown'}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <MdOutlineDescription className="mr-2 text-amber-950" />
+                                            <span className="font-medium">Subject:</span> <span className="ml-1">{f.subject || 'Unknown'}</span>
+                                        </div>
+                                        {!isAnon && (
+                                            <div className="flex items-center">
+                                                <FaRegUserCircle className="mr-2 text-blue-500" />
+                                                <span className="font-medium">Submitted by:</span> <span className="ml-1">{userName}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="mt-4 p-3 bg-white rounded-lg border border-gray-200">
+                                        <span className="font-medium text-gray-800">Description:</span>
+                                        <p className="mt-2 text-gray-600 leading-relaxed">{f.description || 'No description provided.'}</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-
-                        {/* Expanded details */}
-                        {isOpen && (
-                        <div className="mt-3 space-y-1 text-sm text-gray-700">
-                            <div>Visibility: {f.visibility || 'Unknown'}</div>
-                            <div>Type: {f.type || 'Unknown'}</div>
-                            <div>Subject: {f.subject || 'Unknown'}</div>
-                            <div>Description: {f.description || 'Unknown'}</div>
-                        </div>
-                        )}
-                    </div>
-                )
-            })
+                    )
+                })}
+                </div>
             )}
 
         </div>

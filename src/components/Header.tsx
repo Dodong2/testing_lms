@@ -13,7 +13,7 @@ const titles: Record<string, string> = {
     "/home/admin/programManage": "Program Management",
     "/admin/activities": "Activity Logs",
     "/admin/notifications": "Notification",
-    // "/admin/feedback": "",
+    "/home/admin/feedbackManage": "Feedback Management",
     // "/admin/": "",
 }
 

@@ -37,7 +37,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     { href: "/home/admin/programManage", icon: <FaUsers />, text: "Program management" },
     { href: "/home/admin/activities", icon: <FaClipboardList />, text: "Activity logs" },
     { href: "/home/admin/notifications", icon: <IoNotifications />, text: "Notification" },
-    { href: "/home/admin/feedbackManage", icon: <MdOutlineFeedback />, text: "Feedback Management", },
+    { href: "/home/admin/feedbackManage", icon: <MdOutlineFeedback />, text: "Feedback management", },
     ]: []) 
   ];
 
