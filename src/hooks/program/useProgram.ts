@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query"
 import { toast } from "react-hot-toast"
 // services
 import { getPrograms, createProgram, addProgramMembers, deletePrograms, updateProgram, removeProgramMember, getProgramById } from "@/services/programServices"
@@ -6,10 +6,11 @@ import { getPrograms, createProgram, addProgramMembers, deletePrograms, updatePr
 export const useProgram = () => {
 
     // pang get ng program
-    const usePrograms = () => {
+    const usePrograms = (page: number, search: string) => {
         return useQuery({
-            queryKey: ["programs"],
-            queryFn: getPrograms,
+            queryKey: ["programs", page, search],
+            queryFn: () =>  getPrograms(page, search),
+            placeholderData: keepPreviousData
         })
     }
 

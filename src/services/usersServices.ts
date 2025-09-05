@@ -1,5 +1,5 @@
 import { apiFetch } from "./apiClient"
-import { UpdateUsersData, CreateUserData, CreateUserResponse, usersLists } from "@/types/usersManagetypes"
+import { UpdateUsersData, CreateUserData, CreateUserResponse, UsersResponsePaginated } from "@/types/usersManagetypes"
 
 //pang create ng users
 export const createUser = async(data: CreateUserData) => {
@@ -10,8 +10,8 @@ export const createUser = async(data: CreateUserData) => {
 }
 
 //pang get ng users (for admin)
-export const getUsersLists = async(): Promise<usersLists[]> => {
-    return apiFetch<usersLists[]>("/api/users")
+export const getUsersLists = async(page: number, search: string): Promise<UsersResponsePaginated> => {
+    return apiFetch<UsersResponsePaginated>(`/api/users?page=${page}&search=${search}`)
 }
 
 //pang update ng user (for admin)

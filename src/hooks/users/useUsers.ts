@@ -2,18 +2,19 @@
 /* services */
 import { getUsersLists, createUser, updateUsers, deleteUser } from "@/services/usersServices"
 /* react query */
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query"
 /* types */
-import { CreateUserData, CreateUserResponse, usersLists } from "@/types/usersManagetypes"
+import { CreateUserData, CreateUserResponse, UsersResponsePaginated } from "@/types/usersManagetypes"
 import toast from "react-hot-toast"
 
 export const useUsers = () => {
     
     //pang get ng lahat ng User lists
-    const useUsersLists = () => {
-        return useQuery<usersLists[]>({
-        queryKey: ['users'],
-        queryFn: getUsersLists
+    const useUsersLists = (page: number, search: string) => {
+        return useQuery<UsersResponsePaginated>({
+        queryKey: ['users', page, search],
+        queryFn: () =>  getUsersLists(page, search),
+        placeholderData: keepPreviousData
     })
     }
 

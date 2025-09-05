@@ -29,6 +29,7 @@ export interface addMembersProps {
     title: string
 }
 
+// types for get program (paginated & search)
 export interface ProgramGetTypes {
   id: string
   title: string

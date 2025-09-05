@@ -1,11 +1,10 @@
 'use client'
 import { useSession } from "next-auth/react"
-import { useEffect } from "react"
+import { useState } from "react"
 /* hooks */
 import { useUsers } from "@/hooks/users/useUsers"
 import { DeleteUser } from "@/hooks/users/DeleteUser"
 import { useUpdateUserModal } from "@/hooks/users/useUpdateUserModal"
-import { useSearch } from "@/hooks/searchbar/useSearch"
 import { useCreateUserModal } from "@/hooks/users/useCreateUserModal"
 import { useUserEvents } from "@/hooks/socket/useUserSocket"
 /* components */
@@ -19,19 +18,20 @@ import { MdEdit } from "react-icons/md";
 
 export default function UserManage() {
   useUserEvents()
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState("")
   const { data: session, status } = useSession()
   const { useUsersLists } = useUsers()
-  const { data: usersData, isLoading } = useUsersLists()
+  const { data: usersData, isLoading } = useUsersLists(page, search)
   const { openCreateUser, handleCloseCreateUser, handleOpenCreateUser } = useCreateUserModal()
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
   const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateUserModal()
-  const { filteredUsers, handleFiltered } = useSearch()
 
-  useEffect(() => {
-    if(usersData) {
-      handleFiltered(usersData)
-    }
-  }, [usersData, handleFiltered])
+  // useEffect(() => {
+  //   if(usersData) {
+  //     handleFiltered(usersData?.users)
+  //   }
+  // }, [usersData, handleFiltered])
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
@@ -40,14 +40,7 @@ export default function UserManage() {
     <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
-        {usersData && (
-          <SearchBar
-            data={usersData}
-            onFiltered={handleFiltered}
-            keysToSearch={['name', 'email', 'role']}
-            placeholder="Search users..."
-          />
-        )}
+        <SearchBar onSearch={setSearch} placeholder="Search users.." />
         <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={handleOpenCreateUser}>
           <FiUserPlus className="inline-block mr-2" />
           Add New User
@@ -79,8 +72,8 @@ export default function UserManage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
+              {usersData?.users &&  usersData?.users.length > 0 ? (
+                usersData?.users.map((user) => (
                   <tr key={user.id} className="hover:bg-[#E3FDE7] transition-colors duration-150">
                     <td className="py-3 px-4 whitespace-nowrap text-gray-700">{user.name}</td>
                     <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
@@ -110,6 +103,14 @@ export default function UserManage() {
               )}
             </tbody>
           </table>
+
+          {/* pagination control */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+              <span>Page {usersData?.page} of {usersData?.totalPages}</span>
+              <button onClick={() =>  setPage((p) => p + 1)} disabled={page === usersData?.totalPages}  className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+            </div>
+
         </div>
 
         {/* --- Modals --- */}

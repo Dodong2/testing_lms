@@ -1,3 +1,5 @@
+
+
 // for services fetch addUser
 export interface CreateUserData {
     email: string
@@ -28,6 +30,14 @@ export interface usersLists {
         title: string
       }
     }[]
+}
+
+// types for get users (paginated & search)
+export interface UsersResponsePaginated {
+  users: usersLists[]
+  total: number
+  page: number
+  totalPages: number
 }
 
 //type for update in services

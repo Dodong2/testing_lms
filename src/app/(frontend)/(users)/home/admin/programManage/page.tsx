@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from "next-auth/react"
-import { useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* hooks */
@@ -9,7 +9,6 @@ import { useProgram } from "@/hooks/program/useProgram"
 import { DeletePrograms } from "@/hooks/program/DeletePrograms";
 import { useUpdateProgramsModal } from "@/hooks/program/useUpdateProgramsModal";
 import { useViewMemberModal } from "@/hooks/program/useViewMemberModal";
-import { useSearch } from "@/hooks/searchbar/useSearch";
 import { useCreateProgramsModal } from "@/hooks/program/useCreateProgramsModal";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
@@ -24,37 +23,24 @@ import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgra
 
 export default function ProgramManage() {
   useProgramEvents()
+  const [page, setPage ] = useState(1)
+  const [search, setSearch] = useState("")
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
   const { createModal, openCreateModal, closeCreateModal } = useCreateProgramsModal()
   const { deleteModal , selectedDeleteProgram, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeletePrograms()
   const { selectedProgram, updateModal, openModalUpdate, closeModalUpdate } = useUpdateProgramsModal()
   const { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers } = useViewMemberModal()
-  const { handleFilteredProgram, filteredPrograms} = useSearch()
-  const { data: programData, isLoading } = usePrograms()
-
-    useEffect(() => {
-  if (programData?.programs) {
-    handleFilteredProgram(programData.programs)
-  }
-}, [programData, handleFilteredProgram])
+  const { data: programData, isLoading } = usePrograms(page, search)
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
-  
   
   return (
     <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
       {/* search bar */}
       <div className="flex items-center justify-between mb-4">
-        {programData?.programs && (
-          <SearchBar
-            data={programData.programs}
-            onFiltered={handleFilteredProgram}
-            keysToSearch={['title']}
-            placeholder="Search program title..."
-            />
-        )}
+          <SearchBar onSearch={setSearch} placeholder="Search program title..." />
         <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-green-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={openCreateModal}
         >
           <FiPlus className="inline-block mr-2" />
@@ -64,12 +50,12 @@ export default function ProgramManage() {
 
       {/* Program Card 1 */}
       {isLoading ? (
-        <p>Loading...</p>
+        <p className="text-center py-4 text-gray-500">Loading...</p>
       ) : (
       <div>{session.user.role === 'ADMIN' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredPrograms.length > 0 ? (
-          filteredPrograms?.map(program => {
+        {programData?.programs &&  programData?.programs.length > 0 ? (
+          programData.programs?.map(program => {
           const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0 }
           return (
             <div key={program.id} className="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.02]">
@@ -117,6 +103,12 @@ export default function ProgramManage() {
         )}
         
       </div>)}
+      {/* pagination control */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+              <span>Page {programData?.page} of {programData?.totalPages}</span>
+              <button onClick={() =>  setPage((p) => p + 1)} disabled={page === programData?.totalPages}  className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+            </div>
       </div>)}
 
       {session.user.role === 'ADMIN' && (<>

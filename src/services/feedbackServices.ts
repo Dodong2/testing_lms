@@ -29,6 +29,13 @@ export interface FeedbackResponse {
     }
 }
 
+interface FeedbackPagination {
+    feedbacks: FeedbackResponse[]
+    total: number
+    page: number
+    totalPages: number
+}
+
 // create feedback
 export const createFeedback = async(data: FeedbackPayload): Promise<FeedbackResponse> => {
     return apiFetch<FeedbackResponse>("/api/feedback", {
@@ -37,14 +44,6 @@ export const createFeedback = async(data: FeedbackPayload): Promise<FeedbackResp
         body: JSON.stringify(data)
     })
 }
-
-interface FeedbackPagination {
-    feedbacks: FeedbackResponse[]
-    total: number
-    page: number
-    totalPages: number
-}
-
 
 // get feedback for admin (paginated)
 export const getFeedbacks = async(page = 1, limit = 5) => {
