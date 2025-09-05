@@ -73,16 +73,36 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email! },
+            select: { id: true, role: true }
+        })
+
+        if (!user) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 })
+        }
+
         const params = Object.fromEntries(req.nextUrl.searchParams)
         const search = params.search ?? ''
         const page = Number(params.page) || 1
         const limit = Number(params.limit) || 6
 
 
-        //filter condition
-        const where: Prisma.ProgramWhereInput = search ? { title: { contains: search, mode: "insensitive" } } : {}
+        // search filter
+        const searchFilter: Prisma.ProgramWhereInput = search ? { title: { contains: search, mode: "insensitive" } } : {}
 
-        // query
+        // role-based filter
+        const roleFilter: Prisma.ProgramWhereInput = user.role === 'ADMIN' 
+        ? {} // admin see all
+        : {
+            members: { some: { userId: user.id } } // instructor/beneficiary only their program can see
+        }
+
+        const where: Prisma.ProgramWhereInput = {
+            AND: [searchFilter, roleFilter]
+        }
+
+        // query paginated programs + total
         const [programs, total] = await Promise.all([
             prisma.program.findMany({
                 where,
@@ -110,7 +130,7 @@ export async function GET(req: NextRequest) {
             prisma.program.count({ where }),
         ])
 
-        // compute breakdown (beneficiaries + instructors)
+        // compute member counts
         const programsWithCounts = programs.map((program) => {
             let beneficiaries = 0
             let instructors = 0

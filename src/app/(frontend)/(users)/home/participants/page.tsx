@@ -1,16 +1,20 @@
 'use client'
+import { useState } from "react"
 import Link from "next/link"
 import { FiArrowRight } from "react-icons/fi"
 import { useProgram } from "@/hooks/program/useProgram"
 import { useSession } from "next-auth/react"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
+import { SearchBar } from "@/components/SearchBar"
 
 export default function Programs() {
   useProgramEvents()
+  const [page, setPage ] = useState(1)
+    const [search, setSearch] = useState("")
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
 
-  const { data: programData, isLoading } = usePrograms()
+  const { data: programData, isLoading } = usePrograms(page, search)
 
   if (status === "loading") return <div>Loading...</div>
   if(!session) return null // Prevent render flicker
@@ -18,6 +22,9 @@ export default function Programs() {
 
     return (
         <div>
+          {session.user.role === 'ADMIN' && (
+            <SearchBar onSearch={setSearch} placeholder="Search program title..." />
+          )}
             <h2>Your Programs</h2>
        {/* Dashboard content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -43,6 +50,17 @@ export default function Programs() {
       ))
       )}
       </div>
+
+      {/* pagination control */}
+      {session.user.role === 'ADMIN' && (
+        <div className="flex justify-center items-center gap-4 mt-4">
+            <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+            <span>Page {programData?.page} of {programData?.totalPages}</span>
+            <button onClick={() =>  setPage((p) => p + 1)} disabled={page === programData?.totalPages}  className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+        </div>
+      )}
+            
+
         </div>
     )
 }
