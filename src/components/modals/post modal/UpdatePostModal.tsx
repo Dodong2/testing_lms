@@ -1,4 +1,5 @@
 import { UpdatePost } from "@/hooks/post/UpdatePost"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface UpdatePostProps {
     programId: string
@@ -10,6 +11,7 @@ interface UpdatePostProps {
 
 const UpdatePostModal = ({ programId, postId, content, onSuccess, onClose }: UpdatePostProps) => {
     const { isPending, setContentData, handleSubmit } = UpdatePost({ programId, postId, content, onSuccess })
+    useLockBodyScroll(true)
 
     return (
         <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>

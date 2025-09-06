@@ -97,8 +97,8 @@ export default function ProgramManage() {
                 <FiTrash2 className="h-5 w-5" />
               </button>
               </div>
-              <div className="col-span-2 text-xs text-gray-500 whitespace-nowrap text-center mt-2">
-                    <span className="text-xs text-gray-500 whitespace-nowrap">created on {format(new Date(program.createdAt), "MM/dd/yy")}</span>
+              <div className="col-span-2 text-xs bg-[#E3FDE7] p-1 rounded-2xl text-gray-500 whitespace-nowrap text-center mt-2">
+                    <span className="text-xs text-gray-500 whitespace-nowrap">Added on ({format(new Date(program.createdAt), "MM/dd/yy")})</span>
                 </div>
             </div>
                  

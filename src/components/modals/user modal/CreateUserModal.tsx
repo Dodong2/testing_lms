@@ -2,6 +2,7 @@
 'use client'
 import { CreateUser } from "@/hooks/users/CreateUser"
 import { CreateUserData } from "@/types/usersManagetypes"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface ActionProps {
     onClose: () => void
@@ -10,6 +11,7 @@ interface ActionProps {
 
 const CreateUserModal = ({ onClose, onSuccess }: ActionProps) => {
     const { formData, setFormData, handleCreateUser, isPending } = CreateUser({ onSuccess })
+    useLockBodyScroll(true)
     
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>

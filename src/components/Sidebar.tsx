@@ -16,6 +16,7 @@ interface SidebarItem {
   href: string // URL ng link
   icon: ReactNode // icon component
   text:string // label ng link
+  onClick: () => void
 }
 
 // Props para sa buong Sidebar component
@@ -30,13 +31,13 @@ interface SidebarProps {
 // Component para sa bawat item ng sidebar
 // dito nangyayari yung pag-pasa ng href, icon, text para display galing sa ibang page
 // dito babaguhin
-const SidebarItem = ({ href, icon, text }: SidebarItem) => {
+const SidebarItem = ({ href, icon, text, onClick }: SidebarItem) => {
   const pathname = usePathname()
   const isActive = pathname === href
 
   return (
   <Link
-    href={href}
+    href={href} onClick={onClick}
     className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-[#2ECC40]" : "text-gray-700 hover:text-[#2ECC40]"}`}>
       {/* 🔵 Active indicator bar (left side lang) */}
       {isActive && (
@@ -92,7 +93,7 @@ const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
           {/* Main sidebar items (links) */}
           {/* ito yung components, dito na display yung href, icon, text galing sa ibang page */}
           {items.map((item, idx) => (
-            <SidebarItem key={idx} href={item.href} icon={item.icon} text={item.text} />
+            <SidebarItem key={idx} href={item.href} icon={item.icon} text={item.text} onClick={() => setIsOpen(false)} />
           ))}          
         </nav>
       </aside>

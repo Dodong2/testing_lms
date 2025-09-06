@@ -1,10 +1,12 @@
 'use client'
 /* icons */
 import { IoMdAlert } from "react-icons/io";
-
 import { DeleteUserModalProps } from "@/types/usersManagetypes"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
  const DeleteUserModal = ({ userName, onConfirm, isDeleting, onCancel }: DeleteUserModalProps) => {
+    useLockBodyScroll(true)
+
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">

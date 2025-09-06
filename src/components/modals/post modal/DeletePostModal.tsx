@@ -1,5 +1,6 @@
 'use client'
 import { DeletePost } from "@/hooks/post/DeletePost"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 /* icons */
 import { IoMdAlert } from "react-icons/io";
 interface DeletePostProps {
@@ -11,6 +12,8 @@ interface DeletePostProps {
 
 const DeletePostModal = ({ programId, postId, onSuccess, onClose }: DeletePostProps) => {
     const { isPending, handleConfirmDelete } = DeletePost({programId, postId, onSuccess})
+    useLockBodyScroll(true)
+
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">

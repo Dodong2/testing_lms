@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
 import { usePost } from "@/hooks/post/usePost"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface PostModalActionProps {
   onSuccess: () => void
@@ -14,6 +15,7 @@ interface PostModalActionProps {
 const PostModal = ({ programId, onSuccess, onClose }: PostModalActionProps) => {
   const [content, setContent] = useState("")
   const { mutate: createPost, isPending } = usePost(programId).useCreatePost()
+  useLockBodyScroll(true)
 
   const handleCreatePost = () => {
     if (!content.trim()) return

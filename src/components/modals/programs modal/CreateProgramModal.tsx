@@ -1,6 +1,7 @@
 /* Para sa paggawa ng program for admin */
 'use client'
 import { CreatePrograms } from "@/hooks/program/CreatePrograms"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface ActionProps {
     onClose: () => void
@@ -9,6 +10,7 @@ interface ActionProps {
 
 const CreateProgramModal = ({ onClose, onSuccess }: ActionProps) => {
     const { formData, setFormData, handleCreateProgram, isPending } = CreatePrograms({ onSuccess })
+    useLockBodyScroll(true)
     
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>

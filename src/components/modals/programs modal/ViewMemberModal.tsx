@@ -2,7 +2,7 @@
 /* para sa pag add at remove ng Learners & Members */
 import { AddMembers } from "@/hooks/program/AddMembers"
 import { useRemoveMember } from "@/hooks/program/useRemoveMember"
-import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface AddProgramMembersProps {
     programId: string
@@ -14,7 +14,7 @@ interface AddProgramMembersProps {
 }
 
 const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers, isLoading }: AddProgramMembersProps) => {
-    useProgramEvents()
+    useLockBodyScroll(true)
     const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
     const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 

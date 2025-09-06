@@ -1,6 +1,8 @@
 'use client'
 /* icons */
 import { IoMdAlert } from "react-icons/io";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+
 interface DeleteProgramProps {
     // confirmDelete: () => void
     handleConfirm: () => void 
@@ -10,6 +12,8 @@ interface DeleteProgramProps {
 }
 
 const DeleteProgramsModal = ({ handleConfirm, handleCancel, title, isDeleting }: DeleteProgramProps) => {
+    useLockBodyScroll(true)
+
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">

@@ -1,5 +1,6 @@
 "use client";
 import { UpdateUsers } from "@/hooks/users/UpdateUser";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 interface EditUserModalProps {
   UserId: string;
@@ -32,6 +33,8 @@ const EditUserModal = ({
     initialData,
     onSuccess,
   });
+
+  useLockBodyScroll(true)
 
   return (
     <div

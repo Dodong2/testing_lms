@@ -1,4 +1,5 @@
 import { UpdatePrograms } from "@/hooks/program/UpdatePrograms"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface updateProgramProps {
     programId: string
@@ -13,6 +14,7 @@ interface updateProgramProps {
 
 const UpdateProgamsModal = ({ programId, initialData, onClose, onSuccess }: updateProgramProps) => {
     const { formData, handleChange, handleSubmit, isPending } = UpdatePrograms({ programId, initialData, onSuccess })
+    useLockBodyScroll(true)
 
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
