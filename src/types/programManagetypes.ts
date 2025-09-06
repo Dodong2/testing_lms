@@ -35,6 +35,8 @@ export interface ProgramGetTypes {
   title: string
   subtitle: string
   explanation: string
+  totalMembers: number
+  createdAt: string
   memberCounts?: {
     instructors: number
     beneficiaries: number

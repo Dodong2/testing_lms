@@ -1,12 +1,17 @@
 "use client";
 /* hooks */
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { FiSend } from "react-icons/fi";
-import { BsChatSquareTextFill } from "react-icons/bs";
+/* hooks */
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePost } from "@/hooks/post/usePost";
-import { useSession } from "next-auth/react";
+/* utils */
+import { formatCreatedAt } from "@/util/formatCreatedAt";
+/* icons */
+import { FiSend } from "react-icons/fi";
+import { BsChatSquareTextFill } from "react-icons/bs";
+
 
 interface Comment {
   id: string
@@ -42,12 +47,6 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
 
   const handleDelete = (commentId: string) => {
     deleteComment({ postId, commentId })
-  }
-
-  const formatDate = (dateString?: string) => {
-    if(!dateString) return ''
-    const date = new Date(dateString)
-    return date.toISOString().slice(0, 19).replace('T', ' ')
   }
 
   return (
@@ -86,7 +85,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments =[], on
                       <span className="text-xs text-gray-500">
                         {comment.createdAt && (
                           <span className="text-xs text-gray-500">
-                            {formatDate(comment.createdAt)}
+                            {formatCreatedAt(comment.createdAt)}
                           </span>
                         )}
                       </span>

@@ -11,6 +11,8 @@ import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePostModal } from "@/hooks/post/usePostModal";
 import { useOpenPostModal } from "@/hooks/post/useOpenPostModal";
+/* util */
+import { formatCreatedAt } from "@/util/formatCreatedAt";
 /* icons */
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
@@ -90,7 +92,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                           {post.author.name}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {new Date(post.createdAt).toLocaleString()}
+                          {formatCreatedAt(post.createdAt)}
                         </p>
                       </div>
                     </div>

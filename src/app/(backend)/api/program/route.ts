@@ -109,6 +109,8 @@ export async function GET(req: NextRequest) {
                 select: {
                     id: true,
                     title: true,
+                    subtitle: true,
+                    explanation: true,
                     createdAt: true,
                     _count: {
                         select: {
@@ -143,6 +145,8 @@ export async function GET(req: NextRequest) {
             return {
             id: program.id,
             title: program.title,
+            subtitle: program.subtitle,
+            explanation: program.explanation,
             createdAt: program.createdAt,
             totalMembers: program._count.members,
             memberCounts: {

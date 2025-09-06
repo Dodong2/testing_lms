@@ -5,26 +5,27 @@ import { useRemoveMember } from "@/hooks/program/useRemoveMember"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 
 interface AddProgramMembersProps {
-  programId: string
-  title: string
-  onSuccess: () => void
-  onClose: () => void
-  existingMembers: { email: string; name: string; role: string }[]
-} 
+    programId: string
+    title: string
+    onSuccess: () => void
+    onClose: () => void
+    existingMembers: { email: string; name: string; role: string }[]
+    isLoading: boolean
+}
 
-const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMembers }: AddProgramMembersProps) => {
-  useProgramEvents()
-  const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
-  const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
+const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers, isLoading }: AddProgramMembersProps) => {
+    useProgramEvents()
+    const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
+    const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 
-  
 
-  return (
-   <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+
+    return (
+        <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
             <div className="bg-white p-3 rounded-xl shadow-2xl max-w-4xl w-full relative">
                 <form onSubmit={handleSubmit}>
                     <h1 className="text-2xl font-bold text-gray-800 text-center mb-3">Add/Remove Members for: <span className="text-blue-600">{title}</span></h1>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Left Side: Add Members */}
                         <div>
@@ -36,7 +37,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMember
                                 onChange={(e) => setEmailInput(e.target.value)}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 mb-4"
                             />
-                            
+
                             <button
                                 type="button"
                                 onClick={handleAddToList}
@@ -71,34 +72,45 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMember
                                     {isRemoving ? 'Removing...' : `Remove (${selectedEmails.length})`}
                                 </button>
                             </div>
-                            
+
                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-h-[200px] h-96 overflow-y-auto">
-                                <ul className="space-y-2">
-                                    {existingMembers.map((member) => (
-                                        <li key={member.email} className="flex justify-between items-center py-2 px-3 hover:bg-white rounded-md transition-colors duration-150">
-                                            <div>
-                                                <p className="font-medium">{member.name}</p>
-                                                <p className="text-sm text-gray-500">{member.email}</p>
-                                            </div>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedEmails.includes(member.email)}
-                                                onChange={(e) => handleToggleEmail(member.email, e.target.checked)}
-                                                className="form-checkbox h-5 w-5 text-blue-600 rounded-md"
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
+                                {isLoading ? (
+                                    <p className="text-gray-500 animate-pulse">Loading members...</p>
+                                ) : existingMembers.length === 0 ? (
+                                    <p className="text-gray-500 italic">No members found.</p>
+                                ) : (
+                                    <ul className="space-y-2 w-full">
+                                        {existingMembers.map((member) => (
+                                            <li
+                                                key={member.email}
+                                                className="flex justify-between items-center py-2 px-3 hover:bg-white rounded-md transition-colors duration-150"
+                                            >
+                                                <div>
+                                                    <p className="font-medium">{member.name}</p>
+                                                    <p className="text-sm text-gray-500">{member.email}</p>
+                                                </div>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedEmails.includes(member.email)}
+                                                    onChange={(e) =>
+                                                        handleToggleEmail(member.email, e.target.checked)
+                                                    }
+                                                    className="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+                                                />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* BOTTOM: Action Buttons */}
                     <div className="mt-8 pt-6 border-t border-gray-200 flex justify-end space-x-4">
                         <button
                             type="button"
                             onClick={onClose}
-                                className="px-6 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"                        >
+                            className="px-6 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"                        >
                             Cancel
                         </button>
                         {emailLists.length > 0 && (
@@ -113,7 +125,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess , existingMember
                 </form>
             </div>
         </div>
-  )
+    )
 }
 
 export default ViewMemberModal
