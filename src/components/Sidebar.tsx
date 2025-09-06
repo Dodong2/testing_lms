@@ -16,7 +16,7 @@ interface SidebarItem {
   href: string // URL ng link
   icon: ReactNode // icon component
   text:string // label ng link
-  onClick: () => void
+  onClick?: () => void
 }
 
 // Props para sa buong Sidebar component
