@@ -9,8 +9,9 @@ import { SearchBar } from "@/components/SearchBar"
 
 export default function Programs() {
   useProgramEvents()
+  // search & pagination for future purposes 
   const [page, setPage ] = useState(1)
-    const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("")
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
 
@@ -22,6 +23,7 @@ export default function Programs() {
 
     return (
         <div>
+          {/* Search bar, for future purposes */}
           {session.user.role === 'ADMIN' && (
             <SearchBar onSearch={setSearch} placeholder="Search program title..." />
           )}
@@ -51,7 +53,7 @@ export default function Programs() {
       )}
       </div>
 
-      {/* pagination control */}
+      {/* pagination control, for future purposes */}
       {session.user.role === 'ADMIN' && (
         <div className="flex justify-center items-center gap-4 mt-4">
             <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>

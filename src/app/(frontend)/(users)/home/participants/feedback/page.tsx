@@ -1,16 +1,31 @@
 "use client"
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram";
 import { useCreateFeedback } from "@/hooks/feedback/useCreateFeedback";
 /* icons */
 import { FiAlertTriangle, FiBell } from "react-icons/fi";
+import { SearchBar } from "@/components/SearchBar";
 
 export default function Feedback() {
-  const { data: programData, isLoading } = useProgram().usePrograms()
+  // search & pagination for future purposes 
+  const [page, setPage ] = useState(1)
+  const [search, setSearch] = useState("")
+  const { data: session } = useSession()
+  const { data: programData, isLoading } = useProgram().usePrograms(page, search)
   const { handleSubmit, programId, setProgramId, visibility, setVisibility, type, setType, subject, setSubject, description, setDescription, isPending } = useCreateFeedback()
+
+  if(!session) return null // Prevent render flicker
 
   return (
     <div className="bg-gray-100 rounded-md shadow-md p-6">
+      {/* Search bar, for future purposes */}
+      {session.user.role === 'ADMIN' && (
+        <SearchBar onSearch={setSearch} placeholder="Search program title..." />
+        )}
+
+      {/* form */}
       <form onSubmit={handleSubmit}>
         <h2 className="text-xl font-semibold mb-4 text-gray-900">Submit Feedback</h2>
         {/* program name */}
@@ -140,6 +155,16 @@ export default function Feedback() {
           {isPending ? "Submitting..." : "Submit Feedback"}
         </button>
       </form>
+
+      {/* pagination control, for future purposes */}
+      {session.user.role === 'ADMIN' && (
+        <div className="flex justify-center items-center gap-4 mt-4">
+            <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
+            <span>Page {programData?.page} of {programData?.totalPages}</span>
+            <button onClick={() =>  setPage((p) => p + 1)} disabled={page === programData?.totalPages}  className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+        </div>
+      )}
+
     </div>
   )
 }
