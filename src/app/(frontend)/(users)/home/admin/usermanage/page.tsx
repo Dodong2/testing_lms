@@ -106,7 +106,7 @@ export default function UserManage() {
           </table>
 
           {/* pagination control */}
-            <div className="flex justify-center items-center gap-4 mt-4">
+            <div className="flex justify-end items-center gap-4 mt-4">
               <button  onClick={() => setPage((p) => p - 1)} disabled={page === 1}  className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
                 <span>Prev</span> <FaAngleLeft/>
                 </button>
