@@ -9,6 +9,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FiGlobe, FiTag } from 'react-icons/fi';
 import { MdOutlineDescription } from "react-icons/md";
 import { FaChevronDown, FaChevronLeft } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+
 
 export default function FeedbackManagePage() {
     useFeedbackEvents()
@@ -94,12 +96,12 @@ export default function FeedbackManagePage() {
 
                 {/* Pagination Controls */}
                 <div className="flex justify-center items-center gap-4 mt-6">
-                    <button onClick={() => setPage((prev) => Math.max(prev - 1, 1) )} disabled={page === 1} className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
-                        Prev
+                    <button onClick={() => setPage((prev) => Math.max(prev - 1, 1) )} disabled={page === 1} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+                        <FaAngleLeft/> <span>Prev</span> 
                     </button>
-                    <span className="text-gray-700">Page {page} of {totalPages}</span>
-                    <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
-                        Next
+                    <span className="text-gray-700 font-medium">Page {page} of {totalPages}</span>
+                    <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+                        <span>Next</span> <FaAngleRight />
                     </button>
                 </div>
 
