@@ -50,26 +50,11 @@ const PostModal = ({ programId, onSuccess, onClose }: PostModalActionProps) => {
         <div className="flex flex-col items-center gap-4">
       <UploadButton<OurFileRouter, "fileUploader">
         endpoint="fileUploader"
-
         content={{
-          button({ ready }) {
-            return ready ? (
-              <span className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                  Choose File(s)
-              </span>
-            ) : (
-              <span>Loading...</span>
-            )
-          },
-          allowedContent() {
-            return (
-                 <p className="text-xs text-gray-500 mt-2">
-                    Allowed: PDF, DOCX, PPTX, XLSX, Images
-                  </p>
-            )
-          }
+          allowedContent: () => (
+            <p className="text-xs text-gray-500 mt-2">Allowed: PDF, DOCX, PPTX, XLSX, Images</p>
+          )
         }}
-
         onClientUploadComplete={(res) => {
           if (res && res.length > 0) {
             console.log("✅ File uploaded:", res[0].ufsUrl);
