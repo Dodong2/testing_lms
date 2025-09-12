@@ -33,7 +33,10 @@ model User {
   posts    Post[]    @relation("UserPosts")
   comments Comment[] @relation("UserComments")
 
-  Feedback Feedback[]
+  Feedback          Feedback[]
+  Assignment        Assignment[]
+  Submission        Submission[]
+  gradedSubmissions Submission[] @relation("GradedBy")
 }
 
 //account for google auth
@@ -82,7 +85,8 @@ model Program {
   members     ProgramMember[]
   posts       Post[]
 
-  Feedback Feedback[]
+  Feedback   Feedback[]
+  Assignment Assignment[]
 }
 
 model ProgramMember {
@@ -129,4 +133,34 @@ model Feedback {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+}
+
+model Assignment {
+  id          String       @id @default(cuid())
+  programId   String
+  program     Program      @relation(fields: [programId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  attachments Json?
+  dueDate     DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  createdById String
+  createdBy   User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  submissions Submission[]
+}
+
+model Submission {
+  id           String     @id @default(cuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submitterId  String
+  submitter    User       @relation(fields: [submitterId], references: [id], onDelete: Cascade)
+  files        Json
+  comment      String?
+  grade        Int?
+  gradedById   String?
+  gradedBy     User?      @relation("GradedBy", fields: [gradedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }

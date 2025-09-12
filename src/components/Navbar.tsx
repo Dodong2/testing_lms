@@ -8,7 +8,7 @@ type TabProps = {
 const Navbar: React.FC<TabProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { title: "Updates", key: "updates" },
-    { title: "Files", key: "files" },
+    { title: "Assignment", key: "assignments" },
     { title: "Instructors", key: "instructors" },
   ];
 
