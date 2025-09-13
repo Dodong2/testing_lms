@@ -2,18 +2,12 @@
 import { useState } from "react"
 import { usePost } from "@/hooks/post/usePost"
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
-
-import { UploadButton } from "@uploadthing/react";
-import type { OurFileRouter } from "@/app/(backend)/api/uploadthing/core";
-
 interface PostModalActionProps {
   onSuccess: () => void
   onClose: () => void
   programId: string
 
 }
-
-
 
 const PostModal = ({ programId, onSuccess, onClose }: PostModalActionProps) => {
   const [content, setContent] = useState("")
@@ -44,34 +38,7 @@ const PostModal = ({ programId, onSuccess, onClose }: PostModalActionProps) => {
             </button>
             <button type="button" className="bg-gray-800 text-white px-3 py-2 rounded text-sm sm:text-base whitespace-nowrap" onClick={onClose}>Cancel</button>
           </div>
-        </form>
-
-        {/* for uplaoding */}
-        <div className="flex flex-col items-center gap-4">
-      <UploadButton<OurFileRouter, "fileUploader">
-        endpoint="fileUploader"
-        content={{
-          allowedContent: () => (
-            <p className="text-xs text-gray-500 mt-2">Allowed: PDF, DOCX, PPTX, XLSX, Images</p>
-          )
-        }}
-        onClientUploadComplete={(res) => {
-          if (res && res.length > 0) {
-            console.log("✅ File uploaded:", res[0].ufsUrl);
-            alert(`Uploaded: ${res[0].ufsUrl}`);
-          }
-        }}
-        onUploadError={(error: Error) => {
-          console.error("❌ Upload error:", error);
-          alert(`Upload failed: ${error.message}`);
-        }}
-      />
-    </div>
-
-    
-
-
-        
+        </form>       
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ export const useOpenPostModal = () => {
     const [selectedPost, setSelectedPost] = useState<PostGetTypes | null>(null)
     const [OpenUpdate, setOpenUpdate] = useState(false)
     const [OpenDelete, setOpenDelete] = useState(false)
+    const [OpenTask, setOpenTask] = useState(false)
 
     const handleToggleUpdateModal = (post: PostGetTypes) => {
         setSelectedPost(post)
@@ -16,5 +17,9 @@ export const useOpenPostModal = () => {
         setOpenDelete((prev) => !prev)
     }
 
-    return { selectedPost, OpenUpdate, handleToggleUpdateModal, OpenDelete, handleToggleDeleteModal }
+    const handleToggleTaskModal = () => {
+        setOpenTask((prev) => !prev)
+    }
+
+    return { selectedPost, OpenUpdate, handleToggleUpdateModal, OpenDelete, handleToggleDeleteModal, OpenTask, handleToggleTaskModal }
 }

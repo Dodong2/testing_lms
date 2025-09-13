@@ -1,5 +1,5 @@
 import { apiFetch } from "./apiClient"
-import { PostGetTypes } from "@/types/postManagetypes"
+import { PostGetTypes, PostPayload, UpdatePostTypes } from "@/types/postManagetypes"
 
 //get posts
 export const getPosts = async (programId: string) => {
@@ -10,21 +10,21 @@ export const getPosts = async (programId: string) => {
 }
 
 //create posts
-export const createPost = async (programId: string, content: string) => {
+export const createPost = async (programId: string, payload: PostPayload) => {
     return apiFetch(`/api/program/${programId}/posts`, {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ content })
+        body: JSON.stringify(payload)
     })
 }
 
 
 // update Post
-export const updatePosts = async(programId: string, postId: string, content: string) => {
+export const updatePosts = async( programId: string, postId: string, payload: UpdatePostTypes) => {
     return apiFetch(`/api/program/${programId}/posts/${postId}/updateposts`, {
         method: 'PATCH',
         credentials: 'include',
-        body: JSON.stringify({ content })
+        body: JSON.stringify(payload)
     })
 }
 

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { emitSocketEvent } from '@/lib/emitSocketEvent';
+import { PostTag } from '@prisma/client';
 
 
 //pang get ng mga sa specific programs post
@@ -77,7 +78,16 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
     const { id } = await context.params
     const programId = id
     
-    const { content } = await req.json()
+    const { content, files, deadline } = await req.json()
+
+    let tag: PostTag = 'ANNOUNCEMENT'
+    if(files && files.length > 0) {
+        tag = "TASK";
+        if(!deadline) {
+            return NextResponse.json({ error: "Deadline is required for TASK" }, { status: 400 });
+        }
+
+    }
 
     if(typeof content !== 'string' || !content.trim()) {
         return NextResponse.json({ error: 'Content required' },{ status: 400 })
@@ -101,7 +111,10 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         data: {
             content,
             programId,
-            authorId: user.id
+            authorId: user.id,
+            tag,
+            files: files,
+            deadline: deadline ? new Date(deadline) : null
         },
         include: {
             author: { select: { id: true, name: true, image: true, email: true } }

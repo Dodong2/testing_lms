@@ -100,10 +100,18 @@ model Post {
   content   String
   programId String
   authorId  String
+  tag       PostTag   @default(ANNOUNCEMENT)
+  deadline  DateTime?
+  files     Json?
   program   Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
   author    User      @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]
   createdAt DateTime  @default(now())
+}
+
+enum PostTag {
+  ANNOUNCEMENT
+  TASK
 }
 
 model Comment {

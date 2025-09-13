@@ -2,19 +2,17 @@
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 /* components */
-import Comments from "@/components/Comments";
 import PostModal from "@/components/modals/post modal/PostModal";
 import UpdatePostModal from "@/components/modals/post modal/UpdatePostModal";
 import DeletePostModal from "@/components/modals/post modal/DeletePostModal";
+import TaskPostModal from "@/components/modals/post modal/TaskPostModal";
+import TaskPostItem from "@/components/posts/TaskPostItem";
+import BeneficiaryPostItem from "@/components/posts/BeneficiaryPostItem";
 /* hooks */
 import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePostModal } from "@/hooks/post/usePostModal";
 import { useOpenPostModal } from "@/hooks/post/useOpenPostModal";
-/* util */
-import { formatCreatedAt } from "@/util/formatCreatedAt";
-/* icons */
-import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 
 export default function UpdatesContent({ programId }: { programId: string }) {
@@ -28,7 +26,9 @@ export default function UpdatesContent({ programId }: { programId: string }) {
     OpenUpdate,
     selectedPost,
     handleToggleDeleteModal,
-    OpenDelete
+    OpenDelete,
+    OpenTask,
+    handleToggleTaskModal
   } = useOpenPostModal();
 
   usePostEvents(programId);
@@ -45,92 +45,85 @@ export default function UpdatesContent({ programId }: { programId: string }) {
         <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start">
           {/* Main content - LEFT SIDE */}
           <div className="bg-white rounded-md overflow-hidden">
-            {/* Post input area to pre tangina */}
-            <div className="p-2 bg-gray-100 mt-2 rounded-md">
-              <div
-                className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full"
-                onClick={OpenPostModal}
-              >
-                <div className="w-10 h-10 rounded-full bg-gray-300">
-                  {session?.user.image && (
-                    <Image
-                      src={session.user.image}
-                      alt="Profile"
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 rounded-full"
-                    />
-                  )}
+            {/* Post input area for beneficiary */}
+            {session?.user.role === 'BENEFICIARY' && (
+              <div className="p-2 bg-gray-100 mt-2 rounded-md">
+                <div
+                  className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full"
+                  onClick={OpenPostModal}
+                >
+                  <div className="w-10 h-10 rounded-full bg-gray-300">
+                    {session?.user.image && (
+                      <Image
+                        src={session.user.image}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 rounded-full"
+                      />
+                    )}
+                  </div>
+                  <p>Post something</p>
                 </div>
-                <p>Post something</p>
               </div>
-            </div>
+            )}
+
+            {/* for Admin & instructor for post with file for TASK */}
+            {session?.user.role === 'ADMIN' || session?.user.role === 'INSTRUCTOR' && (
+              <div className="p-2 bg-gray-100 mt-2 rounded-md">
+                <div
+                  className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full"
+                  onClick={handleToggleTaskModal}
+                >
+                  <div className="w-10 h-10 rounded-full bg-gray-300">
+                    {session?.user.image && (
+                      <Image
+                        src={session.user.image}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 rounded-full"
+                      />
+                    )}
+                  </div>
+                  <p>Post something</p>
+                </div>
+              </div>
+            )}
 
             {/* Posts List */}
             <div className=" bg-gray-100 p-4 space-y-6 rounded-md shadow mt-3">
               {posts?.map((post) => (
-                <div
-                  key={post.id}
-                  className="border-b border-gray-200 pb-4 last:border-b-0"
-                >
-                  {/* Post Header */}
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        {post.author.image && (
-                          <Image
-                            src={post.author.image}
-                            alt="Profile"
-                            width={40}
-                            height={40}
-                            className="w-10 h-10 rounded-full"
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">
-                          {post.author.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formatCreatedAt(post.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* edit side */}
-                      {session?.user.id === post.author.id && (
-                        <div className=" flex gap-4 text-lg ml-4">
-                          <button onClick={() => handleToggleUpdateModal(post)} className="relative group flex flex-col items-center">
-                            <FiEdit className="text-yellow-500 transform transition-transform duration-200 hover:scale-135"/>
-                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Edit</span>
-                          </button>
-                          <button onClick={() => handleToggleDeleteModal(post)} className="relative group flex flex-col items-center">
-                            <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135"/>
-                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Delete</span>
-                          </button>
-                        </div>
-                      )}
-                  </div>
-
-                  {/* Post Content */}
-                  <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">
-                    {post.content}
-                  </p>
-
-                  {/* Comments */}
-                  <Comments
+                post.tag === "TASK" ? (
+                  <TaskPostItem 
+                    key={post.id} 
+                    post={post}
+                    session={session}
                     programId={programId}
-                    postId={post.id}
-                    comments={post.comments}
-                    onAddComment={(programId, postId, content) =>
-                      createComment({ programId, postId: post.id, content })
-                    }
+                    handleToggleUpdateModal={handleToggleUpdateModal}
+                    handleToggleDeleteModal={handleToggleDeleteModal}
+                    createComment={createComment}
                   />
-                </div>
+                ) : (
+                  <BeneficiaryPostItem
+                    key={post.id}
+                    post={post}
+                    session={session}
+                    programId={programId}
+                    handleToggleUpdateModal={handleToggleUpdateModal}
+                    handleToggleDeleteModal={handleToggleDeleteModal}
+                    createComment={createComment}
+                  />
+                )
               ))}
             </div>
           </div>
         </div>
+
+        {/* post task modal */}
+        {OpenTask && (
+          <TaskPostModal programId={programId} onClose={handleToggleTaskModal} onSuccess={handleToggleTaskModal}/>
+        )}
 
         {/* post modal */}
         {openPost && (
@@ -147,6 +140,8 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             programId={programId}
             postId={selectedPost.id}
             content={selectedPost.content}
+            files={selectedPost.files ?? []}
+            deadline={selectedPost.deadline ?? ""} 
             onClose={() => handleToggleUpdateModal(selectedPost)}
             onSuccess={() => handleToggleUpdateModal(selectedPost)}
           />

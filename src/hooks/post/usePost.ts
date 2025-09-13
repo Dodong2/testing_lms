@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { getPosts, createPost, updatePosts, deletePost, createComment, deleteComment } from "@/services/postServices";
+import { PostPayload, UpdatePostTypes } from "@/types/postManagetypes";
 
 
 
@@ -18,8 +19,8 @@ export const usePost = (programId: string) => {
     const useCreatePost = () => {
         const queryClient = useQueryClient()
         return useMutation({
-            mutationFn: ({ content }: { content: string }) =>
-                createPost(programId, content),
+            mutationFn: (payload: PostPayload) =>
+                createPost(programId, payload),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ["post", programId] })
                 toast.success("Post created successfully!")
@@ -34,8 +35,8 @@ export const usePost = (programId: string) => {
     const useUpdatePost = () => {
         const queryClient = useQueryClient()
         return useMutation({
-            mutationFn: ({ postId, content }: { postId: string, content: string } ) => 
-                updatePosts(programId, postId, content),
+            mutationFn: ({ postId, payload }: { postId: string, payload: UpdatePostTypes }) => 
+                updatePosts(programId, postId, payload),
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ["post", programId] })
                     toast.success("Post updated successfully!")
