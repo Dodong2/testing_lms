@@ -5,7 +5,6 @@ import { useState } from "react"
 import UpdatesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/UpdatesContent"
 import InstructorsContent from "@/app/(frontend)/(users)/home/participants/programs/pages/InstructorsContent"
 import FilesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/FilesContent"
-import AssignmentPage from "@/app/(frontend)/(users)/home/participants/programs/pages/AssignmentContent"
 
 interface Program {
     id: string
@@ -27,7 +26,7 @@ export const useNavbarTabs = ({ program, username }: ProgramClientProps) => {
             case 'updates':
                 return <UpdatesContent programId={program.id} />
             case 'assignments':
-                return <AssignmentPage programId={program.id}/>
+                return <FilesContent/>
             case 'instructors':
                 return <InstructorsContent/>
             default:
