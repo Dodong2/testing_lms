@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getNotifications, CreateNotifAdmin } from "@/services/notification";
+import { getNotifications, CreateNotifAdmin, markAllAsRead } from "@/services/notification";
 import { Notification } from "@/types/notifAdmintypes";
 
 export const useNotifAdmin = () => {
@@ -25,5 +25,15 @@ export const useNotifAdmin = () => {
         })
     }
 
-    return { useGetNotifications, useCreateNotifications }
+    const useMarkAllAsRead = () => {
+        const queryClient = useQueryClient()
+        return useMutation({
+            mutationFn: () => markAllAsRead(),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['notifications'] })
+            }
+        })
+    }
+
+    return { useGetNotifications, useCreateNotifications, useMarkAllAsRead }
 }

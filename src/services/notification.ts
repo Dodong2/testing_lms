@@ -18,3 +18,11 @@ export const CreateNotifAdmin = async(data: { userId: string; type: Notification
         body: JSON.stringify(data)
     })
 }
+
+// mark all as read
+export const markAllAsRead = async () => {
+  return apiFetch<{ success: boolean }>('/api/notifications', {
+    method: 'PATCH',
+    credentials: 'include'
+  })
+}
