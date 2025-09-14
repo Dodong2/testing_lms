@@ -33,7 +33,8 @@ model User {
   posts    Post[]    @relation("UserPosts")
   comments Comment[] @relation("UserComments")
 
-  Feedback Feedback[]
+  Feedback     Feedback[]
+  Notification Notification[]
 }
 
 //account for google auth
@@ -137,4 +138,24 @@ model Feedback {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  type        NotificationType
+  message     String
+  read        Boolean          @default(false)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referenceId String?
+  createdAt   DateTime         @default(now())
+
+  @@index([userId])
+}
+
+enum NotificationType {
+  FEEDBACK
+  TASK
+  PROGRAM
+  SYSTEM
 }

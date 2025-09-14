@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         if(!subject || !description || !type || !visibility || !programId) {
             return NextResponse.json({ error: "Missing fields" }, { status: 400 })
         }
-
+        
         const feedback = await prisma.feedback.create({
             data: {
                 subject,
@@ -33,6 +33,25 @@ export async function POST(req: NextRequest) {
             }
         })
 
+        // Then create notifications for all admins
+        const admins = await prisma.user.findMany({ where: { role: 'ADMIN' } })
+
+        const notifPromises = admins.map(admin => 
+            prisma.notification.create({
+                data: {
+                    userId: admin.id,
+                    type: "FEEDBACK",
+                    message: `NEW FEEDBACK from ${feedback.program.title}`,
+                    referenceId: feedback.id
+                }
+            })
+        )
+
+        // for notif admin real-time
+        const createdNotifs = await Promise.all(notifPromises)
+        await emitSocketEvent("notification", "notification-created", createdNotifs);
+
+        // for feedback real-time
         await emitSocketEvent('feedback', 'feedback-created', feedback)
 
         return NextResponse.json(feedback)

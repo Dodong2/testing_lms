@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { useState } from "react"
 import Image from "next/image"
+import NotificationBell from "./notifAdmin/NotificationBell"
 
 const titles: Record<string, string> = {
     "/beneficiary": "Home",
@@ -52,6 +53,13 @@ const Header = () => {
               <button className="bg-white text-blue-600 font-semibold py-2 px-4 rounded-full w-full mt-2 cursor-pointer transition-transform duration-75 hover:bg-gray-100 transform active:scale-95" onClick={() => signOut({ callbackUrl: "/" })} >Sign Out</button>
               </div>
             )}
+              
+            {session.user.role === 'ADMIN' && (
+              <div className="absolute top-5 right-10 ">
+                <NotificationBell/>
+            </div>
+            )}
+            
       </header>
   )
 }
