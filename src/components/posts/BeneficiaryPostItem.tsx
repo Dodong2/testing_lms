@@ -17,9 +17,9 @@ interface BeneficiaryPostItemProps {
 
 const BeneficiaryPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: BeneficiaryPostItemProps) => {
   return (
-    <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0">
+    <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
       {/* Header */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full overflow-hidden">
             {post.author.image && (
@@ -54,7 +54,7 @@ const BeneficiaryPostItem = ({ post, session, programId, handleToggleUpdateModal
       </div>
 
       {/* Content */}
-      <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">{post.content}</p>
+      <p className="text-sm text-gray-700 mb-2 whitespace-pre-wrap">{post.content}</p>
 
       {/* Comments */}
       <Comments

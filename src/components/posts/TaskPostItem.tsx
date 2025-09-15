@@ -18,7 +18,7 @@ interface TaskPostItemProps {
 
 const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
     return (
-        <div key={post.id} className="border-b border-gray-200 pb-4 last:border-b-0">
+        <div key={post.id} className="bg-red-400 border-b border-gray-200 pb-4 last:border-b-0">
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

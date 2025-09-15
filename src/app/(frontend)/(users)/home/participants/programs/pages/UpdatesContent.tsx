@@ -92,7 +92,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             )}
 
             {/* Posts List */}
-            <div className=" bg-gray-100 p-4 space-y-6 rounded-md shadow mt-3">
+            <div className="space-y-6 rounded-md shadow mt-3">
               {posts?.map((post) => (
                 post.tag === "TASK" ? (
                   <TaskPostItem 
