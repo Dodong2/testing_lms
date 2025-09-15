@@ -58,8 +58,8 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
           onClick={() => setShowComments((prev) => !prev)}
           className="flex justify-center items-center bg-sky-200 hover:bg-sky-400 hover:text-white border border-gray-300 gap-2 p-1 rounded-md cursor-pointer active:scale-95 transition-transform">
           <span className="text-1xl"><FaRegCommentDots /></span>
-          <span className="text-sm">{comments.length > 0 
-            ? <div className="flex justify-center items-center gap-1">View comments <span className="text-xs rounded-md bg-gray-400 text-white h-5 w-5 flex items-center justify-center">{comments.length}</span></div> 
+          <span className="text-sm">{comments.length > 0
+            ? <div className="flex justify-center items-center gap-1">View comments <span className="text-xs rounded-md bg-gray-400 text-white h-5 w-5 flex items-center justify-center">{comments.length}</span></div>
             : 'Add comment'}</span>
         </button>
       </div>
@@ -69,7 +69,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
         <div className="space-y-4">
           {/* Existing Comments */}
           {comments.map((comment) => (
-            <div key={comment.id} className="inline-flex items-start gap-2 bg-white p-3 rounded-md w-fit max-w-full">
+            <div key={comment.id} className="flex items-start gap-2">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0">
                 {comment.author.image && (
                   <Image
@@ -80,26 +80,29 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
                   />
                 )}
               </div>
-                
-                {/* comment contents */}
-              <div className="flex-1 flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm">{comment.author.name}</span>
-                  <span className="text-xs text-gray-500">
-                    {comment.createdAt && (
-                      <span className="text-xs text-gray-500">
-                        {formatCreatedAt(comment.createdAt)}
-                      </span>
-                    )}
-                  </span>
+
+              {/* comment contents */}
+              <div className="bg-white p-3 rounded-md w-fit min-w-[180px] max-w-full">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm">{comment.author.name}</span>
+                    <span className="text-xs text-gray-500">
+                      {comment.createdAt && (
+                        <span className="text-xs text-gray-500">
+                          {formatCreatedAt(comment.createdAt)}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  {/* show delete only if user is author */}
+                  {session?.user?.id == comment.author.id && (
+                    <button onClick={() => handleDelete(comment.id)} className="ml-2 text-red-500 hover:text-red-700">delete</button>
+                  )}
                 </div>
                 <p className="text-sm text-gray-700 mt-1 break-words">{comment.content}</p>
-              </div>
 
-              {/* show delete only if user is author */}
-              {session?.user?.id == comment.author.id && (
-                <button onClick={() => handleDelete(comment.id)} className="ml-2 text-red-500 hover:text-red-700">delete</button>
-              )}
+
+              </div>
             </div>
           ))}
 
