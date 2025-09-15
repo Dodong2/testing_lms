@@ -36,6 +36,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                     <div>
                         <p className="font-semibold text-gray-800">{post.author.name}</p>
                         <p className="text-xs text-gray-500">{formatCreatedAt(post.createdAt)}</p>
+                        <p>{post.tag}</p>
                     </div>
                 </div>
 

@@ -40,9 +40,9 @@ export default function FeedbackManagePage() {
                     const createdAt = f.createdAt ? new Date(f.createdAt).toLocaleDateString() : 'Unknown Date'
 
                     return (
-                        <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-amber-500" : ""}`}>
+                        <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-red-500" : ""}`}>
                             {/* Summary row */}
-                            <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-amber-50" : "hover:bg-[#E3FDE7]"} ${isOpen ? 'bg-[#F8E0C4]': ''}`}>
+                            <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-red-50" : "hover:bg-[#E3FDE7]"} ${isOpen ? 'bg-[#F8E0C4]': ''}`}>
                                 <div className="flex-1 min-w-0">
                                     <div className={`font-semibold ${!isRead ? "text-amber-800" : "text-gray-900"} truncate`}>
                                         {isAnon ? `Anonymous Feedback` : `${userName}`}

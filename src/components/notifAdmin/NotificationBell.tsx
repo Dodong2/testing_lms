@@ -3,6 +3,7 @@ import { useNotifAdmin } from "@/hooks/notification/useNotifAdmin"
 import { formatCreatedAt } from "@/util/formatCreatedAt"
 import { useNotificationEvents } from "@/hooks/socket/useSocketNotification";
 import { FaBell } from "react-icons/fa6";
+import Link from "next/link";
 
 const NotificationBell = () => {
     useNotificationEvents()
@@ -25,8 +26,8 @@ const NotificationBell = () => {
 
     return (
         <div className="relative">
-            <button onClick={toggleDropdown} className="relative cursor-pointer active:scale-95 transition-transform duration-75">
-                <FaBell className="text-3xl text-white" />
+            <button onClick={toggleDropdown} className="relative cursor-pointer active:scale-95 transition-transform duration-75" title="notifications">
+                <FaBell className="text-2xl text-amber-300 hover:text-white" />
                 {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs px-1">
                         {unreadCount}
@@ -35,31 +36,38 @@ const NotificationBell = () => {
             </button>
 
             {open && (
-                <div className="absolute right-4 mt-2 w-64 bg-white border shadow-lg rounded-md p-2 z-50">
+                <div className="absolute right-3 mt-1/3 w-64 bg-white shadow-2xl rounded-md z-50">
                     {notifications.length === 0 ? (
                         <p className="text-sm text-gray-500">No notifications</p>
                     ) : (
                         <>
+                        <div className="p-1 text-center bg-amber-300 rounded-tr-md rounded-tl-md shadow-md">
+                            <h1 className="text-gray-700 font-medium">Notifications</h1>
+                        </div>
                             {notifications.map(n => (
-                                <div key={n.id} className="p-2 border-b last:border-b-0">
-                                    <p className="text-sm font-semibold">{n.message}</p>
+                                <Link key={n.id} href='/home/admin/feedbackManage'>
+                                <div  className="p-2 transition-colors duration-200 ease-in-out hover:bg-amber-100">
+                                    <p className="text-sm font-semibold text-gray-700">{n.message}</p>
                                     <p className="text-xs text-gray-400">{formatCreatedAt(n.createdAt)}</p>
+                                    <div className="w-1/1 mx-auto border-b border-gray-400 mt-1"></div>
                                 </div>
+                                </Link>
                             ))}
 
-                            <div className="flex justify-between items-center mt-2 text-sm">
+                            {/* paginations */}
+                            <div className="flex justify-between items-center p-2 text-sm bg-amber-400 rounded-bl-md rounded-br-md">
                                 <button
                                     onClick={() => setPage(p => p - 1)}
                                     disabled={!hasPrev || isFetching}
-                                    className="px-2 py-1 border rounded disabled:opacity-50"
+                                    className="px-2 py-1 border rounded disabled:opacity-50 font-medium text-gray-700 bg-yellow-100 border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform"
                                 >
                                     Prev
                                 </button>
-                                <span>Page {data?.page} / {data?.totalPages}</span>
+                                <span className="font-medium text-gray-700">Page {data?.page} / {data?.totalPages}</span>
                                 <button
                                     onClick={() => setPage(p => p + 1)}
                                     disabled={!hasNext || isFetching}
-                                    className="px-2 py-1 border rounded disabled:opacity-50"
+                                    className="px-2 py-1 border rounded disabled:opacity-50 font-medium text-gray-700 bg-yellow-100 border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform"
                                 >
                                     Next
                                 </button>

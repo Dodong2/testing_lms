@@ -12,8 +12,7 @@ import { LuFileSpreadsheet } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
 import { FaChartBar } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
-import { FaClipboardList } from "react-icons/fa";
-import { IoNotifications } from "react-icons/io5";
+import { RiOrganizationChart } from "react-icons/ri";
 /* for session */
 import { useSession } from "next-auth/react";
 
@@ -34,9 +33,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     ...(session.user.role === 'ADMIN' ? [
     { href: "/home/admin", icon: <FaChartBar />, text: "Dashboard" },
     { href: "/home/admin/usermanage", icon: <FaUsers />, text: "User management" },
-    { href: "/home/admin/programManage", icon: <FaUsers />, text: "Program management" },
-    { href: "/home/admin/activities", icon: <FaClipboardList />, text: "Activity logs" },
-    { href: "/home/admin/notifications", icon: <IoNotifications />, text: "Notification" },
+    { href: "/home/admin/programManage", icon: <RiOrganizationChart />, text: "Program management" },
     { href: "/home/admin/feedbackManage", icon: <MdOutlineFeedback />, text: "Feedback management"},
     ]: []) 
   ];
