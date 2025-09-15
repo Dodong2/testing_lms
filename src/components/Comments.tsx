@@ -69,7 +69,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
         <div className="space-y-4">
           {/* Existing Comments */}
           {comments.map((comment) => (
-            <div key={comment.id} className="flex items-start gap-2 bg-white p-3 rounded-md">
+            <div key={comment.id} className="inline-flex items-start gap-2 bg-white p-3 rounded-md w-fit max-w-full">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0">
                 {comment.author.image && (
                   <Image
@@ -80,8 +80,9 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
                   />
                 )}
               </div>
-
-              <div className="flex-1">
+                
+                {/* comment contents */}
+              <div className="flex-1 flex-col">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-sm">{comment.author.name}</span>
                   <span className="text-xs text-gray-500">
@@ -92,7 +93,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
                     )}
                   </span>
                 </div>
-                <p className="text-sm text-gray-700 mt-1">{comment.content}</p>
+                <p className="text-sm text-gray-700 mt-1 break-words">{comment.content}</p>
               </div>
 
               {/* show delete only if user is author */}
