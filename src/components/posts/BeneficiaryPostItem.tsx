@@ -19,7 +19,7 @@ const BeneficiaryPostItem = ({ post, session, programId, handleToggleUpdateModal
   return (
     <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
       {/* Header */}
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full overflow-hidden">
             {post.author.image && (

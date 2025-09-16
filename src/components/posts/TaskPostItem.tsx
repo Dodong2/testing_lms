@@ -1,11 +1,19 @@
 "use client"
+import { useState } from "react";
 import Image from "next/image"
+import { Session } from "next-auth";
+/* components */
+import Comments from "../Comments";
+import PostsContent from "./PostsContent";
+import PostFiles from "./PostFiles";
+/* types */
+import { PostGetTypes } from "@/types/postManagetypes";
+/* date format */
+import { format } from "date-fns";
+/* icons */
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { formatCreatedAt } from "@/util/formatCreatedAt";
-import Comments from "../Comments";
-import { PostGetTypes } from "@/types/postManagetypes";
-import { Session } from "next-auth";
-import { format } from "date-fns";
+import { CiPen } from "react-icons/ci";
 
 interface TaskPostItemProps {
     post: PostGetTypes
@@ -17,10 +25,12 @@ interface TaskPostItemProps {
 }
 
 const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
+    const [showFiles, setShowFiles] = useState(false)
+
     return (
-        <div key={post.id} className="bg-red-400 border-b border-gray-200 pb-4 last:border-b-0">
+        <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
                         {post.author.image && (
@@ -36,13 +46,15 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                     <div>
                         <p className="font-semibold text-gray-800">{post.author.name}</p>
                         <p className="text-xs text-gray-500">{formatCreatedAt(post.createdAt)}</p>
-                        <p>{post.tag}</p>
                     </div>
                 </div>
 
-                {/* Edit / Delete */}
+                {/* right side */}
                 {session?.user.id === post.author.id && (
-                    <div className="flex gap-4 text-lg ml-4">
+                    <div className="flex justify-center items-center gap-4 text-lg ml-4">
+                        {/* tags */}
+                        <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span>{post.tag}</span></div>
+                        {/* Edit / Delete */}
                         <button onClick={() => handleToggleUpdateModal(post)} className="relative group flex flex-col items-center">
                             <FiEdit className="text-yellow-500 transform transition-transform duration-200 hover:scale-135" />
                             <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Edit</span>
@@ -57,26 +69,24 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
 
 
             {/* Content */}
-            <p className="text-sm text-gray-700 mb-4 whitespace-pre-wrap">{post.content}</p>
+            <PostsContent content={post.content} />
 
 
             {/* Files & Deadline */}
-            <details key={post.id} className="border rounded-md p-2">
-                <summary className="cursor-pointer">
-                     (Deadline: {post.deadline ? format(new Date(post.deadline), "dd/MM/yy") : "N/A"})
-                </summary>
-                {post.files?.map((file) => (
-                    <a
-                        key={file.url}
-                        href={file.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="block text-blue-600"
-                    >
-                        {file.name}
-                    </a>
-                ))}
-            </details>
+            <div key={post.id} className="border rounded-md p-2" onClick={() => setShowFiles((prev) => !prev)}>
+                <div className="cursor-pointer">
+                    (Deadline: {post.deadline ? format(new Date(post.deadline), "dd/MM/yy") : "N/A"})
+                </div>
+                {showFiles && post.files && post.files.length > 0 && (
+                    <div className="mt-2 space-y-2">
+                        {post.files?.map((file, idx) => (
+                            <PostFiles key={idx}
+                                name={file.name}
+                                url={file.url}
+                            />
+                        ))}
+                    </div>)}
+            </div>
 
 
             {/* Comments */}

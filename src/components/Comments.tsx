@@ -11,6 +11,7 @@ import { formatCreatedAt } from "@/util/formatCreatedAt";
 /* icons */
 import { FiSend } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
+import { FiTrash2 } from "react-icons/fi";
 
 
 interface Comment {
@@ -96,7 +97,9 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
                   </div>
                   {/* show delete only if user is author */}
                   {session?.user?.id == comment.author.id && (
-                    <button onClick={() => handleDelete(comment.id)} className="ml-2 text-red-500 hover:text-red-700">delete</button>
+                    <button onClick={() => handleDelete(comment.id)} className="ml-2" title="delete this comment?">
+                      <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135"/>
+                    </button>
                   )}
                 </div>
                 <p className="text-sm text-gray-700 mt-1 break-words">{comment.content}</p>
