@@ -29,6 +29,6 @@ export default async function ProgramPage({ params }: Props) {
     if (!program) return <div>Program not found</div>
 
     return (
-        <ProgramClient program={program} username={session.user.name || 'User'}/>
+        <ProgramClient program={program} username={session.user.name || 'User'} programId={program.id}/>
     )
 }

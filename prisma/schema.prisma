@@ -8,14 +8,6 @@ datasource db {
   // directUrl = env("DIRECT_URL")
 }
 
-//for sample task
-model Task {
-  id        String   @id @default(cuid())
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 //for users
 model User {
   id       String    @id @default(cuid())
@@ -35,6 +27,8 @@ model User {
 
   Feedback     Feedback[]
   Notification Notification[]
+
+  Meeting Meeting[]
 }
 
 //account for google auth
@@ -84,6 +78,8 @@ model Program {
   posts       Post[]
 
   Feedback Feedback[]
+
+  Meeting Meeting[]
 }
 
 model ProgramMember {
@@ -158,4 +154,19 @@ enum NotificationType {
   TASK
   PROGRAM
   SYSTEM
+}
+
+model Meeting {
+  id        String   @id @default(cuid())
+  title     String
+  link      String
+  startTime DateTime
+  endTime   DateTime
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  programId String
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  createdBy String
+  user      User    @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 }

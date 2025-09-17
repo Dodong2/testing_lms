@@ -3,7 +3,7 @@ import {
   format,
   isToday,
   isYesterday,
-  differenceInWeeks,
+  differenceInDays,
   differenceInMonths,
   differenceInHours,
   formatDistanceToNow
@@ -32,9 +32,11 @@ export function formatCreatedAt(date: Date | string): string {
   }
 
   // ✅ If within weeks
-  const weeks = differenceInWeeks(now, parsedDate)
-  if (weeks < 4) {
-    return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`
+  const days = differenceInDays(now, parsedDate)
+  if (days < 28) {
+    if(days < 7) {
+      return `${days} day${days > 1 ? "s" : ""} ago`
+    }
   }
 
   // ✅ If within months
