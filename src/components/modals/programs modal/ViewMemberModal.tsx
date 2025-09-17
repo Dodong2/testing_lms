@@ -1,6 +1,6 @@
 'use client'
 /* para sa pag add at remove ng Learners & Members */
-import { AddMembers } from "@/hooks/program/AddMembers"
+import { useAddMembers } from "@/hooks/program/AddMembers"
 import { useRemoveMember } from "@/hooks/program/useRemoveMember"
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
@@ -15,7 +15,7 @@ interface AddProgramMembersProps {
 
 const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers, isLoading }: AddProgramMembersProps) => {
     useLockBodyScroll(true)
-    const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = AddMembers({ programId, onSuccess })
+    const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = useAddMembers({ programId, onSuccess })
     const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 
 

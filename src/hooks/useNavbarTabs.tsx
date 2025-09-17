@@ -4,7 +4,7 @@ import { useState } from "react"
 // pages inside ng participants program
 import UpdatesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/UpdatesContent"
 import InstructorsContent from "@/app/(frontend)/(users)/home/participants/programs/pages/InstructorsContent"
-import FilesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/FilesContent"
+import AssignmentContent  from "@/app/(frontend)/(users)/home/participants/programs/pages/AssignmentContent"
 
 interface Program {
     id: string
@@ -26,9 +26,9 @@ export const useNavbarTabs = ({ program, username }: ProgramClientProps) => {
             case 'updates':
                 return <UpdatesContent programId={program.id} />
             case 'assignments':
-                return <FilesContent/>
+                return <AssignmentContent programId={program.id}/>
             case 'instructors':
-                return <InstructorsContent/>
+                return <InstructorsContent programId={program.id}/>
             default:
                 return <UpdatesContent programId={program.id}/>
 

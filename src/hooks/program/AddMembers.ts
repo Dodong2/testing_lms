@@ -7,7 +7,7 @@ interface addProgramMembersProps {
     onSuccess: () => void
 }
 
-export const AddMembers = ({ programId, onSuccess }: addProgramMembersProps) => {
+export const useAddMembers = ({ programId, onSuccess }: addProgramMembersProps) => {
     const [ emailInput, setEmailInput ] = useState('')
     const [ emailLists, setEmailLists ] = useState<string[]>([])
     const { useAddProgramMembers } = useProgram()

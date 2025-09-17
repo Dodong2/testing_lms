@@ -79,6 +79,7 @@ export interface ProgramWithMembers {
   updatedAt: string
   members: {
     user: {
+      image: string
       id: string
       email: string
       name: string
