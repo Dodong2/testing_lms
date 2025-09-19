@@ -38,26 +38,44 @@ export default function LoginPage() {
     }
   }, [status, router])
 
-  if (status === "loading" || redirecting) return <div>Loading...</div>
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <div className="flex justify-center mb-4">
-          <div className="rounded-full bg-gray-200 p-3">
-            {contents.message1.icon} {/* Use account icon */}
-          </div>
-        </div>
-        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">
-          {contents.message1.title}
-        </h2>
-        <p className="text-center text-gray-500 mb-4">
-          {contents.message1.description}
-        </p>
-        <button onClick={() => signIn("google", { prompt: "consent select_account", })}
-          className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full flex justify-center items-center gap-1.5"
-        >{contents.loginButton.icon} {contents.loginButton.title} </button>
+  if (status === "loading" || redirecting) return (
+    <div className="flex items-center justify-center min-h-screen text-gray-700">
+      <div className="animate-pulse">
+        Loading...
       </div>
     </div>
+  )
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 p-4">
+
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-sm transition-transform duration-300 hover:scale-[1.02] transform-gpu">
+
+        {/* EduLink Logo */}
+        <div className="flex justify-center mb-6">
+          {/* <EduLinkLogo className="h-12 w-12 text-blue-600 dark:text-blue-400" /> */}
+          <span className="text-4xl font-bold text-blue-600 dark:text-blue-400">EduLink</span>
+        </div>
+
+        <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-2">
+          Welcome back!
+        </h2>
+        <p className="text-center text-gray-500 dark:text-gray-400 mb-6 text-sm">
+          Please select your account type.
+        </p>
+
+        {/* Student Login Button */}
+        <button
+          onClick={() => signIn("google", { prompt: "consent select_account", })}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 w-full flex justify-center items-center gap-2 mb-4 transition-colors duration-300"
+        >
+          <IoLogoGoogle className="text-2xl" />
+          <span className="text-base">Continue with Google</span>
+        </button>
+
+      </div>
+    </div>
+
+
   )
 }

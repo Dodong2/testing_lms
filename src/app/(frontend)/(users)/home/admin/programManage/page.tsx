@@ -1,5 +1,5 @@
 'use client'
-
+import Image from "next/image";
 import { useSession } from "next-auth/react"
 import { useState } from "react";
 import Link from "next/link";
@@ -107,7 +107,8 @@ export default function ProgramManage() {
           )
         })
         ) : (
-          <div className="col-span-full flex justify-center items-center py-10">
+          <div className="col-span-full flex flex-col justify-center items-center py-10">
+            <Image src='/not-found.png' alt="not-found" width={150} height={150}/>
             <p className="text-gray-500 italic">No programs found.</p>
           </div>
         )}

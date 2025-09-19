@@ -24,7 +24,7 @@ export default function FeedbackManagePage() {
 
     return (
         <div className="p-2 md:p-5">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Feedback Management</h1>
+            <h1 className="text-2xl font-bold italic text-gray-800 mb-6">Feedback Management</h1>
             {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : (<>
                 <div className="space-y-4">
                 {feedbacksData?.map((f) => {
