@@ -1,5 +1,6 @@
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query"
 import { getMeetingByProgram, createMeeting } from "@/services/meetingService"
+import toast from "react-hot-toast"
 
 export const useMeetings = (programId: string) => {
 
@@ -19,6 +20,7 @@ export const useMeetings = (programId: string) => {
             mutationFn: (payload: { title: string, link: string, startTime: string, endTime: string }) => 
                 createMeeting(programId, payload),
             onSuccess: () => {
+                toast.success("Meeting created")
                 queryClient.invalidateQueries({ queryKey: ["meetings", programId] })
             }
         })

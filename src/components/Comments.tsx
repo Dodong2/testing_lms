@@ -54,7 +54,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
     <div className="flex flex-col gap-2 mt-2">
       <div className="p-0.5 rounded-md w-full bg-white"></div>
       {/* button comments */}
-      <div className="">
+      <div>
         <button
           onClick={() => setShowComments((prev) => !prev)}
           className="flex justify-center items-center bg-sky-200 hover:bg-sky-400 hover:text-white border border-gray-300 gap-2 p-1 rounded-md cursor-pointer active:scale-95 transition-transform">
