@@ -32,7 +32,6 @@ export default function UserHomePage() {
     <AuthGuard>
       <div>
 
-
         {/* if yung beneficiary or instructors yung naka-sign-in ito yung main page */}
         {(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR') && (
           <Programs />
