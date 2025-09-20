@@ -1,9 +1,9 @@
-// app/api/send-notification/route.ts
+import { NextResponse } from "next/server";
 import { messaging } from "@/lib/firebaseAdmin";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { token, title, message, link } = await request.json();
+    const { token, title, message, link } = await req.json();
 
     const payload = {
       token,
@@ -11,27 +11,20 @@ export async function POST(request: Request) {
         title,
         body: message,
       },
-      ...(link && {
-        webpush: {
-          fcmOptions: { link },
+      webpush: {
+        fcmOptions: {
+          link,
         },
-      }),
+      },
     };
 
     const response = await messaging.send(payload);
-
-    return new Response(JSON.stringify({ success: true, response }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error: unknown) {
-    console.error("❌ Error sending message:", error);
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+    return NextResponse.json({ success: true, response });
+  } catch (err: any) {
+    console.error("❌ Error sending message:", err);
+    return NextResponse.json(
+      { success: false, error: err.message },
+      { status: 500 }
     );
   }
 }
