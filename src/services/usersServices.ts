@@ -1,5 +1,5 @@
 import { apiFetch } from "./apiClient"
-import { UpdateUsersData, CreateUserData, CreateUserResponse, UsersResponsePaginated } from "@/types/usersManagetypes"
+import { UpdateUsersData, CreateUserData, CreateUserResponse, UsersResponsePaginated, RoleStatsResponse } from "@/types/usersManagetypes"
 
 //pang create ng users
 export const createUser = async(data: CreateUserData) => {
@@ -29,4 +29,9 @@ export const deleteUser = async(UserId: string) => {
     return apiFetch(`/api/users/${UserId}/deleteusers`, {
         method: "DELETE"
     })
+}
+
+// for charts
+export const getUserRoleStats = async (): Promise<RoleStatsResponse> => {
+    return apiFetch<RoleStatsResponse>(`/api/users/role-stats`)
 }

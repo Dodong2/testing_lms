@@ -67,3 +67,11 @@ export interface DeleteUserModalProps {
   onCancel: () => void
   isDeleting: boolean
 }
+
+// for chart types api
+export interface RoleStatsResponse {
+  admins: number
+  instructors: number
+  beneficiaries: number
+  total: number
+}

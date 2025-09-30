@@ -1,10 +1,10 @@
 'use client'
 /* services */
-import { getUsersLists, createUser, updateUsers, deleteUser } from "@/services/usersServices"
+import { getUsersLists, createUser, updateUsers, deleteUser, getUserRoleStats } from "@/services/usersServices"
 /* react query */
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query"
 /* types */
-import { CreateUserData, CreateUserResponse, UsersResponsePaginated } from "@/types/usersManagetypes"
+import { CreateUserData, CreateUserResponse, UsersResponsePaginated, RoleStatsResponse } from "@/types/usersManagetypes"
 import toast from "react-hot-toast"
 
 export const useUsers = () => {
@@ -61,11 +61,19 @@ export const useUsers = () => {
                 toast.error(error.message)
             }
         })
-    } 
+    }
+
+    //for charts
+    const useUserRoleStats = () => {
+        return useQuery<RoleStatsResponse>({
+            queryKey: ["user-role-stats"],
+            queryFn: getUserRoleStats,
+        })
+    }
 
 
 
 
-    return { useUsersLists, useCreateUser, useUpdateUsers, useDeleteUsers }
+    return { useUsersLists, useCreateUser, useUpdateUsers, useDeleteUsers, useUserRoleStats }
 }
 
