@@ -38,7 +38,7 @@ const EditUserModal = ({
 
   return (
     <div
-      className="fixed flex inset-0 items-center justify-center z-50"
+      className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm"
       style={{ backgroundColor: "rgba(70, 70, 70, 0.3)" }}
     >
       <div className="bg-white p-8 rounded-xl shadow-2xl max-w-2xl w-full relative">

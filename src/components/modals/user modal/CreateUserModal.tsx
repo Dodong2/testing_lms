@@ -14,7 +14,7 @@ const CreateUserModal = ({ onClose, onSuccess }: ActionProps) => {
     useLockBodyScroll(true)
     
   return (
-    <div className="fixed flex inset-0 items-center justify-center z-50"  style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+    <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
          <form onSubmit={handleCreateUser} className="space-y-5 text-gray-800">
         <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">Create User</h2>

@@ -6,6 +6,8 @@ import { Session } from "next-auth";
 import Comments from "../Comments";
 import PostsContent from "./PostsContent";
 import PostFiles from "./PostFiles";
+import ModalFileViewer from "../ModalFileViewer";
+import FileViewer from "../FileViewer";
 /* types */
 import { PostGetTypes } from "@/types/postManagetypes";
 /* date format */
@@ -26,6 +28,17 @@ interface TaskPostItemProps {
 
 const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
     const [showFiles, setShowFiles] = useState(false)
+    const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
+
+    const getFileType = (url: string): string => {
+        if (url.match(/\.(jpg|jpeg|png|gif|svg)$/i)) return "image";
+        if (url.match(/\.pdf$/i)) return "pdf";
+        if (url.match(/\.(mp4|webm)$/i)) return "video";
+        if (url.match(/\.(mp3|wav)$/i)) return "audio";
+        if (url.match(/\.docx?$/i)) return "docx";
+        if (url.match(/\.pptx?$/i)) return "pptx";
+        return "text";
+    };
 
     return (
         <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
@@ -83,6 +96,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                             <PostFiles key={idx}
                                 name={file.name}
                                 url={file.url}
+                                onClick={(f) => setSelectedFile(f)}
                             />
                         ))}
                     </div>)}
@@ -98,6 +112,15 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                     createComment({ programId, postId: post.id, content })
                 }
             />
+
+            <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>
+                {selectedFile && (
+                    <FileViewer
+                        fileUrl={selectedFile.url}
+                        fileType={getFileType(selectedFile.url)}
+                    />
+                )}
+            </ModalFileViewer>
         </div>
     )
 }

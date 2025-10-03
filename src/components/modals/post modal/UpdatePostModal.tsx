@@ -21,7 +21,7 @@ const UpdatePostModal = ({ programId, postId, content, files = [], deadline = ""
     useLockBodyScroll(true)
 
     return (
-        <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+        <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* content */}

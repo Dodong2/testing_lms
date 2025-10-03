@@ -21,7 +21,7 @@ const CreateMeetingModal = ({ programId, onClose, onSuccess }: MeetingProps) => 
     }
 
   return (
-     <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+     <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Create Meeting</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
