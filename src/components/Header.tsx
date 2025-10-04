@@ -33,7 +33,7 @@ const Header = () => {
     const { name, email, role } = session.user
 
   return (
-    <header className="sticky top-0 border-b border-gray-200 bg-[#2ECC40] p-4 z-10">
+    <header className="sticky top-0 border-b border-gray-200 bg-blue-500 p-4 z-10">
         <h1 className="text-ml font-bold text-white text-center">{pageTitle}</h1>
         
           {session.user.image && (

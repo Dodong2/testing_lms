@@ -7,6 +7,7 @@ import UpdatePostModal from "@/components/modals/post modal/UpdatePostModal";
 import DeletePostModal from "@/components/modals/post modal/DeletePostModal";
 import TaskPostModal from "@/components/modals/post modal/TaskPostModal";
 import TaskPostItem from "@/components/posts/TaskPostItem";
+import AnnouncePostItem from "@/components/posts/AnnouncePostItem";
 import BeneficiaryPostItem from "@/components/posts/BeneficiaryPostItem";
 /* hooks */
 import { usePost } from "@/hooks/post/usePost";
@@ -95,17 +96,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             <div className="space-y-6 rounded-md shadow mt-3">
               {posts?.map((post) => (
                 post.tag === "TASK" ? (
-                  <TaskPostItem 
-                    key={post.id} 
-                    post={post}
-                    session={session}
-                    programId={programId}
-                    handleToggleUpdateModal={handleToggleUpdateModal}
-                    handleToggleDeleteModal={handleToggleDeleteModal}
-                    createComment={createComment}
-                  />
-                ) : (
-                  <BeneficiaryPostItem
+                  <TaskPostItem
                     key={post.id}
                     post={post}
                     session={session}
@@ -114,7 +105,27 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                     handleToggleDeleteModal={handleToggleDeleteModal}
                     createComment={createComment}
                   />
-                )
+                ) : post.tag === "ANNOUNCEMENT" ? (
+                  <AnnouncePostItem
+                    key={post.id}
+                    post={post}
+                    session={session}
+                    programId={programId}
+                    handleToggleUpdateModal={handleToggleUpdateModal}
+                    handleToggleDeleteModal={handleToggleDeleteModal}
+                    createComment={createComment}
+                  />
+                ) : (
+                    <BeneficiaryPostItem
+                      key={post.id}
+                      post={post}
+                      session={session}
+                      programId={programId}
+                      handleToggleUpdateModal={handleToggleUpdateModal}
+                      handleToggleDeleteModal={handleToggleDeleteModal}
+                      createComment={createComment}
+                    />
+                  )
               ))}
             </div>
           </div>
@@ -122,7 +133,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
         {/* post task modal */}
         {OpenTask && (
-          <TaskPostModal programId={programId} onClose={handleToggleTaskModal} onSuccess={handleToggleTaskModal}/>
+          <TaskPostModal programId={programId} onClose={handleToggleTaskModal} onSuccess={handleToggleTaskModal} />
         )}
 
         {/* post modal */}
@@ -141,7 +152,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             postId={selectedPost.id}
             content={selectedPost.content}
             files={selectedPost.files ?? []}
-            deadline={selectedPost.deadline ?? ""} 
+            deadline={selectedPost.deadline ?? ""}
             onClose={() => handleToggleUpdateModal(selectedPost)}
             onSuccess={() => handleToggleUpdateModal(selectedPost)}
           />

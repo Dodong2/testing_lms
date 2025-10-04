@@ -34,6 +34,7 @@ export interface PostPayload {
   content: string;
   files?: FileMeta[];
   deadline?: string; // YYYY-MM-DD
+  tag?: "TASK" | "ANNOUNCEMENT" | "NORMAL"
 }
 
 // ginamit sa updatePosts services at usePost hooks

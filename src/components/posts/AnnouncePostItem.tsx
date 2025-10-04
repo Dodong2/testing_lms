@@ -26,7 +26,7 @@ interface TaskPostItemProps {
     createComment: (args: { programId: string; postId: string; content: string }) => void;
 }
 
-const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
+const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
     const [showFiles, setShowFiles] = useState(false)
     const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
 
@@ -63,6 +63,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                 </div>
 
                 {/* right side */}
+
                 <div className="flex justify-center items-center gap-4 text-lg ml-4">
                     {/* tags */}
                     <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span>{post.tag}</span></div>
@@ -78,29 +79,31 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                         </button>
                     </>)}
                 </div>
+
             </div>
 
 
             {/* Content */}
             <PostsContent content={post.content} />
 
-
             {/* Files & Deadline */}
-            <div key={post.id} className="border rounded-md p-2" onClick={() => setShowFiles((prev) => !prev)}>
-                <div className="cursor-pointer">
-                    (Deadline: {post.deadline ? format(new Date(post.deadline), "dd/MM/yy") : "N/A"})
+            {post.files && post.files?.length > 0 && (
+                <div key={post.id} className="border rounded-md p-2" onClick={() => setShowFiles((prev) => !prev)}>
+                    <div className="cursor-pointer">
+                        Files Preview
+                    </div>
+                    {showFiles && post.files && post.files.length > 0 && (
+                        <div className="mt-2 space-y-2">
+                            {post.files?.map((file, idx) => (
+                                <PostFiles key={idx}
+                                    name={file.name}
+                                    url={file.url}
+                                    onClick={(f) => setSelectedFile(f)}
+                                />
+                            ))}
+                        </div>)}
                 </div>
-                {showFiles && post.files && post.files.length > 0 && (
-                    <div className="mt-2 space-y-2">
-                        {post.files?.map((file, idx) => (
-                            <PostFiles key={idx}
-                                name={file.name}
-                                url={file.url}
-                                onClick={(f) => setSelectedFile(f)}
-                            />
-                        ))}
-                    </div>)}
-            </div>
+            )}
 
 
             {/* Comments */}
@@ -125,4 +128,4 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
     )
 }
 
-export default TaskPostItem
+export default AnnouncePostItem

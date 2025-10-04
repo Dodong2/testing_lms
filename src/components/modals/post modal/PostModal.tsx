@@ -1,3 +1,4 @@
+/* for beneficiary */
 'use client'
 import { useState } from "react"
 import { usePost } from "@/hooks/post/usePost"

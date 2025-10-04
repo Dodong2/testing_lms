@@ -63,13 +63,16 @@ const UpdatePostModal = ({ programId, postId, content, files = [], deadline = ""
                         </div>
                     )}
 
-                    {/* deadline */}
-                    <input
-                        type="date"
-                        onChange={(e) => setDeadlineData(e.target.value)}
-                        defaultValue={deadline ? deadline.split("T")[0] : ""}
-                        className="border p-2 w-full"
-                    />
+                    {(session?.user.role === "ADMIN" || session?.user.role === "INSTRUCTOR" && deadline.length > 0) && (<>
+                        {/* deadline */}
+                        <input
+                            type="date"
+                            onChange={(e) => setDeadlineData(e.target.value)}
+                            defaultValue={deadline ? deadline.split("T")[0] : ""}
+                            className="border p-2 w-full"
+                        />
+                    </>)}
+
 
                     {/* Preview uploaded files */}
                     {filesData.length > 0 && (

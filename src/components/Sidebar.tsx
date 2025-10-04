@@ -38,7 +38,7 @@ const SidebarItem = ({ href, icon, text, onClick }: SidebarItem) => {
   return (
   <Link
     href={href} onClick={onClick}
-    className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-[#2ECC40]" : "text-gray-700 hover:text-[#2ECC40]"}`}>
+    className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-blue-500" : "text-gray-700 hover:text-blue-700"}`}>
       {/* 🔵 Active indicator bar (left side lang) */}
       {isActive && (
         <div className="absolute right-0 top-0 h-full w-1 bg-blue-500 rounded-l-md"></div>
@@ -84,7 +84,7 @@ const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Sidebar header */}
-        <div className="p-4 font-bold border-b bg-[#2ECC40] border-gray-200 whitespace-nowrap">
+        <div className="p-4 font-bold border-b bg-blue-500 border-gray-200 whitespace-nowrap">
          <p className="ml-13 text-white">Extenstion Portal</p> 
         </div>
 
