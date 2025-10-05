@@ -31,41 +31,41 @@ export default function Programs() {
       <h2 className="text-2xl font-bold italic text-gray-800">Your Programs</h2>
       {/* Dashboard content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-  {isLoading ? (
-    <p>Loading...</p>
-  ) : programData?.programs && programData.programs.length > 0 ? (
-    programData.programs.map((program) => (
-      <div
-        key={program.id}
-        className="bg-white rounded-lg shadow overflow-hidden border border-transparent hover:border-blue-500 transition-all"
-      >
-        <Link href={`/home/participants/programs/${program.id}`}>
-          {/* Top gray box */}
-          <div className="bg-gray-300 h-32 w-full"></div>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : programData?.programs && programData.programs.length > 0 ? (
+          programData.programs.map((program) => (
+            <div
+              key={program.id}
+              className="bg-white rounded-lg shadow overflow-hidden border border-transparent hover:border-blue-500 transition-all"
+            >
+              <Link href={`/home/participants/programs/${program.id}`}>
+                {/* Top gray box */}
+                <div className="bg-gray-300 h-32 w-full"></div>
 
-          {/* Bottom content */}
-          <div className="flex items-center justify-between p-4">
-            <span className="text-lg font-medium">{program.title}</span>
-            <button className="bg-gray-400 text-white rounded-full p-2 hover:bg-gray-500">
-              <FiArrowRight />
-            </button>
+                {/* Bottom content */}
+                <div className="flex items-center justify-between p-4">
+                  <span className="text-lg font-medium">{program.title}</span>
+                  <button className="bg-gray-400 text-white rounded-full p-2 hover:bg-gray-500">
+                    <FiArrowRight />
+                  </button>
+                </div>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full flex flex-col items-center justify-center py-10 text-gray-500 italic">
+            <Image
+              src="/not-found.png"
+              alt="no-programs"
+              width={150}
+              height={150}
+              className="mb-2"
+            />
+            <p>No programs available yet.</p>
           </div>
-        </Link>
+        )}
       </div>
-    ))
-  ) : (
-    <div className="col-span-full flex flex-col items-center justify-center py-10 text-gray-500 italic">
-      <Image
-        src="/not-found.png"
-        alt="no-programs"
-        width={150}
-        height={150}
-        className="mb-2"
-      />
-      <p>No programs available yet.</p>
-    </div>
-  )}
-</div>
 
 
       {/* pagination control, for future purposes */}
