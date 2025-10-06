@@ -1,16 +1,16 @@
-interface SubmissionPageProps {
-  params: {
-    id: string
-    postId: string
-  }
-}
 
-export default function SubmissionPage({ params }: SubmissionPageProps) {
-  const { id: programId, postId } = params
+// interface SubmissionTask {
+//   params: {
+//     id: string
+//     postId: string
+//   }
+// }
 
+export default function SubmissionPage() {
   return (
     <div>
-      Welcome to submission page for program {programId}, post {postId}
+       Welcome to submission page for program
     </div>
   )
 }
+
