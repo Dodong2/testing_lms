@@ -1,7 +1,7 @@
 
 interface SubmissionTask {
   params: {
-    programId: string
+    id: string
     postId: string
   }
 }
@@ -10,7 +10,7 @@ export default function SubmissionPage ({ params }: SubmissionTask) {
   const { id: programId, postId } = params
   return (
     <div>
-        welcome to submission page
+       Welcome to submission page for program {programId}, post {postId}
     </div>
   )
 }
