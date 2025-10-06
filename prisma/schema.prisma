@@ -29,6 +29,8 @@ model User {
   Notification Notification[]
 
   Meeting Meeting[]
+
+  Submission Submission[]
 }
 
 //account for google auth
@@ -104,6 +106,8 @@ model Post {
   author    User      @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]
   createdAt DateTime  @default(now())
+
+  Submission Submission[]
 }
 
 enum PostTag {
@@ -170,4 +174,18 @@ model Meeting {
   program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
   createdBy String
   user      User    @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+  id          String    @id @default(cuid())
+  postId      String
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  files       Json?
+  links       String
+  grade       Int?
+  feedback    String?
+  submittedAt DateTime  @default(now())
+  gradedAt    DateTime?
 }

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image"
 import { Session } from "next-auth";
+import Link from "next/link";
 /* components */
 import Comments from "../Comments";
 import PostsContent from "./PostsContent";
@@ -101,6 +102,20 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                         ))}
                     </div>)}
             </div>
+            
+            {/* submission for beneficiary */}
+            {session?.user.role === 'BENEFICIARY' && (
+                <Link href={`/home/participants/programs/${programId}/${post.id}/Submission`}>
+                    <button>Submit your work</button>
+                </Link>
+            )}
+            
+            {/* grading for instructor */}
+            {session?.user.role === 'INSTRUCTOR' && (
+                <Link href={`/home/participants/programs/${programId}/${post.id}/Submission`}>
+                <button>Student work</button>
+                </Link>
+            )}
 
 
             {/* Comments */}
