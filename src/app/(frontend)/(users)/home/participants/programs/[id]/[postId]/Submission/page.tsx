@@ -1,10 +1,13 @@
 
 interface SubmissionTask {
+  params: {
     programId: string
     postId: string
+  }
 }
 
-const page = ({ programId, postId }: SubmissionTask) => {
+export default function SubmissionPage ({ params }: SubmissionTask) {
+  const { id: programId, postId } = params
   return (
     <div>
         welcome to submission page
@@ -12,4 +15,3 @@ const page = ({ programId, postId }: SubmissionTask) => {
   )
 }
 
-export default page
