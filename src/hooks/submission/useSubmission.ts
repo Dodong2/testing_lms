@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { submitWork, getSubmissions, gradeSubmission } from "@/services/submissionServices";
-import { SubmitWorkPayload, gradeSubmissionTypes } from "@/types/submissiontypes";
+import { SubmitWorkPayload, gradeSubmissionTypes, Submission } from "@/types/submissiontypes";
 
 export const useSubmission = (programId: string, postId: string) => {
 
@@ -13,6 +13,7 @@ export const useSubmission = (programId: string, postId: string) => {
         })
     }
 
+    //
     const useSubmitWork = () => {
         const queryClient = useQueryClient()
         return useMutation({
@@ -41,5 +42,5 @@ export const useSubmission = (programId: string, postId: string) => {
 
 
 
-return { useGetSubmssions, useSubmitWork }
+return { useGetSubmssions, useSubmitWork, useGradeSubmission }
 }

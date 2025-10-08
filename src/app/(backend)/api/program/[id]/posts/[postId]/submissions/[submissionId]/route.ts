@@ -2,6 +2,7 @@ import { NextRequest, NextResponse, userAgent } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 // Instructor: Grade Work
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string, postId: string, submissionId: string }> }) {
@@ -28,6 +29,8 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
                 student: { select: { id: true, name: true, image: true } }
             }
         })
+
+        await emitSocketEvent("submission", "submission-graded", graded);
 
         return NextResponse.json(graded)
     } catch(error) {

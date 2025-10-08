@@ -45,6 +45,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             }
         })
 
+        await emitSocketEvent("submission", "submission-created", submission);
+
         return NextResponse.json(submission)
     } catch (error) {
         console.error(error)

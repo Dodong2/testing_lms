@@ -9,6 +9,7 @@ import { handleUserEvent } from './handlers/userHandlers'
 import { handlePostEvents } from './handlers/postHandlers'
 import { handlefeedbackEvents } from './handlers/feedbackHandlers'
 import { handleNotifEvents } from './handlers/notificationHandlers'
+import { handleSubmissionEvents } from './handlers/submissionHandlers'
 
 const app = express()
 app.use(cors())
@@ -53,6 +54,9 @@ app.post("/emit", express.json(), (req, res) => {
       break
     case 'notification':
       handleNotifEvents(io, type, payload)
+      break
+    case 'submission':
+      handleSubmissionEvents(io, type, payload)
       break
     default:
       console.log("❓ Unknown category:", category)

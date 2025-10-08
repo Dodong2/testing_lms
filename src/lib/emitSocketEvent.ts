@@ -2,7 +2,7 @@
 Pinapadala nito ang event + data sa Socket.IO server (nasa localhost:3001) para i-broadcast sa ibang users.
 nasa socket-server yung step 1 */
 export const emitSocketEvent = async (
-  category: "program" | "user" | "post" | "feedback" | "notification",
+  category: "program" | "user" | "post" | "feedback" | "notification" | "submission",
   type: string,
   payload: unknown // or a stricter type if desired
 ): Promise<void> => {
