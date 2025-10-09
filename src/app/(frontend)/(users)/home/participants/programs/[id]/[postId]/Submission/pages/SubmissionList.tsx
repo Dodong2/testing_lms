@@ -1,9 +1,11 @@
 'use client'
 
 import Image from "next/image"
-import { useSubmission } from "@/hooks/submission/useSubmission"
 import { useState } from "react"
+/* hooks */
+import { useSubmission } from "@/hooks/submission/useSubmission"
 import { useSubmissionEvents } from "@/hooks/socket/useSubmissionEvents"
+/* types */
 import { Submission } from "@/types/submissiontypes"
 
 interface SubmissionLists {
@@ -69,6 +71,7 @@ const SubmissionList = ({ postId, programId }: SubmissionLists) => {
             </p>
           </div>
 
+          {/* links */}
           {submission.links && (
             <a
               href={submission.links}
@@ -81,6 +84,7 @@ const SubmissionList = ({ postId, programId }: SubmissionLists) => {
             </a>
           )}
 
+          {/* files */}
           {submission.files && submission.files.length > 0 && (
             <ul className="text-sm mt-2">
               {submission.files.map((file, idx) => (
@@ -112,6 +116,7 @@ const SubmissionList = ({ postId, programId }: SubmissionLists) => {
             </div>
           )}
 
+          {/* for grading */}
           {openSubmissionId === submission.id && (
             <div className="mt-3 border-t pt-3" onClick={(e) => e.stopPropagation()}>
               <h4 className="font-semibold text-gray-700 mb-2">Grade this submission</h4>
