@@ -1,9 +1,10 @@
 'use client'
 
-/* hooks */
+import Image from "next/image"
 import { useSubmission } from "@/hooks/submission/useSubmission"
 import { useState } from "react"
 import { useSubmissionEvents } from "@/hooks/socket/useSubmissionEvents"
+import { Submission } from "@/types/submissiontypes"
 
 interface SubmissionLists {
   postId: string
@@ -16,79 +17,128 @@ const SubmissionList = ({ postId, programId }: SubmissionLists) => {
   const { mutate: gradeWorks, isPending } = useSubmission(programId, postId).useGradeSubmission()
 
   const [openSubmissionId, setOpenSubmissionId] = useState<string | null>(null)
-  const [grade, setGrade] = useState<number>(0)
-  const [feedback, setFeedback] = useState<string>('')
+  const [grades, setGrades] = useState<Record<string, number>>({})
+  const [feedbacks, setFeedbacks] = useState<Record<string, string>>({})
 
-  if (isLoading) return <p>Loading submissions...</p>;
-  if (!getSubmissions?.length) return <p>No submissions yet.</p>;
+  if (isLoading) return <p>Loading submissions...</p>
+  if (!getSubmissions?.length) return <p>No submissions yet.</p>
 
-  const handleToggle = (id: string) => {
-    setOpenSubmissionId((prev) => (prev === id ? null : id))
+  const handleToggle = (submission: Submission) => {
+    setOpenSubmissionId(prev => (prev === submission.id ? null : submission.id))
+    setGrades(prev => ({ ...prev, [submission.id]: submission.grade ?? 0 }))
+    setFeedbacks(prev => ({ ...prev, [submission.id]: submission.feedback ?? '' }))
   }
 
   const handleGradeSubmit = (submissionId: string) => {
     gradeWorks(
-      { submissionId, grade, feedback },
+      {
+        submissionId,
+        grade: grades[submissionId],
+        feedback: feedbacks[submissionId],
+      },
       {
         onSuccess: () => {
-          setGrade(0)
-          setFeedback('')
           setOpenSubmissionId(null)
-        }
+        },
       }
     )
   }
-
 
   return (
     <div className="space-y-3">
       <h2 className="font-semibold text-gray-700 mb-2">Submitted Works</h2>
       {getSubmissions.map((submission) => (
-        <div key={submission.id} className="border p-3 rounded-md" onClick={() => handleToggle(submission.id)}>
+        <div
+          key={submission.id}
+          className="border p-3 rounded-md"
+          onClick={() => handleToggle(submission)}
+        >
           <div className="flex justify-between items-center">
+            {submission.student.image && (
+              <Image
+                src={submission.student.image}
+                alt="Profile"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full"
+              />
+            )}
             <p className="font-medium text-gray-800">{submission.student.name}</p>
             <p className="text-sm text-gray-500">
-              {submission.grade ? `Grade: ${submission.grade}` : 'Not graded yet'}
+              {submission.grade != null ? `Grade: ${submission.grade}` : 'Not graded yet'}
             </p>
           </div>
 
-          {/* Links */}
           {submission.links && (
-            <a href={submission.links} className="text-blue-500" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+            <a
+              href={submission.links}
+              className="text-blue-500"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+            >
               View Link
             </a>
           )}
 
-          {/* Files */}
-          {submission.files && submission.files?.length > 0 && (
+          {submission.files && submission.files.length > 0 && (
             <ul className="text-sm mt-2">
-              {submission.files?.map((file, idx) => (
+              {submission.files.map((file, idx) => (
                 <li key={idx}>
-                  📎 <a href={file.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>{file.name}</a>
+                  📎{" "}
+                  <a
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {file.name}
+                  </a>
                 </li>
               ))}
             </ul>
           )}
 
-          {/* Collapsible grading form */}
+          {submission.grade != null && (
+            <div className="mt-2 text-sm text-gray-600">
+              <p>
+                <span className="font-medium">Grade:</span> {submission.grade}
+              </p>
+              {submission.feedback && (
+                <p>
+                  <span className="font-medium">Feedback:</span> {submission.feedback}
+                </p>
+              )}
+            </div>
+          )}
+
           {openSubmissionId === submission.id && (
-            <div className="mt-3 border-t pt-3"
-              onClick={(e) => e.stopPropagation()}>
+            <div className="mt-3 border-t pt-3" onClick={(e) => e.stopPropagation()}>
               <h4 className="font-semibold text-gray-700 mb-2">Grade this submission</h4>
               <div className="flex flex-col gap-2">
                 <input
                   type="number"
                   min={0}
                   max={100}
-                  value={grade}
-                  onChange={(e) => setGrade(Number(e.target.value))}
+                  value={grades[submission.id] ?? 0}
+                  onChange={(e) =>
+                    setGrades((prev) => ({
+                      ...prev,
+                      [submission.id]: Number(e.target.value),
+                    }))
+                  }
                   className="border rounded-md px-2 py-1 text-sm focus:ring focus:ring-gray-400"
                   placeholder="Enter grade (0–100)"
                 />
 
                 <textarea
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
+                  value={feedbacks[submission.id] ?? ''}
+                  onChange={(e) =>
+                    setFeedbacks((prev) => ({
+                      ...prev,
+                      [submission.id]: e.target.value,
+                    }))
+                  }
                   placeholder="Feedback (optional)"
                   className="border rounded-md px-2 py-1 text-sm focus:ring focus:ring-gray-400 resize-none"
                   rows={3}

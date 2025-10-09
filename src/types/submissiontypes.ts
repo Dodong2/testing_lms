@@ -18,6 +18,7 @@ export interface Submission {
   student: {
     id: string;
     name: string;
+    image: string
   };
   links?: string
   grade?: number;
