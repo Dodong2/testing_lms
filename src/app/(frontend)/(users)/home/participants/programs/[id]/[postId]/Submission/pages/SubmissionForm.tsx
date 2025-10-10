@@ -8,7 +8,8 @@ import { UploadButton } from "@/util/Uploadthing"
 import { useSubmission } from "@/hooks/submission/useSubmission"
 import { useSubmissionEvents } from "@/hooks/socket/useSubmissionEvents"
 import { Submission } from "@/types/submissiontypes"
-
+/* components */
+import { FileUpload } from "@/components/FileUpload"
 
 interface SubmissionFormProps {
   postId: string
@@ -37,6 +38,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
     }
     submitWork({ links, files })
   }
+
 
   return (
     <div className="space-y-4">
@@ -114,40 +116,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
             className="border p-2 rounded w-full"
           />
 
-          <UploadButton
-            endpoint="fileUploader"
-            content={{
-              allowedContent: () => (
-                <p className="text-xs text-gray-500 mt-2">
-                  Allowed: PDF, DOCX, PPTX, XLSX, Images
-                </p>
-              ),
-            }}
-            onClientUploadComplete={(res) => {
-              if (res) {
-                const uploaded = res.map((file) => ({
-                  name: file.name,
-                  url: file.ufsUrl,
-                  type: file.type,
-                }));
-                setFiles((prev) => [...prev, ...uploaded]);
-              }
-            }}
-            onUploadError={(error: Error) => {
-              console.error("❌ Upload error:", error);
-              alert(`Upload failed: ${error.message}`);
-            }}
-          />
-
-          {files.length > 0 && (
-            <ul className="text-sm mt-2">
-              {files.map((f, idx) => (
-                <li key={idx} className="truncate">
-                  📎 {f.name}
-                </li>
-              ))}
-            </ul>
-          )}
+          <FileUpload files={files} setFiles={setFiles}/>
 
           <button
             type="submit"

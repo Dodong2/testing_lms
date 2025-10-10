@@ -10,6 +10,9 @@ export const ourFileRouter = {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": { maxFileSize: "8MB" }, // docx
     "application/vnd.openxmlformats-officedocument.presentationml.presentation": { maxFileSize: "16MB" }, // pptx
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": { maxFileSize: "8MB" }, // xlsx
+    "video/mp4": { maxFileSize: "64MB" },
+    "video/mpeg": { maxFileSize: "64MB" },
+    "video/quicktime": { maxFileSize: "64MB" },
   })
     .onUploadComplete(async ({ file }) => {
       console.log("✅ Uploaded file:", file.ufsUrl); // use ufsUrl instead of file.url
