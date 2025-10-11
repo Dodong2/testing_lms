@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
     }
 
     // Already logged in? Prevent access to login page
-    if (pathname === '/') {
+    if (pathname === '/' && token) {
       return NextResponse.redirect(new URL('/home', req.url))
     }
   }

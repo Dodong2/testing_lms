@@ -16,121 +16,98 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    error: "/error",
-  },
+  session: { strategy: "jwt" },
+  pages: { error: "/error" },
+
   callbacks: {
     async signIn({ user, account, profile }) {
-      const existingUser = await prisma.user.findUnique({
-        where: { email: user.email },
-      });
+      if (!user.email) return false;
 
-      if(!user.email) return false // if walang email, reject login
-      if(!existingUser) return false // if walang email, reject login
+      const email = user.email;
+      const image = (profile as ExtendedProfile)?.picture || null;
 
-      // Kung wala pa sa DB, gumawa ng bago with image from Google
+      // Check if there are existing users in DB
+      const userCount = await prisma.user.count();
+
+      // Find or create the user
+      let existingUser = await prisma.user.findUnique({ where: { email } });
+
       if (!existingUser) {
-        await prisma.user.create({
+        existingUser = await prisma.user.create({
           data: {
-          name: user.name ?? '',
-          email: user.email,
-          image: (profile as ExtendedProfile)?.picture || null,
-          role: 'BENEFICIARY'
-          }
-        })
-      } else if (!existingUser.image && (profile as ExtendedProfile)?.picture) {
+            name: user.name ?? "Unnamed User",
+            email,
+            image,
+            role: userCount === 0 ? "ADMIN" : 'BENEFICIARY',
+          },
+        });
+      } else {
+        // Optional: update name or image if blank
         await prisma.user.update({
           where: { id: existingUser.id },
-          data: { image: (profile as ExtendedProfile)?.picture }
-        })
-      }
-
-      const existingAccount = await prisma.account.findFirst({
-        where: {
-          provider: account?.provider,
-          providerAccountId: account?.providerAccountId,
-        },
-      });
-
-      
-
-      if (!existingAccount && account) {
-        await prisma.account.create({
           data: {
-            userId: existingUser.id,
-            type: account.type,
-            provider: account.provider,
-            providerAccountId: account.providerAccountId,
-            access_token: account.access_token,
-            token_type: account.token_type,
-            scope: account.scope,
-            id_token: account.id_token,
-            expires_at: account.expires_at,
-            refresh_token: account.refresh_token,
+            name: existingUser.name || user.name || "Unnamed User",
+            image: existingUser.image ?? image,
           },
         });
       }
 
-      return true;
-    },
-    async jwt({ token, user, profile}) {
-      if(!token.email) return token
-
-      const existingUser = await prisma.user.findUnique({
-        where: { email: token.email as string }
-      })
-
-      if(!existingUser) {
-        return {} as typeof token
-      }
-      
-      const ExtendedProfile = profile as ExtendedProfile
-      if (user) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: user.email! },
+      // 🔹 Ensure account exists
+      if (account) {
+        const existingAccount = await prisma.account.findFirst({
+          where: {
+            provider: account.provider,
+            providerAccountId: account.providerAccountId,
+          },
         });
 
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.role = dbUser.role;
-          token.name = dbUser.name;
-          token.email = dbUser.email;
-          token.picture = dbUser.image || ExtendedProfile?.picture
+        if (!existingAccount) {
+          await prisma.account.create({
+            data: {
+              userId: existingUser.id,
+              type: account.type,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              access_token: account.access_token,
+              token_type: account.token_type,
+              scope: account.scope,
+              id_token: account.id_token,
+              expires_at: account.expires_at,
+              refresh_token: account.refresh_token,
+            },
+          });
         }
       }
 
-      token.id = existingUser.id
-      token.role = existingUser.role
+      return true;
+    },
+
+    async jwt({ token }) {
+      if (!token.email) return token;
+
+      const dbUser = await prisma.user.findUnique({
+        where: { email: token.email as string },
+      });
+
+      if (dbUser) {
+        token.id = dbUser.id;
+        token.role = dbUser.role;
+        token.name = dbUser.name;
+        token.picture = dbUser.image ?? undefined;
+      }
 
       return token;
     },
+
     async session({ session, token }) {
-      if(!token?.email) {
-        return {} as typeof session
-      }
-
-      session.user = {
-        ...session.user,
-        id: token.id as string,
-        role: token.role,
-      };
-
-      if (session.user) {
-        session.user.name = token.name!;
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role;
+        session.user.name = token.name;
         session.user.email = token.email!;
         session.user.image = token.picture;
-        session.user.role = token.role!;
       }
-
       return session;
     },
   },
 };
-
-
-
-
-

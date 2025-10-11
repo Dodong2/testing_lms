@@ -43,10 +43,13 @@ export default function UserManage() {
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
         <SearchBar onSearch={setSearch} placeholder="Search users.." />
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={handleOpenCreateUser}>
+
+
+        {/* for user creation */}
+        {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={handleOpenCreateUser}>
           <FiUserPlus className="inline-block mr-2" />
           Add New User
-        </button>
+        </button> */}
       </div>
 
       {isLoading ? (
