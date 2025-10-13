@@ -1,10 +1,15 @@
 'use client'
 
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 // pages inside ng participants program
 import UpdatesContent from "@/app/(frontend)/(users)/home/participants/programs/pages/UpdatesContent"
-import InstructorsContent from "@/app/(frontend)/(users)/home/participants/programs/pages/InstructorsContent"
-import AssignmentContent  from "@/app/(frontend)/(users)/home/participants/programs/pages/AssignmentContent"
+import MemberContent from "@/app/(frontend)/(users)/home/participants/programs/pages/MemberContent"
+import AssignmentContent from "@/app/(frontend)/(users)/home/participants/programs/pages/AssignmentContent"
+import MeetingContent from "@/app/(frontend)/(users)/home/participants/programs/pages/MeetingContent"
+import EDA from "@/app/(frontend)/(users)/home/participants/programs/pages/EDA"
+import Evaluation from "@/app/(frontend)/(users)/home/participants/programs/pages/Evaluation"
+import Attendance from "@/app/(frontend)/(users)/home/participants/programs/pages/Attendance"
 
 interface Program {
     id: string
@@ -16,9 +21,11 @@ interface Program {
 interface ProgramClientProps {
     program: Program
     username: string
+    role: "INSTRUCTOR" | "BENEFICIARY"
 }
 
-export const useNavbarTabs = ({ program, username }: ProgramClientProps) => {
+export const useNavbarTabs = ({ program, username, role }: ProgramClientProps) => {
+    const { data: session, status } = useSession()
     const [activeTab, setActiveTab] = useState("updates")
 
     const renderContent = () => {
@@ -26,11 +33,22 @@ export const useNavbarTabs = ({ program, username }: ProgramClientProps) => {
             case 'updates':
                 return <UpdatesContent programId={program.id} />
             case 'assignments':
-                return <AssignmentContent programId={program.id}/>
-            case 'instructors':
-                return <InstructorsContent programId={program.id}/>
+                return <AssignmentContent programId={program.id} />
+            case 'members':
+                return <MemberContent programId={program.id} />
+            case 'meetings':
+                return <MeetingContent programId={program.id} />
+            case 'eda':
+                return role === "INSTRUCTOR" ? (<EDA programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p>)
+            case 'evaluation':
+                return role === "INSTRUCTOR" ? ( <Evaluation programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
+            case 'attendance':
+                return role === "INSTRUCTOR" ? (<Attendance programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
             default:
-                return <UpdatesContent programId={program.id}/>
+                return <UpdatesContent programId={program.id} />
 
         }
     }

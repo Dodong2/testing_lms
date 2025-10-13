@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 /* main page view depends on roles */
 import Admin from "./admin/page"
 import Programs from "./participants/page"
-
+import Instructor from "./instructors/page"
 
 export default function UserHomePage() {
   const { data: session, status } = useSession()
@@ -33,8 +33,12 @@ export default function UserHomePage() {
       <div>
 
         {/* if yung beneficiary or instructors yung naka-sign-in ito yung main page */}
-        {(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR') && (
+        {session.user.role === 'BENEFICIARY' && (
           <Programs />
+        )}
+
+        {session.user.role === 'INSTRUCTOR' && (
+          <Instructor/>
         )}
 
         {/* if yung admin lang yung naka sign-in ito yung main page */}

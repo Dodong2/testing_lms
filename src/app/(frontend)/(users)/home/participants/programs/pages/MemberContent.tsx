@@ -3,7 +3,7 @@ import { FaUserCircle } from "react-icons/fa"
 import { useProgram } from "@/hooks/program/useProgram"
 import Image from "next/image"
 
-export default function InstructorsContent({ programId }: { programId: string }) {
+export default function MemberContent({ programId }: { programId: string }) {
   const { data: program, isLoading, isError } = useProgram().useProgramById(programId)
 
   if (isLoading) return <div>Loading...</div>

@@ -23,11 +23,17 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
   // Mga items para sa sidebar (may icon at text)
   // ito yung mga contexts o values sa href, icon, text, na ipapasa sa sidebar para ma-display
   const sidebarItems = [
-    ...(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR' ? [
+    ...(session.user.role === 'BENEFICIARY' ? [
     { href: "/home/participants", icon: <HiHome />, text: "Programs" },
     { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
   ]: []),
+
+    ...(session.user.role === 'INSTRUCTOR' ? [
+    { href: "/home/instructors", icon: <HiHome />, text: "Programs" },
+    { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
+    { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
+    ]: []),
     
 
     ...(session.user.role === 'ADMIN' ? [

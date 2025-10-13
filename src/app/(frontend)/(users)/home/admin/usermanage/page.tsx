@@ -22,6 +22,7 @@ export default function UserManage() {
   useUserEvents()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
+  const [roleFilter, setRoleFilter] = useState<"ALL" | "ADMIN" | "INSTRUCTOR" | "BENEFICIARY">("ALL")
   const { data: session, status } = useSession()
   const { useUsersLists } = useUsers()
   const { data: usersData, isLoading } = useUsersLists(page, search)
@@ -29,27 +30,51 @@ export default function UserManage() {
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
   const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateUserModal()
 
-  // useEffect(() => {
-  //   if(usersData) {
-  //     handleFiltered(usersData?.users)
-  //   }
-  // }, [usersData, handleFiltered])
-
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null
+
+  // Apply filter locally (no backend 
+  const filteredUsers = usersData?.users?.filter((user) =>
+    roleFilter === "ALL" ? true : user.role === roleFilter
+  )
 
   return (
     <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
       {/* search & add members */}
       <div className="flex items-center justify-between mb-4">
-        <SearchBar onSearch={setSearch} placeholder="Search users.." />
+        <SearchBar onSearch={(value) => {
+          setSearch(value);
+
+          if (value.trim() !== "") {
+          setRoleFilter("ALL");
+          }
+        }}
+          placeholder="Search users.."
+        />
 
 
-        {/* for user creation */}
+        {/* Role filter buttons */}
+        <div className="flex flex-wrap items-center gap-2">
+          {["ALL", "ADMIN", "INSTRUCTOR", "BENEFICIARY"].map((role) => (
+            <button
+              key={role}
+              onClick={() => setRoleFilter(role as "ALL" | "ADMIN" | "INSTRUCTOR" | "BENEFICIARY")}
+              className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200
+                ${roleFilter === role
+                  ? "bg-green-500 text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-green-100"}`}
+            >
+              {role}
+            </button>
+          ))}
+        </div>
+
+        {/* for user creation for now cancel only */}
         {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 ml-4 cursor-pointer active:scale-95 transition-transform" onClick={handleOpenCreateUser}>
           <FiUserPlus className="inline-block mr-2" />
           Add New User
         </button> */}
+
       </div>
 
       {isLoading ? (
@@ -77,8 +102,8 @@ export default function UserManage() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {usersData?.users && usersData?.users.length > 0 ? (
-                      usersData?.users.map((user) => (
+                    {filteredUsers && filteredUsers?.length > 0 ? (
+                      filteredUsers.map((user) => (
                         <tr key={user.id} className="hover:bg-[#E3FDE7] transition-colors duration-150">
                           <td className="py-3 px-4 whitespace-nowrap text-gray-700">{user.name}</td>
                           <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>

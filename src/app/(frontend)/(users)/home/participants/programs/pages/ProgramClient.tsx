@@ -1,11 +1,10 @@
 'use client'
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 /* hooks */
-import { useMeetings } from "@/hooks/meeting/useMeetings"
 import { useNavbarTabs } from "@/hooks/useNavbarTabs"
 /* components */
 import Navbar from "@/components/Navbar"
-import MeetingLists from "@/components/modals/meeting modal/MeetingLists"
 /* icons */
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { IoMdInformationCircle } from "react-icons/io";
@@ -24,7 +23,10 @@ interface ProgramClientProps {
 }
 
 const ProgramClient = ({ programId, program, username }: ProgramClientProps) => {
+  const { data: session } = useSession()
   const [showExplanation, setExplanation] = useState(false)
+
+   const role = (session?.user?.role as "INSTRUCTOR" | "BENEFICIARY") || "BENEFICIARY"
 
   const ToggleExplanations = () => {
     setExplanation((prev) => !prev)
@@ -37,15 +39,13 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
       explanation: program.explanation,
       subtitle: program.subtitle
 
-    }, username
+    }, username, role
   })
-  const { data: meetings, isLoading } = useMeetings(programId).useGetMeetings()
 
-  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className="w-full">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4 items-start">
+      <div className="max-w-5xl mx-auto  gap-4">
         {/* Main content - LEFT SIDE */}
         <div className="bg-white rounded-md overflow-hidden">
           {/* Header */}
@@ -56,8 +56,8 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
             {/* explanations */}
             <div>
               <button onClick={ToggleExplanations} className={`absolute top-5 right-5`} title="view program description">
-                {showExplanation ? <IoMdInformationCircle size={30}/> : <IoMdInformationCircleOutline size={30}/>}
-                </button>
+                {showExplanation ? <IoMdInformationCircle size={30} /> : <IoMdInformationCircleOutline size={30} />}
+              </button>
               {showExplanation && (
                 <div className="bg-white p-2 rounded-md border border-gray-300 mt-2">
                   <h1 className="text-1xl font-bold text-gray-700 whitespace-pre-wrap">Program descriptions:</h1>
@@ -65,22 +65,16 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
                   <span className="text-sm text-gray-700 whitespace-pre-wrap">{program.explanation}</span>
                 </div>
               )}
-              </div>
+            </div>
             {/* <h2 className="text-1xl">Welcome, {username}!</h2> */}
           </div>
 
           {/* Tabs */}
-          <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Navbar activeTab={activeTab} setActiveTab={setActiveTab} role={role} />
 
           {/* Dynamic Content based on active tab */}
           {renderContent()}
         </div>
-
-
-
-        {/* Right Sidebar - Upcoming Meetings */}
-        <MeetingLists meetings={meetings} programId={programId} />
-
       </div>
 
 
