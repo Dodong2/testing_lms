@@ -44,3 +44,4 @@ next-env.d.ts
 
 # Ignore nested node_modules in socket-server
 /socket-server/node_modules
+/ocr-server/node_modules
