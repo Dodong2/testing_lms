@@ -8,7 +8,8 @@ import DeletePostModal from "@/components/modals/post modal/DeletePostModal";
 import TaskPostModal from "@/components/modals/post modal/TaskPostModal";
 import TaskPostItem from "@/components/posts/TaskPostItem";
 import AnnouncePostItem from "@/components/posts/AnnouncePostItem";
-import BeneficiaryPostItem from "@/components/posts/BeneficiaryPostItem";
+// import BeneficiaryPostItem from "@/components/posts/BeneficiaryPostItem";
+import EmptyState from "@/components/EmptyState";
 /* hooks */
 import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
@@ -46,8 +47,8 @@ export default function UpdatesContent({ programId }: { programId: string }) {
         <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start">
           {/* Main content - LEFT SIDE */}
           <div className="bg-white rounded-md overflow-hidden">
-            {/* Post input area for beneficiary */}
-            {session?.user.role === 'BENEFICIARY' && (
+            {/* Post input area for beneficiary for bawal mag post si beneficiary*/}
+            {/* {session?.user.role === 'BENEFICIARY' && (
               <div className="p-2 bg-gray-100 mt-2 rounded-md">
                 <div
                   className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full"
@@ -67,7 +68,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                   <p>Post something</p>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* for Admin & instructor for post with file for TASK */}
             {session?.user.role === 'ADMIN' || session?.user.role === 'INSTRUCTOR' && (
@@ -94,29 +95,12 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
             {/* Posts List */}
             <div className="space-y-6 rounded-md shadow mt-3">
-              {posts?.map((post) => (
-                post.tag === "TASK" ? (
-                  <TaskPostItem
-                    key={post.id}
-                    post={post}
-                    session={session}
-                    programId={programId}
-                    handleToggleUpdateModal={handleToggleUpdateModal}
-                    handleToggleDeleteModal={handleToggleDeleteModal}
-                    createComment={createComment}
-                  />
-                ) : post.tag === "ANNOUNCEMENT" ? (
-                  <AnnouncePostItem
-                    key={post.id}
-                    post={post}
-                    session={session}
-                    programId={programId}
-                    handleToggleUpdateModal={handleToggleUpdateModal}
-                    handleToggleDeleteModal={handleToggleDeleteModal}
-                    createComment={createComment}
-                  />
-                ) : (
-                    <BeneficiaryPostItem
+              {!posts?.length ? (
+                <EmptyState message="no post yet."/>
+              ) : (
+                posts.map((post) =>
+                  post.tag === "TASK" ? (
+                    <TaskPostItem
                       key={post.id}
                       post={post}
                       session={session}
@@ -125,8 +109,19 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                       handleToggleDeleteModal={handleToggleDeleteModal}
                       createComment={createComment}
                     />
-                  )
-              ))}
+                  ) : post.tag === "ANNOUNCEMENT" ? (
+                    <AnnouncePostItem
+                      key={post.id}
+                      post={post}
+                      session={session}
+                      programId={programId}
+                      handleToggleUpdateModal={handleToggleUpdateModal}
+                      handleToggleDeleteModal={handleToggleDeleteModal}
+                      createComment={createComment}
+                    />
+                  ) : null // <- normal post or unknown type
+                )
+              )}
             </div>
           </div>
         </div>

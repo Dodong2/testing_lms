@@ -114,9 +114,13 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             return NextResponse.json({ error: 'Not a member of this program' }, { status: 403 })
         }
 
-        // Check role
-        if (!['BENEFICIARY', 'INSTRUCTOR'].includes(user.role)) {
+        // Check role pwede ka dito magdagdag ng role 'BENEFICIARY', 
+        if (!['INSTRUCTOR'].includes(user.role)) {
             return NextResponse.json({ error: 'Only beneficiaries or instructors can post' }, { status: 403 })
+        }
+
+        if (user.role === "BENEFICIARY") {
+            return NextResponse.json({ error: "Beneficiaries are not allowed to create posts" }, { status: 403 })
         }
 
         const post = await prisma.post.create({
