@@ -47,6 +47,7 @@ export default function Programs() {
 
                 {/* Bottom content */}
                 <div className="flex items-center justify-between p-4">
+
                   <span className="text-lg font-medium">{program.title}</span>
                   <button className="bg-gray-400 text-white rounded-full p-2 hover:bg-gray-500">
                     <FiArrowRight />
