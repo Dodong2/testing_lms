@@ -7,6 +7,8 @@ import { useEffect, useState } from "react"
 /* icons */
 import { IoLogoGoogle } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
+/* component */
+import Loading from "@/components/Loading"
 
 // Object Factory Function ang tawag dito
 const createContents = () => ({
@@ -40,9 +42,7 @@ export default function LoginPage() {
 
   if (status === "loading" || redirecting) return (
     <div className="flex items-center justify-center min-h-screen text-gray-700">
-      <div className="animate-pulse">
-        Loading...
-      </div>
+        <Loading size={45}/>
     </div>
   )
 

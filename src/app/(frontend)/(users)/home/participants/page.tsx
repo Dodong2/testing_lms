@@ -1,12 +1,17 @@
 'use client'
-import Image from "next/image"
 import { useState } from "react"
 import Link from "next/link"
-import { FiArrowRight } from "react-icons/fi"
-import { useProgram } from "@/hooks/program/useProgram"
 import { useSession } from "next-auth/react"
+/* hooks */
+import { useProgram } from "@/hooks/program/useProgram"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
+/* components */
 import { SearchBar } from "@/components/SearchBar"
+import EmptyState from "@/components/EmptyState"
+import Loading from "@/components/Loading"
+/* icons */
+import { FiArrowRight } from "react-icons/fi"
+
 
 export default function Programs() {
   useProgramEvents()
@@ -32,7 +37,7 @@ export default function Programs() {
       {/* Dashboard content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {isLoading ? (
-          <p>Loading...</p>
+          <Loading/>
         ) : programData?.programs && programData.programs.length > 0 ? (
           programData.programs.map((program) => (
             <div
@@ -57,16 +62,7 @@ export default function Programs() {
             </div>
           ))
         ) : (
-          <div className="col-span-full flex flex-col items-center justify-center py-10 text-gray-500 italic">
-            <Image
-              src="/not-found.png"
-              alt="no-programs"
-              width={150}
-              height={150}
-              className="mb-2"
-            />
-            <p>No programs available yet.</p>
-          </div>
+          <EmptyState message="No programs available yet."/>
         )}
       </div>
 

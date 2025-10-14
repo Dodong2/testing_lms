@@ -1,11 +1,12 @@
 'use client'
 import { useState } from "react";
-import Image from "next/image";
 /* hooks */
 import { useFeedback } from "@/hooks/feedback/useFeedback"
 import { useLocalStorageAdmin } from "@/hooks/feedback/useLocalStorageAdmin";
 import { useFeedbackEvents } from "@/hooks/socket/useFeedbackSocket";
 import { FaRegUserCircle } from "react-icons/fa";
+/* components */
+import EmptyState from "@/components/EmptyState";
 /* icon */
 import { FiGlobe, FiTag } from 'react-icons/fi';
 import { MdOutlineDescription } from "react-icons/md";
@@ -107,16 +108,7 @@ export default function FeedbackManagePage() {
                 </div>
 
             </>) : (
-                <div className="col-span-full flex flex-col items-center justify-center py-10 text-gray-500 italic">
-                    <Image
-                        src="/not-found.png"
-                        alt="no-programs"
-                        width={150}
-                        height={150}
-                        className="mb-2"
-                    />
-                    <p>No feedback available yet.</p>
-                </div>
+                <EmptyState message="No feedback available yet."/>
             )}
 
         </div>

@@ -1,10 +1,14 @@
-import { usePost } from "@/hooks/post/usePost"
 import { useSession } from "next-auth/react"
-import TaskPostItem from "@/components/posts/TaskPostItem"
+/* hooks */
+import { usePost } from "@/hooks/post/usePost"
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { useOpenPostModal } from "@/hooks/post/useOpenPostModal";
+/* components */
+import TaskPostItem from "@/components/posts/TaskPostItem"
 import UpdatePostModal from "@/components/modals/post modal/UpdatePostModal";
 import DeletePostModal from "@/components/modals/post modal/DeletePostModal";
+import EmptyState from "@/components/EmptyState";
+import Loading from "@/components/Loading";
 
 export default function AssignmentContent({ programId }: { programId: string }) {
   const { data: session } = useSession()
@@ -24,7 +28,7 @@ export default function AssignmentContent({ programId }: { programId: string }) 
     return <div>Invalid program ID</div>;
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading size={45}/>;
 
   const taskPosts = posts?.filter((post) => post.tag === "TASK") ?? []
 
@@ -43,7 +47,7 @@ export default function AssignmentContent({ programId }: { programId: string }) 
           />
         ) )
       ) : (
-        <p>No activity</p>
+        <EmptyState message="no Assigment yet." />
       )}
 
       {/* post update modal */}

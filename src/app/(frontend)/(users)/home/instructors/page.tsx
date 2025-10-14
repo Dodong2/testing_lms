@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import { useSession } from "next-auth/react"
 import { useState } from "react";
 import Link from "next/link";
@@ -8,10 +7,11 @@ import { format } from "date-fns";
 import { useProgram } from "@/hooks/program/useProgram"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* components */
+import { SearchBar } from "@/components/SearchBar";
+import EmptyState from "@/components/EmptyState";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2, FiArrowRight } from 'react-icons/fi';
-import { FaList } from "react-icons/fa";/* components */
-import { SearchBar } from "@/components/SearchBar";
+import { FaList } from "react-icons/fa";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
@@ -71,10 +71,7 @@ export default function Instructors() {
           )
         })
         ) : (
-          <div className="col-span-full flex flex-col justify-center items-center py-10">
-            <Image src='/not-found.png' alt="not-found" width={150} height={150}/>
-            <p className="text-gray-500 italic">No programs found.</p>
-          </div>
+          <EmptyState message="No programs found."/>
         )}
         
       </div>)}

@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
 /* hooks */
@@ -13,6 +12,7 @@ import CreateUserModal from "@/components/modals/user modal/CreateUserModal"
 import EditUserModal from "@/components/modals/user modal/EditUserModal"
 import DeleteUserModal from "@/components/modals/user modal/DeleteUserModal"
 import { SearchBar } from "@/components/SearchBar"
+import EmptyState from "@/components/EmptyState"
 /* icons */
 import { FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { MdEdit } from "react-icons/md";
@@ -129,10 +129,7 @@ export default function UserManage() {
                     ) : (
                       <tr>
                         <td colSpan={4} className="py-4 text-center text-gray-500 italic">
-                          <div className="flex flex-col items-center justify-center">
-                            <Image src="/not-found.png" alt="not-found" width={150} height={150} />
-                            No users found.
-                          </div>
+                          <EmptyState message="No users found."/>
                         </td>
                       </tr>
                     )}

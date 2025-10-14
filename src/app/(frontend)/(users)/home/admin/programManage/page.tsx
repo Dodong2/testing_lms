@@ -16,6 +16,7 @@ import CreateProgramModal from "@/components/modals/programs modal/CreateProgram
 import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgramsModal";
 import ViewMemberModal from "@/components/modals/programs modal/ViewMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
+import EmptyState from "@/components/EmptyState";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { FaList } from "react-icons/fa";/* components */
@@ -107,10 +108,7 @@ export default function ProgramManage() {
           )
         })
         ) : (
-          <div className="col-span-full flex flex-col justify-center items-center py-10">
-            <Image src='/not-found.png' alt="not-found" width={150} height={150}/>
-            <p className="text-gray-500 italic">No programs found.</p>
-          </div>
+          <EmptyState message="No programs found."/>
         )}
         
       </div>)}
