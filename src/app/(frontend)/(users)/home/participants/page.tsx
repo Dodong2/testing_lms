@@ -42,7 +42,7 @@ export default function Programs() {
               <Link href={`/home/participants/programs/${program.id}`}>
                 {/* Top gray box */}
                 <div className="bg-gray-300 h-32 w-full">
-                  {program.joined ? <p>Joined</p> : <button>Join</button>}
+                  {program.joined ? <p className="text-amber-500">Joined</p> : <button>Join</button>}
                 </div>
 
                 {/* Bottom content */}
