@@ -94,9 +94,9 @@ export async function GET(req: NextRequest) {
         // role-based filter
         const roleFilter: Prisma.ProgramWhereInput = user.role === 'ADMIN' 
         ? {} // admin see all
-        : {
-            members: { some: { userId: user.id } } // instructor/beneficiary only their program can see
-        }
+        : user.role === 'INSTRUCTOR'
+        ? { members: { some: { userId: user.id } } // instructor only their program can see
+        } : {} // beneficiary: see a
 
         const where: Prisma.ProgramWhereInput = {
             AND: [searchFilter, roleFilter]
@@ -119,6 +119,7 @@ export async function GET(req: NextRequest) {
                     },
                     members: {
                         select: {
+                            userId: true,
                             user: {
                                 select: { role: true }
                             }
@@ -142,6 +143,9 @@ export async function GET(req: NextRequest) {
                 if(m.user.role === "INSTRUCTOR") instructors++
             })
 
+            // joined flag for beneficiary
+            const joined = user.role === 'BENEFICIARY' ? program.members.some((m) => m.userId === user.id) : true
+
             return {
             id: program.id,
             title: program.title,
@@ -152,7 +156,8 @@ export async function GET(req: NextRequest) {
             memberCounts: {
                 beneficiaries,
                 instructors,
-            }
+            },
+            joined
         }
 
         })

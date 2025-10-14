@@ -33,6 +33,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     { href: "/home/instructors", icon: <HiHome />, text: "Programs" },
     { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
+    { href: "/home/participants/evaluation", icon: <MdOutlineFeedback  />, text: "Evaluation"  },
     ]: []),
     
 

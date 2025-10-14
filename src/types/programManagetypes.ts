@@ -41,4 +41,5 @@ export interface ProgramGetTypes {
     instructors: number
     beneficiaries: number
   }
+  joined: string
 }

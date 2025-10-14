@@ -41,7 +41,9 @@ export default function Programs() {
             >
               <Link href={`/home/participants/programs/${program.id}`}>
                 {/* Top gray box */}
-                <div className="bg-gray-300 h-32 w-full"></div>
+                <div className="bg-gray-300 h-32 w-full">
+                  {program.joined ? <p>Joined</p> : <button>Join</button>}
+                </div>
 
                 {/* Bottom content */}
                 <div className="flex items-center justify-between p-4">
