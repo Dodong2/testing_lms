@@ -8,63 +8,10 @@ import { Prisma } from "@prisma/client";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 
-//Get yung mga programs kahit sino sa roles makikita nitong mga programs.
-// export async function GET() {
-// try {
-//     const session = await getServerSession(authOptions)
-//     if(!session) return NextResponse.json({ programs:[] })
-
-//     const userId = await prisma.user.findUnique({
-//         where: { email: session.user.email! },
-//         select: { id: true, role: true }
-//     })
-
-//     const programs = await prisma.program.findMany({
-//         where: {
-//             members: { some: { userId: userId?.id } }
-//         },
-//         include: session.user.role === "ADMIN" ? {
-//             members: {
-//                 select: {
-//                     user: {
-//                         select: { role: true }
-//                     }
-//                 }
-//             }
-//         } : undefined
-//     })
-
-//     const programsWithCounts = programs.map(program => {
-//         if (session.user.role !== 'ADMIN') return program
-
-//         let beneficiaries = 0
-//         let instructors = 0
-
-//         if('members' in program && Array.isArray(program.members)) {
-//             program.members.forEach(m => {
-//             if (m.user.role === 'BENEFICIARY') beneficiaries +=1
-//             if (m.user.role === 'INSTRUCTOR') instructors +=1
-//         })
-//         }
-
-//         const { ...rest } = program
-//         return {
-//             ...rest,
-//             memberCounts: {
-//                 beneficiaries,
-//                 instructors
-//             }
-//         }
-//     })
-    
-
-//     return NextResponse.json({ programs: programsWithCounts })
-    
-// } catch(error) {
-//         console.error('failed to get programs', error)
-//         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-//     }
-// }
+/* 
+Get yung mga programs makakakita lang ng mga program ay yung beneficiary at Admin. 
+pero sa instructor makikita lang yung kanila
+*/
 
 export async function GET(req: NextRequest) {
     try {

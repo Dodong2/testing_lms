@@ -1,5 +1,6 @@
 import { apiFetch } from "./apiClient"
 import { ProgramGetTypes } from "@/types/programManagetypes"
+import { JoinRequestUser, JoinRequest } from "@/types/joinManagetypes"
 
 export interface ProgramResponse {
   programs: ProgramGetTypes[]
@@ -91,3 +92,22 @@ export interface ProgramWithMembers {
 export const getProgramById = async(programId: string): Promise<ProgramWithMembers> => {
     return apiFetch<ProgramWithMembers>(`/api/program/${programId}`)
 }
+
+// for beneficiary join program
+export const joinProgram = async (programId: string) => {
+    return apiFetch(`/api/program/${programId}/join`, { method: "POST" })
+}
+
+// for beneficiary get join program
+export const getJoinRequests = async (programId: string) => {
+    return apiFetch<JoinRequest[]>(`/api/program/${programId}/join-request`)
+}
+
+// for beneficiary join program
+export const approveJoinRequest = async(programId: string, userId: string) => {
+    return apiFetch(`/api/program/${programId}/approve-join`, {
+        method: 'POST',
+        body: JSON.stringify({ userId })
+    })
+}
+

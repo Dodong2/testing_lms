@@ -31,6 +31,8 @@ model User {
   Meeting Meeting[]
 
   Submission Submission[]
+
+  JoinRequest JoinRequest[]
 }
 
 //account for google auth
@@ -82,6 +84,8 @@ model Program {
   Feedback Feedback[]
 
   Meeting Meeting[]
+
+  JoinRequest JoinRequest[]
 }
 
 model ProgramMember {
@@ -188,4 +192,20 @@ model Submission {
   feedback    String?
   submittedAt DateTime  @default(now())
   gradedAt    DateTime?
+}
+
+model JoinRequest {
+  id        String     @id @default(cuid())
+  program   Program    @relation(fields: [programId], references: [id], onDelete: Cascade)
+  programId String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  status    JoinStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+}
+
+enum JoinStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

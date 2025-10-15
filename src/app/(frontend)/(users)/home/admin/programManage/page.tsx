@@ -37,7 +37,7 @@ export default function ProgramManage() {
   const { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers, loadingMembers } = useViewMemberModal()
   const { data: programData, isLoading } = usePrograms(page, search)
 
-  if (status === "loading") return <div>Loading...</div>
+  if (status === "loading") return <EmptyState message=""/>
   if (!session) return null
   
   return (

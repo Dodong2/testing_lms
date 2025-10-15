@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useSession } from "next-auth/react"
 /* hooks */
 import { useProgram } from "@/hooks/program/useProgram"
+import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 /* components */
 import { SearchBar } from "@/components/SearchBar"
@@ -22,6 +23,7 @@ export default function Programs() {
   const { usePrograms } = useProgram()
 
   const { data: programData, isLoading } = usePrograms(page, search)
+  const { mutate: joinProgram } = useJoinRequests().useJoinProgram()
 
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null // Prevent render flicker
@@ -30,9 +32,8 @@ export default function Programs() {
   return (
     <div>
       {/* Search bar, for future purposes */}
-      {session.user.role === 'ADMIN' && (
         <SearchBar onSearch={setSearch} placeholder="Search program title..." />
-      )}
+        
       <h2 className="text-2xl font-bold italic text-gray-800">Your Programs</h2>
       {/* Dashboard content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -47,7 +48,9 @@ export default function Programs() {
               <Link href={`/home/participants/programs/${program.id}`}>
                 {/* Top gray box */}
                 <div className="bg-gray-300 h-32 w-full">
-                  {program.joined ? <p className="text-amber-500">Joined</p> : <button className="p-1 bg-amber-500">Join</button>}
+                  {program.joined ? (<p className="text-amber-500 text-center mt-2">Joined</p>) 
+                  : (<button className="p-1 bg-amber-500 text-white rounded hover:bg-amber-600" onClick={(e) => {e.preventDefault(), joinProgram(program.id)  }}>Join</button>)
+                  }
                 </div>
 
                 {/* Bottom content */}
@@ -68,13 +71,11 @@ export default function Programs() {
 
 
       {/* pagination control, for future purposes */}
-      {session.user.role === 'ADMIN' && (
         <div className="flex justify-center items-center gap-4 mt-4">
           <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
           <span>Page {programData?.page} of {programData?.totalPages}</span>
           <button onClick={() => setPage((p) => p + 1)} disabled={page === programData?.totalPages} className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
         </div>
-      )}
 
 
     </div>
