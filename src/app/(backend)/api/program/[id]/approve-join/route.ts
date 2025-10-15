@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { emitSocketEvent } from "@/lib/emitSocketEvent"
 import { sendProgramInviteEmail } from "@/lib/email/sendProgramInvite"
 
+// instructor approve join on program
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await getServerSession(authOptions)

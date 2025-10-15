@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
+// for beneficiary request to join program
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await getServerSession(authOptions)
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
                 programId_userId: { programId, userId: session.user.id },
             },
         })
-        if (!existingMember) {
+        if (existingMember) {
             return NextResponse.json({ error: "Already joined" }, { status: 400 })
         }
 

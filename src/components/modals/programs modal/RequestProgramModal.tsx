@@ -3,45 +3,53 @@ import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 /* components */
 import Loading from "@/components/Loading"
 import EmptyState from "@/components/EmptyState"
+import { JoinRequest } from "@/types/joinManagetypes"
 
 interface RequestProps {
-    userId: string
     programId: string
-    onSuccess: () => void
     onClose: () => void
+    requests: JoinRequest[]
+    isLoading: boolean
+    approveRequest: (userId: string) => void
 }
 
-const RequestProgramModal = ({ userId, programId, onSuccess, onClose }: RequestProps) => {
-    const { data: requests, isLoading } = useJoinRequests().useJoinRequests(programId)
-    const { mutate: approveRequest } = useJoinRequests().useApproveJoinRequest(programId)
+const RequestProgramModal = ({ programId, onClose, requests, approveRequest, isLoading }: RequestProps) => {
+   
 
-    if (isLoading) return <Loading />
-    if (!requests?.length) return <EmptyState message="No join requests yet." />
 
-  return (
-     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">Pending Join Requests</h1>
-      <div className="grid gap-4">
-        {requests.map((req) => (
-          <div key={req.id} className="shadow-sm border">
-            <div className="flex justify-between items-center p-4">
-              <div>
-                <p className="font-semibold">{req.user.name}</p>
-                <p className="text-gray-500 text-sm">{req.user.email}</p>
-              </div>
-              <button
-                onClick={() => approveRequest(req.user.id)}
-                className="bg-green-600 hover:bg-green-700 text-white"
-              >
-                Approve
-              </button>
+    return (
+        <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">Pending Join Requests</h1>
+                <div className="grid gap-4">
+                    {isLoading ? (
+                        <Loading />
+                    ) : requests && requests.length > 0 ? (
+                        requests.map((req) => (
+                        <div key={req.id} className="shadow-sm border">
+                            <div className="flex justify-between items-center p-4">
+                                <div>
+                                    <p className="font-semibold">{req.user.name}</p>
+                                    <p className="text-gray-500 text-sm">{req.user.email}</p>
+                                </div>
+                                <button
+                                    onClick={() => approveRequest(req.user.id)}
+                                    className="bg-green-600 hover:bg-green-700 text-white"
+                                >
+                                    Approve
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                    ) : (
+                        <EmptyState message="No join requests yet." />
+                    )}
+                    
+                </div>
+                <button onClick={onClose}>close</button>
             </div>
-          </div>
-        ))}
-      </div>
-      <button onClick={onClose}>close</button>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default RequestProgramModal

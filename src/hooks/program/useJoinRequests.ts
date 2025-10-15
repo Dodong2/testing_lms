@@ -8,6 +8,7 @@ import { JoinRequestUser, JoinRequest } from '@/types/joinManagetypes'
 
 export const useJoinRequests = () => {
 
+    // for beneficiary join program
     const useJoinProgram = () => {
         const queryClient = useQueryClient()
         return useMutation({
@@ -22,13 +23,15 @@ export const useJoinRequests = () => {
         })
     }
 
-    const useJoinRequests = (programId: string) => {
+    // for beneficiary get join program
+    const useRequestLists = (programId: string) => {
         return useQuery<JoinRequest[]>({
             queryKey: ["join-requests", programId],
             queryFn: () => getJoinRequests(programId),
         })
     }
 
+    // for beneficiary join program
     const useApproveJoinRequest = (programId: string) => {
         const queryClient = useQueryClient()
         return useMutation({
@@ -42,5 +45,5 @@ export const useJoinRequests = () => {
         })
     }
 
-    return { useJoinProgram, useJoinRequests, useApproveJoinRequest }
+    return { useJoinProgram, useRequestLists, useApproveJoinRequest }
 }

@@ -100,7 +100,10 @@ export const joinProgram = async (programId: string) => {
 
 // for beneficiary get join program
 export const getJoinRequests = async (programId: string) => {
-    return apiFetch<JoinRequest[]>(`/api/program/${programId}/join-request`)
+    return apiFetch<JoinRequest[]>(`/api/program/${programId}/join-requests`, {
+        method: 'GET',
+        credentials: 'include'
+    })
 }
 
 // for beneficiary join program

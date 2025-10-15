@@ -1,10 +1,18 @@
 "use client"
 import { FaUserCircle } from "react-icons/fa"
-import { useProgram } from "@/hooks/program/useProgram"
 import Image from "next/image"
+/* hooks */
+import { useProgram } from "@/hooks/program/useProgram"
+import { joinOpenModal } from "@/hooks/program/joinOpenModal"
+import RequestProgramModal from "@/components/modals/programs modal/RequestProgramModal"
+import { useJoinRequests } from "@/hooks/program/useJoinRequests"
+
 
 export default function MemberContent({ programId }: { programId: string }) {
   const { data: program, isLoading, isError } = useProgram().useProgramById(programId)
+   const { data: requests } = useJoinRequests().useRequestLists(programId)
+    const { mutate: approveRequest } = useJoinRequests().useApproveJoinRequest(programId)
+  const { joinOpen, toggleJoinOpen } = joinOpenModal()
 
   if (isLoading) return <div>Loading...</div>
   
@@ -49,6 +57,7 @@ export default function MemberContent({ programId }: { programId: string }) {
 
   return (
     <div className="bg-gray-100 space-y-6 rounded-md shadow mt-3 p-6">
+      <button onClick={toggleJoinOpen}>requests</button>
       <h2 className="text-xl font-semibold mb-4 text-gray-900">Members</h2>
 
       <div>
@@ -65,6 +74,13 @@ export default function MemberContent({ programId }: { programId: string }) {
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Beneficiaries</h3>
         {renderMembers(groupedMembers.BENEFICIARY)}
       </div>
+
+      {joinOpen && (
+        <RequestProgramModal programId={programId} onClose={toggleJoinOpen} requests={requests ?? []}
+    isLoading={!requests}
+    approveRequest={approveRequest}/>
+      )}
+
     </div>
   )
 }
