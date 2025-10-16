@@ -10,12 +10,15 @@ import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 
 export default function MemberContent({ programId }: { programId: string }) {
   const { data: program, isLoading, isError } = useProgram().useProgramById(programId)
-   const { data: requests } = useJoinRequests().useRequestLists(programId)
-    const { mutate: approveRequest } = useJoinRequests().useApproveJoinRequest(programId)
+  const { data: requests } = useJoinRequests().useRequestLists(programId)
+  const { mutate: approveRequest } = useJoinRequests().useApproveJoinRequest(programId)
+  const { mutate: rejectRequest } = useJoinRequests().useRejectJoinRequest(programId)
   const { joinOpen, toggleJoinOpen } = joinOpenModal()
+  const { mutate: approveAll } = useJoinRequests().useApproveAll(programId)
+  const { mutate: rejectAll } = useJoinRequests().useRejectAll(programId)
 
   if (isLoading) return <div>Loading...</div>
-  
+
   if (isError) {
     console.log(isError)
   }
@@ -76,9 +79,16 @@ export default function MemberContent({ programId }: { programId: string }) {
       </div>
 
       {joinOpen && (
-        <RequestProgramModal programId={programId} onClose={toggleJoinOpen} requests={requests ?? []}
-    isLoading={!requests}
-    approveRequest={approveRequest}/>
+        <RequestProgramModal 
+          programId={programId} 
+          onClose={toggleJoinOpen} 
+          requests={requests ?? []}
+          isLoading={!requests}
+          approveRequest={approveRequest} 
+          rejectRequest={rejectRequest}
+          approveAll={approveAll}
+          rejectAll={rejectAll}
+          />
       )}
 
     </div>

@@ -42,4 +42,5 @@ export interface ProgramGetTypes {
     beneficiaries: number
   }
   joined: string
+  pending: string
 }

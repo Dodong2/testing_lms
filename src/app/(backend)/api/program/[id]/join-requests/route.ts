@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     const { id } = await context.params
 
     const joinRequests = await prisma.joinRequest.findMany({
-      where: { programId: id },
+      where: { programId: id, status: 'PENDING' },
       include: {
         user: {
           select: {
@@ -34,6 +34,30 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
 
   } catch (error) {
     console.log("failed to connect join-request API", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: NextRequest, context: { params: Promise<{ id:string }> }) {
+  try {
+    const session = await getServerSession(authOptions)
+    if(!session?.user.email) return NextResponse.json({ error: "Unauthorize" }, { status: 401 })
+    
+    const user = await prisma.user.findUnique({ where: { email: session.user.email } })
+     if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    const { id } = await context.params
+    const programId = id
+
+    await prisma.joinRequest.deleteMany({
+      where: { programId, userId: user.id }
+    })
+
+    return NextResponse.json({ message: "Join request cancelled" })
+  } catch(error) {
+    console.error("failed to connect join-request API", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

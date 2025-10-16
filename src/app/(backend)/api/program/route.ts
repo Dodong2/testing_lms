@@ -71,6 +71,10 @@ export async function GET(req: NextRequest) {
                                 select: { role: true }
                             }
                         }
+                    },
+                    JoinRequest: {
+                        where: { userId: user.id, status: "PENDING" },
+                        select: { id: true }
                     }
                 },
                 skip: (page - 1) * limit,
@@ -92,6 +96,7 @@ export async function GET(req: NextRequest) {
 
             // joined flag for beneficiary
             const joined = user.role === 'BENEFICIARY' ? program.members.some((m) => m.userId === user.id) : true
+            const pending = user.role === 'BENEFICIARY' && program.JoinRequest.length > 0
 
             return {
             id: program.id,
@@ -104,7 +109,8 @@ export async function GET(req: NextRequest) {
                 beneficiaries,
                 instructors,
             },
-            joined
+            joined,
+            pending
         }
 
         })

@@ -98,7 +98,7 @@ export const joinProgram = async (programId: string) => {
     return apiFetch(`/api/program/${programId}/join`, { method: "POST" })
 }
 
-// for beneficiary get join program
+// for instructor get join lists program
 export const getJoinRequests = async (programId: string) => {
     return apiFetch<JoinRequest[]>(`/api/program/${programId}/join-requests`, {
         method: 'GET',
@@ -114,3 +114,17 @@ export const approveJoinRequest = async(programId: string, userId: string) => {
     })
 }
 
+// for instructor reject join
+export const rejectJoinRequest = async (programId: string, userId: string) => {
+    return apiFetch(`/api/program/${programId}/reject-join`, {
+        method: 'POST',
+        body: JSON.stringify({ userId })
+    })
+}
+
+// for beneficiary cancel request
+export const cancelJoinRequest = (programId: string) => {
+    return apiFetch(`/api/program/${programId}/join-requests`,{
+        method: 'DELETE'
+    })
+} 
