@@ -10,7 +10,7 @@ import { sendProgramRemovalEmail } from "@/lib/email/sendProgramRemoval";
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try{
     const session = await getServerSession(authOptions)
-    if (!session || session.user.role !== 'ADMIN') {
+    if (!session || session.user.role !== 'INSTRUCTOR') {
         return NextResponse.json({error: "Unauthorized" }, { status: 401 })
     }
 

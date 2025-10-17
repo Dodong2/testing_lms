@@ -2,21 +2,24 @@
 import Loading from "@/components/Loading"
 import EmptyState from "@/components/EmptyState"
 import { JoinRequest } from "@/types/joinManagetypes"
+import { useJoinRequests } from "@/hooks/program/useJoinRequests"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 
 interface RequestProps {
     programId: string
     onClose: () => void
-    requests: JoinRequest[]
-    isLoading: boolean
-    approveRequest: (userId: string) => void
-    rejectRequest: (userId: string) => void
-    approveAll: (userIds: string[]) => void
-    rejectAll: (userIds: string[]) => void
 }
 
-const RequestProgramModal = ({ programId, onClose, requests, approveRequest, rejectRequest, approveAll, rejectAll, isLoading }: RequestProps) => {
+const RequestProgramModal = ({ programId, onClose }: RequestProps) => {
+    useLockBodyScroll(true)
+    const { data: requests, isLoading } = useJoinRequests().useRequestLists(programId)
+    const { mutate: approveRequest } = useJoinRequests().useApproveJoinRequest(programId)
+    const { mutate: rejectRequest } = useJoinRequests().useRejectJoinRequest(programId)
+    const { mutate: approveAll } = useJoinRequests().useApproveAll(programId)
+    const { mutate: rejectAll } = useJoinRequests().useRejectAll(programId)
 
     const pendingUserIds = requests?.filter(r => r.status === "PENDING").map(r => r.user.id) || []
+
 
     return (
         <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>

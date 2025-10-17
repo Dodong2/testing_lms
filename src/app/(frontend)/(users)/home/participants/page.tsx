@@ -21,7 +21,6 @@ export default function Programs() {
   // search & pagination for future purposes 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
-  const [pendingRequests, setPendingRequests] = useState<Record<string, boolean>>({})
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
 
