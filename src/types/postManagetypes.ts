@@ -1,5 +1,6 @@
 export interface PostGetTypes {
   id: string
+  title: string
   content: string
   authorId: string
   programId: string
@@ -31,6 +32,7 @@ export interface FileMeta {
 }
 
 export interface PostPayload {
+  title?: string
   content: string;
   files?: FileMeta[];
   deadline?: string; // YYYY-MM-DD
@@ -39,6 +41,7 @@ export interface PostPayload {
 
 // ginamit sa updatePosts services at usePost hooks
 export interface UpdatePostTypes {
+  title?: string
   content: string 
   files?: FileMeta[]
   deadline?: string

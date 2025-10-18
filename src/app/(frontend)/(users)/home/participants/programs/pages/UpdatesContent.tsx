@@ -41,6 +41,8 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
   if (isLoading) return <div>Loading...</div>;
 
+
+
   return (
     <>
       <div className="w-full">
@@ -145,11 +147,13 @@ export default function UpdatesContent({ programId }: { programId: string }) {
           <UpdatePostModal
             programId={programId}
             postId={selectedPost.id}
+            title={selectedPost.title}
             content={selectedPost.content}
             files={selectedPost.files ?? []}
             deadline={selectedPost.deadline ?? ""}
             onClose={() => handleToggleUpdateModal(selectedPost)}
             onSuccess={() => handleToggleUpdateModal(selectedPost)}
+            tags={selectedPost.tag}
           />
         )}
 

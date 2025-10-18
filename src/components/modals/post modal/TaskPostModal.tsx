@@ -22,6 +22,7 @@ interface TaskPostModalProps {
 }
 
 const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) => {
+  const [title, setTitle] = useState("")
   const [content, setContent] = useState("");
   const [files, setFiles] = useState<FileMeta[]>([]);
   const [deadline, setDeadline] = useState("");
@@ -34,6 +35,11 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
     e.preventDefault();
     if (!content.trim()) return;
 
+    if(postType === 'TASK' && !title.trim()) {
+      toast.error("Title is required for task posts.")
+      return
+    }
+
     if (postType === "TASK" && !deadline) {
       toast.error("Deadline is required for task posts.");
       return;
@@ -41,10 +47,11 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
 
     createPost(
       postType === "TASK"
-        ? { content, files, deadline, tag: "TASK" }
+        ? { title, content, files, deadline, tag: "TASK" }
         : { content, files, tag: "ANNOUNCEMENT" },
       {
         onSuccess: () => {
+          setTitle("")
           setContent("");
           setFiles([]);
           setDeadline("");
@@ -92,6 +99,15 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
               Announcement
             </label>
           </div>
+
+          {/* title */}
+          {postType === 'TASK' && (
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
+             placeholder="Enter title for this task"
+             className="w-full border p-2 rounded-md"
+             required
+             />
+          )}
 
           {/* Content */}
           <textarea

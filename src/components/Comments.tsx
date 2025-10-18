@@ -54,14 +54,33 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
     <div className="flex flex-col gap-2 mt-2">
       <div className="p-0.5 rounded-md w-full bg-white"></div>
       {/* button comments */}
-      <div>
+      <div className="mt-2">
         <button
           onClick={() => setShowComments((prev) => !prev)}
-          className="flex justify-center items-center bg-sky-200 hover:bg-sky-400 hover:text-white border border-gray-300 gap-2 p-1 rounded-md cursor-pointer active:scale-95 transition-transform">
-          <span className="text-1xl"><FaRegCommentDots /></span>
-          <span className="text-sm">{comments.length > 0
-            ? <div className="flex justify-center items-center gap-1">View comments <span className="text-xs rounded-md bg-gray-400 text-white h-5 w-5 flex items-center justify-center">{comments.length}</span></div>
-            : 'Add comment'}</span>
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer 
+               text-sky-700 bg-sky-50 border border-transparent 
+               hover:bg-sky-100 hover:text-sky-800
+               active:scale-95 transition-all duration-150 ease-in-out"
+        >
+          {/* Icon: I-normalize ang size */}
+          <span className="text-lg">
+            <FaRegCommentDots />
+          </span>
+
+          {comments.length > 0 ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">
+                View comments
+              </span>
+              <span className="text-xs font-semibold rounded-full bg-sky-500 text-white h-5 w-5 flex items-center justify-center flex-shrink-0">
+                {comments.length}
+              </span>
+            </div>
+          ) : (
+            <span className="text-sm font-medium">
+              Add comment
+            </span>
+          )}
         </button>
       </div>
 
@@ -98,7 +117,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
                   {/* show delete only if user is author */}
                   {session?.user?.id == comment.author.id && (
                     <button onClick={() => handleDelete(comment.id)} className="ml-2" title="delete this comment?">
-                      <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135"/>
+                      <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135" />
                     </button>
                   )}
                 </div>

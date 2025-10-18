@@ -22,7 +22,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
         }
 
         const { id: programId, postId } = await context.params
-        const { content, files, deadline } = await req.json()
+        const { title, content, files, deadline } = await req.json()
 
         if(!content || typeof content !== "string") {
             return NextResponse.json({ error: "Content required" }, { status: 400 })
@@ -45,6 +45,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
         const updated = await prisma.post.update({
             where: { id: postId, programId },
             data: { 
+                title: title ?? post.title,
                 content, 
                 files: files ?? post.files,
                 deadline: deadline ? new Date(deadline) : null,

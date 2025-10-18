@@ -78,7 +78,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         const { id } = await context.params
         const programId = id
 
-        const { content, files, deadline, tag: tagFromBody } = await req.json()
+        const { title, content, files, deadline, tag: tagFromBody } = await req.json()
 
         // for instructors
         let tag: PostTag = PostTag.NORMAL
@@ -105,6 +105,10 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             return NextResponse.json({ error: 'Content required' }, { status: 400 })
         }
 
+        if (tagFromBody === "TASK" && (!title || !title.trim())) {
+            return NextResponse.json({ error: "Title is required for TASK posts" }, { status: 400 });
+        }
+
         // Check membership
         const member = await prisma.programMember.findFirst({
             where: { programId: programId, userId: user.id }
@@ -116,7 +120,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
         // Check role pwede ka dito magdagdag ng role 'BENEFICIARY', 
         if (!['INSTRUCTOR'].includes(user.role)) {
-            return NextResponse.json({ error: 'Only beneficiaries or instructors can post' }, { status: 403 })
+            return NextResponse.json({ error: 'Only instructors can post' }, { status: 403 })
         }
 
         if (user.role === "BENEFICIARY") {
@@ -125,6 +129,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
         const post = await prisma.post.create({
             data: {
+                title: title ?? null,
                 content,
                 programId,
                 authorId: user.id,

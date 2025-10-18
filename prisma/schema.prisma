@@ -100,6 +100,7 @@ model ProgramMember {
 
 model Post {
   id        String    @id @default(cuid())
+  title     String?
   content   String
   programId String
   authorId  String

@@ -13,9 +13,11 @@ import { PostGetTypes } from "@/types/postManagetypes";
 /* date format */
 import { format } from "date-fns";
 /* icons */
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 import { formatCreatedAt } from "@/util/formatCreatedAt";
 import { CiPen } from "react-icons/ci";
+import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
+import { HiChevronDown } from 'react-icons/hi';
 
 interface TaskPostItemProps {
     post: PostGetTypes
@@ -29,6 +31,7 @@ interface TaskPostItemProps {
 const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
     const [showFiles, setShowFiles] = useState(false)
     const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const getFileType = (url: string): string => {
         if (url.match(/\.(jpg|jpeg|png|gif|svg)$/i)) return "image";
@@ -43,7 +46,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
     return (
         <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
                         {post.author.image && (
@@ -57,27 +60,36 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                         )}
                     </div>
                     <div>
-                        <p className="font-semibold text-gray-800">{post.author.name}</p>
+                        <p className="font-semibold text-xs sm:text-sm md:text-base text-gray-800 whitespace-nowrap">{post.author.name}</p>
                         <p className="text-xs text-gray-500">{formatCreatedAt(post.createdAt)}</p>
                     </div>
                 </div>
 
                 {/* right side */}
-
-                <div className="flex justify-center items-center gap-4 text-lg ml-4">
+                <div className="flex justify-center items-center gap-1 text-lg">
                     {/* tags */}
-                    <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span>{post.tag}</span></div>
+                    <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span className="text-xs sm:text-sm">{post.tag}</span></div>
                     {/* Edit / Delete */}
-                    {session?.user.id === post.author.id && (<>
-                        <button onClick={() => handleToggleUpdateModal(post)} className="relative group flex flex-col items-center">
-                            <FiEdit className="text-yellow-500 transform transition-transform duration-200 hover:scale-135" />
-                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Edit</span>
+                    <div className="relative">
+                        {/* Menu Toggle Button */}
+                        <button
+                            onClick={() => setMenuOpen((prev) => !prev)}  className="p-1 rounded-full hover:bg-amber-500 cursor-pointer active:scale-75 transition-transform">
+                            <FiMoreVertical className="text-gray-700 text-lg" />
                         </button>
-                        <button onClick={() => handleToggleDeleteModal(post)} className="relative group flex flex-col items-center">
-                            <FiTrash2 className="text-red-500 transform transition-transform duration-200 hover:scale-135" />
-                            <span className="absolute -top-6 text-xs bg-gray-800 text-white px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Delete</span>
-                        </button>
-                    </>)}
+
+                        {/* Dropdown Menu */}
+                        {menuOpen && (
+                            <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-md flex flex-col items-stretch animate-fadeIn z-10">
+                                <button onClick={() => {handleToggleUpdateModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-yellow-50 transition-colors">
+                                    <FiEdit className="text-yellow-500" /> Edit
+                                </button>
+
+                                <button onClick={() => {handleToggleDeleteModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors">
+                                    <FiTrash2 className="text-red-500" /> Delete
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
             </div>
@@ -88,12 +100,34 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
 
             {/* Files & Deadline */}
             {post.files && post.files?.length > 0 && (
-                <div key={post.id} className="border rounded-md p-2" onClick={() => setShowFiles((prev) => !prev)}>
-                    <div className="cursor-pointer">
-                        Files Preview
+                 <div key={post.id} className="border border-gray-200 rounded-lg shadow-sm bg-white mt-3">
+                    <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-150">
+                        <div className="flex items-center gap-2">
+                            {showFiles ? (
+                               < FaRegFolderOpen className="text-gray-400"/>
+                            ) : (
+                                < FaRegFolder className="text-gray-400"/>
+                            )}
+
+                            {/* Text at File Count */}
+                            <span className="font-medium text-gray-700">
+                                Files ({post.files?.length || 0})
+                            </span>
+                        </div>
+
+                        {/* DEADLINE AT TOGGLE ARROW */}
+                        <div className="flex items-center gap-3">
+                            <span className="text-sm text-red-600 font-medium">
+                                View files
+                            </span>
+
+                            {/* Arrow Icon na umiikot */}
+                            <HiChevronDown  className={`h-5 w-5 text-gray-500 transform transition-transform duration-300 ${showFiles ? 'rotate-180' : ''}`}/>
+                        </div>
                     </div>
+                        
                     {showFiles && post.files && post.files.length > 0 && (
-                        <div className="mt-2 space-y-2">
+                        <div className="border-t border-gray-100 p-3 space-y-1">
                             {post.files?.map((file, idx) => (
                                 <PostFiles key={idx}
                                     name={file.name}
@@ -101,7 +135,13 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                                     onClick={(f) => setSelectedFile(f)}
                                 />
                             ))}
-                        </div>)}
+                        </div>
+                    )}
+                    {showFiles && (!post.files || post.files.length === 0) && (
+                        <div className="border-t border-gray-100 p-3 text-sm text-gray-500 text-center italic">
+                            No files attached to this post.
+                        </div>
+                    )}
                 </div>
             )}
 

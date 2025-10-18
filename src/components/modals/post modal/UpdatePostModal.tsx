@@ -8,25 +8,38 @@ import { FileMeta } from "@/types/postManagetypes"
 interface UpdatePostProps {
     programId: string
     postId: string
+    title: string
     content: string
     files: FileMeta[]
     deadline: string
     onSuccess?: () => void
     onClose: () => void
+    tags?: "ANNOUNCEMENT" | "TASK" | "NORMAL"
 }
 
-const UpdatePostModal = ({ programId, postId, content, files = [], deadline = "", onSuccess, onClose }: UpdatePostProps) => {
+const UpdatePostModal = ({ programId, postId, title, content, files = [], deadline = "", onSuccess, onClose, tags }: UpdatePostProps) => {
     const { data: session } = useSession()
-    const { isPending, setContentData, filesData, setFilesData, setDeadlineData, handleSubmit } = UpdatePost({ programId, postId, content, files, deadline, onSuccess })
+    const { isPending, setTitleData, setContentData, filesData, setFilesData, setDeadlineData, handleSubmit } = UpdatePost({ programId, postId, title, content, files, deadline, onSuccess })
     useLockBodyScroll(true)
 
     return (
         <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* content */}
-                    <input
+                    {/* title */}
+                    {tags === 'TASK' && (
+                    <input 
                         type="text"
+                        name="title"
+                        defaultValue={title}
+                        onChange={(e) => setTitleData(e.target.value)} 
+                        placeholder="title"
+                        className="border p-2 w-full"
+                        />
+                    )}
+                    
+                    {/* content */}
+                    <textarea
                         name="content"
                         defaultValue={content}
                         onChange={(e) => setContentData(e.target.value)}
