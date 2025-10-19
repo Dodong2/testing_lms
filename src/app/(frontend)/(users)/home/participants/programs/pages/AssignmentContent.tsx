@@ -54,12 +54,14 @@ export default function AssignmentContent({ programId }: { programId: string }) 
       {OpenUpdate && selectedPost && (
         <UpdatePostModal
           programId={programId}
+          title={selectedPost.title}
           postId={selectedPost.id}
           content={selectedPost.content}
           files={selectedPost.files ?? []}
           deadline={selectedPost.deadline ?? ""}
           onClose={() => handleToggleUpdateModal(selectedPost)}
           onSuccess={() => handleToggleUpdateModal(selectedPost)}
+          tags={selectedPost.tag}
         />
       )}
 
