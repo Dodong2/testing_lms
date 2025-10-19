@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
@@ -26,6 +27,10 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             data: { status: 'REJECTED' }
         })
 
+        await emitSocketEvent("program", "join-rejected", {
+            programId: id,
+            userId,
+        })
 
         return NextResponse.json({ success: true, message: "Join request rejected" })
 

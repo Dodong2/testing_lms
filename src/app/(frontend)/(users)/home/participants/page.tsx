@@ -21,9 +21,10 @@ export default function Programs() {
   // search & pagination for future purposes 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
+  const [joiningProgramId, setJoiningProgramId] = useState<string | null>(null)
+  const [cancelingProgramId, setCancelingProgramId] = useState<string | null>(null)
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
-
   const { data: programData, isLoading } = usePrograms(page, search)
   const { mutate: joinProgram, isPending: joining } = useJoinRequests().useJoinProgram()
   const { mutate: cancelProgram, isPending: canceling } = useJoinRequests().useCancelJoin()
@@ -84,15 +85,18 @@ export default function Programs() {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              cancelProgram(program.id);
+                              setCancelingProgramId(program.id)
+                              cancelProgram(program.id, {
+                                onSettled: () => setCancelingProgramId(null)
+                              });
                             }}
-                            disabled={canceling}
-                            className={`px-3 py-1 rounded text-white ${canceling
+                            disabled={cancelingProgramId === program.id}
+                            className={`px-3 py-1 rounded text-white ${cancelingProgramId === program.id
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-red-500 hover:bg-red-600"
                               }`}
                           >
-                            {canceling ? "Canceling..." : "Cancel"}
+                            {cancelingProgramId === program.id ? "Canceling..." : "Cancel"}
                           </button>
                         </>
                       ) : (
@@ -101,15 +105,18 @@ export default function Programs() {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              joinProgram(program.id);
+                              setJoiningProgramId(program.id)
+                              joinProgram(program.id, {
+                                onSettled: () => setJoiningProgramId(null)
+                              });
                             }}
-                            disabled={joining}
-                            className={`px-3 py-1 rounded text-white ${joining
+                            disabled={joiningProgramId === program.id}
+                            className={`px-3 py-1 rounded text-white ${joiningProgramId === program.id
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-amber-500 hover:bg-amber-600"
                               }`}
                           >
-                            {joining ? "Sending..." : "Join"}
+                            {joiningProgramId === program.id ? "Sending..." : "Join"}
                           </button>
                         </>
                       )}

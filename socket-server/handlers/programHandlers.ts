@@ -17,6 +17,18 @@ export const handleProgramEvents = (io: Server, type: string, payload: unknown) 
     case "remove-member":
       io.emit("remove-member", payload)
       break;
+    case "member-approved":
+      io.emit("member-approved", payload)
+      break;
+    case "join-rejected":
+      io.emit("join-rejected", payload)
+      break;
+    case "join-cancelled":
+      io.emit("join-cancelled", payload)
+      break;
+    case "join-request-created":
+      io.emit("join-request-created", payload)
+      break;
     default:
       console.log("Unknown event type");
     }

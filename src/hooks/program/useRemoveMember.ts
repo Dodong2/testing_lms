@@ -3,36 +3,42 @@ import { useProgram } from "./useProgram"
 import toast from "react-hot-toast"
 
 export const useRemoveMember = (programId: string) => {
-    const { mutate: removeMember, isPending } = useProgram().useRemoveProgramMember()
+    const { mutateAsync: removeMember, isPending } = useProgram().useRemoveProgramMember()
 
     const [selectedEmails, setSelectedEmails] = useState<string[]>([])
     const [removingEmails, setRemovingEmails] = useState<string[]>([])
 
     const handleToggleEmail = (email: string, isChecked: boolean) => {
-        setSelectedEmails((prev) => 
+        setSelectedEmails((prev) =>
             isChecked ? [...prev, email] : prev.filter((e) => e !== email)
         )
     }
 
     const handleRemove = async () => {
         // if wealang re-remove
-        if(selectedEmails.length === 0) {
+        if (selectedEmails.length === 0) {
             toast.error(`Nothing to remove`)
-             return
+            return
         }
 
         setRemovingEmails(selectedEmails)
 
-        for (const email of selectedEmails) {
-            await removeMember({ programId, email })
-        }
+        // wrap with toast.promise for proper flow
+        await toast.promise(
+            Promise.all(
+                selectedEmails.map((email) => removeMember({ programId, email }))
+            ),
+            {
+                loading: "Removing selected members...",
+                success: `${selectedEmails.length} member${selectedEmails.length > 1 ? "s" : ""} removed successfully`,
+                error: "Failed to remove one or more members",
+            }
+        )
 
-        //for counts
-        toast.success(`${selectedEmails.length} Members removed successfully`)
         setSelectedEmails([])
         setRemovingEmails([])
     }
-    
+
 
 
     return {

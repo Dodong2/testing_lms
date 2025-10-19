@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 // get all request to join lists
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -53,6 +54,11 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id:s
 
     await prisma.joinRequest.deleteMany({
       where: { programId, userId: user.id }
+    })
+
+    await emitSocketEvent("program", "join-cancelled", {
+      programId,
+      userId: user.id
     })
 
     return NextResponse.json({ message: "Join request cancelled" })

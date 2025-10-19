@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { emitSocketEvent } from "@/lib/emitSocketEvent";
 
 // for beneficiary request to join program
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -41,12 +42,15 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             return NextResponse.json({ error: "Already requested" }, { status: 400 })
         }
 
-        await prisma.joinRequest.create({
-            data: {
-                programId,
-                userId: session.user.id,
-            }
+        const newRequest = await prisma.joinRequest.create({
+            data: { programId, userId: session.user.id },
         })
+
+        await emitSocketEvent("program", "join-request-created", {
+            programId,
+            userId: session.user.id,
+            requestId: newRequest.id,
+        });
 
         return NextResponse.json({ success: true, message: "Join request sent" })
 

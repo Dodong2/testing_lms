@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             })
         ])
 
-        await emitSocketEvent("program", "member-added", {
+        await emitSocketEvent("program", "member-approved", {
             programId: id,
             newMembers: [userId]
         })

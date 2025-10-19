@@ -7,6 +7,7 @@ import { useProgram } from "@/hooks/program/useProgram"
 import { joinOpenModal } from "@/hooks/program/joinOpenModal"
 import { useRemoveMember } from "@/hooks/program/useRemoveMember"
 import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
+import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 /* components */
 import RequestProgramModal from "@/components/modals/programs modal/RequestProgramModal"
 /* icons */
@@ -19,6 +20,7 @@ export default function MemberContent({ programId }: { programId: string }) {
   const { joinOpen, toggleJoinOpen } = joinOpenModal()
   const [removeMode, setRemoveMode] = useState(false)
   const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
+  const { data: requests } = useJoinRequests().useRequestLists(programId)
 
   if (isLoading) return <div>Loading...</div>
 
@@ -80,7 +82,7 @@ export default function MemberContent({ programId }: { programId: string }) {
   return (
     <div className="bg-gray-100 space-y-6 rounded-md shadow mt-3 p-6">
       {session.user.role === 'INSTRUCTOR' && (
-        <button onClick={toggleJoinOpen} className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 whitespace-nowrap">requests</button>
+        <button onClick={toggleJoinOpen} className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 whitespace-nowrap">requests ({requests?.length})</button>
       )}
 
       {session.user.role === 'INSTRUCTOR' && (
@@ -98,7 +100,7 @@ export default function MemberContent({ programId }: { programId: string }) {
               onClick={handleRemove}
               disabled={isRemoving || selectedEmails.length === 0}
               className={`px-4 py-2 rounded-md font-medium shadow
-          ${selectedEmails.length === 0
+                ${selectedEmails.length === 0
                   ? "bg-gray-300 cursor-not-allowed"
                   : "bg-red-600 hover:bg-red-700 text-white"}`}
             >
