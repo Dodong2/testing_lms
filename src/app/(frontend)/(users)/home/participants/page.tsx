@@ -13,8 +13,7 @@ import Loading from "@/components/Loading"
 /* icons */
 import { FiArrowRight, FiUser } from "react-icons/fi"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
-import { SiGoogleclassroom } from "react-icons/si";
-
+import { PiSealCheckDuotone } from "react-icons/pi";
 
 export default function Programs() {
   useProgramEvents()
@@ -23,6 +22,7 @@ export default function Programs() {
   const [search, setSearch] = useState("")
   const [joiningProgramId, setJoiningProgramId] = useState<string | null>(null)
   const [cancelingProgramId, setCancelingProgramId] = useState<string | null>(null)
+  const [filter, setFilter] = useState<"ALL" | "JOINED">("ALL")
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
   const { data: programData, isLoading } = usePrograms(page, search)
@@ -32,40 +32,70 @@ export default function Programs() {
   if (status === "loading") return <div>Loading...</div>
   if (!session) return null // Prevent render flicker
 
+  // for button filter all & joined program
+  const filteredPrograms = programData?.programs?.filter((program) => {
+    if (filter === "JOINED") return program.joined === true
+    return true
+  })
 
   return (
     <div>
-      {/* Search bar, for future purposes */}
-      <SearchBar onSearch={setSearch} placeholder="Search program title..." />
+      {/* Search bar & filter */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+        <SearchBar
+          onSearch={(value) => {
+            setSearch(value)
+            if (value.trim() !== "") {
+              setFilter("ALL")
+            }
+          }}
+          placeholder="Search program title..."
+        />
 
-      <h2 className="text-2xl font-bold italic text-gray-800">Your Programs</h2>
+        <div className="flex gap-2 md:mt-0 mt-2">
+          <button
+            onClick={() => setFilter("ALL")}
+            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "ALL" ? "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md" : "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100"}`}>
+            All Programs
+          </button>
+
+          <button
+            onClick={() => setFilter("JOINED")}
+            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "JOINED" ? "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md" : "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100"}`}>
+            Your Programs
+          </button>
+        </div>
+      </div>
+
+
+      <h2 className="text-2xl font-bold italic text-[#EFEFEF]">{filter === 'ALL' ? 'All Programs' : 'Your Programs'}</h2>
 
       {/* Dashboard content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {isLoading ? (
           <Loading />
-        ) : programData?.programs && programData.programs.length > 0 ? (
-          programData.programs.map((program) => {
+        ) : filteredPrograms && filteredPrograms.length > 0 ? (
+          filteredPrograms.map((program) => {
             const isJoined = program.joined
             const isPending = program.pending;
 
             return (
               <div
                 key={program.id}
-                className="bg-white rounded-lg shadow overflow-hidden border-2 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]"
+                className="bg-[#525252] rounded-lg shadow overflow-hidden border-2 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]"
               >
                 {/* Kung joined na siya, clickable */}
                 {isJoined ? (
                   <div className="p-3">
                     <div className="flex items-center justify-between">
-                      <SiGoogleclassroom size={25} className="text-gray-700" />
+                      {isJoined ? <PiSealCheckDuotone className="text-amber-300" size={25} /> : <div></div>}
                       <span className="bg-amber-300 p-1 text-xs text-center rounded-[10px]">Joined</span>
                     </div>
-                    <span className="text-lg font-medium">{program.title}</span>
-                    <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
-                    <div className="flex justify-center items-center">
-                      <Link href={`/home/participants/programs/${program.id}`}>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">view program</button>
+                    <span className="text-lg text-[#EFEFEF] font-medium">{program.title}</span>
+                    <div className="flex items-center text-[#EFEFEF] text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
+                    <div className="mt-2">
+                      <Link href={`/home/participants/programs/${program.id}`} className="w-full flex justify-center items-center">
+                        <button className="italic bg-[#00306E] w-3/4 hover:bg-[#06234a] text-white font-semibold py-2 px-4 rounded-3xl shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">view program</button>
                       </Link>
                     </div>
                   </div>
@@ -73,12 +103,12 @@ export default function Programs() {
                   // Kung hindi pa joined, walang link — Join button lang
                   <div className="p-3">
                     <div className="flex items-center justify-between">
-                      <SiGoogleclassroom size={25} className="text-gray-700" />
-                      <span className="bg-amber-300 p-1 text-xs text-center rounded-[10px]">{isJoined ? 'Joined' : isPending ? "Pending" : "Not a member yet"}</span>
+                      <div></div>
+                      <span className="bg-amber-300 p-1 text-xs text-center rounded-[10px]">{isJoined ? 'Joined' : isPending ? "Pending" : "Not joined"}</span>
                     </div>
-                    <span className="text-lg font-medium">{program.title}</span>
-                    <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
-                    <div className="flex justify-center items-center">
+                    <span className="text-lg text-[#EFEFEF] font-medium">{program.title}</span>
+                    <div className="flex items-center text-[#EFEFEF] text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
+                    <div className="flex justify-center items-center mt-2">
                       {isPending ? (
                         <>
                           <button
@@ -91,12 +121,12 @@ export default function Programs() {
                               });
                             }}
                             disabled={cancelingProgramId === program.id}
-                            className={`px-3 py-1 rounded text-white ${cancelingProgramId === program.id
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-red-500 hover:bg-red-600"
-                              }`}
+                            className={`italic text-white ${cancelingProgramId === program.id
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-[#6E0000] hover:bg-[#b00101]"
+                              } w-3/4 font-semibold py-2 px-4 rounded-3xl shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap`}
                           >
-                            {cancelingProgramId === program.id ? "Canceling..." : "Cancel"}
+                            {cancelingProgramId === program.id ? "canceling..." : "cancel request"}
                           </button>
                         </>
                       ) : (
@@ -111,12 +141,12 @@ export default function Programs() {
                               });
                             }}
                             disabled={joiningProgramId === program.id}
-                            className={`px-3 py-1 rounded text-white ${joiningProgramId === program.id
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-amber-500 hover:bg-amber-600"
-                              }`}
+                            className={`italic text-white ${joiningProgramId === program.id
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-[#00306E] hover:bg-[#06234a]"
+                              } w-3/4 font-semibold py-2 px-4 rounded-3xl shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap`}
                           >
-                            {joiningProgramId === program.id ? "Sending..." : "Join"}
+                            {joiningProgramId === program.id ? "requesting..." : "join request"}
                           </button>
                         </>
                       )}

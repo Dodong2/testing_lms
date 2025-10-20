@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 /* icons */
 import { FiMenu } from "react-icons/fi";
+import { RiMenu4Fill } from "react-icons/ri";
+import { IoClose } from "react-icons/io5";
 /* for session */
 import { useSession } from "next-auth/react";
 
@@ -38,7 +40,7 @@ const SidebarItem = ({ href, icon, text, onClick }: SidebarItem) => {
   return (
   <Link
     href={href} onClick={onClick}
-    className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-blue-500" : "text-gray-700 hover:text-blue-700"}`}>
+    className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-blue-500" : "text-[#EFEFEF] hover:text-blue-500"}`}>
       {/* 🔵 Active indicator bar (left side lang) */}
       {isActive && (
         <div className="absolute right-0 top-0 h-full w-1 bg-blue-500 rounded-l-md"></div>
@@ -63,10 +65,11 @@ const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
       {/* BUTTON: Toggle button para sa mobile menu. magpapakita lang if sa mobile screen */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-2 left-4 z-40 p-2 bg-white rounded-md shadow-md"
+        className="md:hidden fixed top-2 left-3 z-40 p-2 bg-[#00306E] active:border-1 active:border-white rounded-md shadow-xl text-white "
         aria-label="Toggle menu"
       >
-        <FiMenu size={24} />
+        {isOpen ? <IoClose className="cursor-pointer active:scale-95 transition-transform duration-75" size={24}/>  : <RiMenu4Fill className="cursor-pointer active:scale-95 transition-transform duration-75" size={24}/> }
+        
       </button>
 
       {/* OVERLAY: Lumalabas lang sa mobile kapag bukas ang sidebar */}
@@ -79,13 +82,13 @@ const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
 
       {/* SIDEBAR: Main navigation panel */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-[#E3FDE7] border-r border-gray-200 z-30 overflow-auto
+        className={`fixed top-0 left-0 h-full bg-[#222222] z-30 overflow-auto
         transition-transform duration-300 ease-in-out w-60
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Sidebar header */}
-        <div className="p-4 font-bold border-b bg-blue-500 border-gray-200 whitespace-nowrap">
-         <p className="ml-13 text-white">Extenstion Portal</p> 
+        <div className="p-4 font-bold shadow-2xl bg-[#00306E] whitespace-nowrap">
+         <p className="ml-10 text-white">Extenstion Portal</p> 
         </div>
 
         {/* NAVIGATION LINKS */}

@@ -41,6 +41,6 @@ export interface ProgramGetTypes {
     instructors: number
     beneficiaries: number
   }
-  joined: string
-  pending: string
+  joined: boolean
+  pending: boolean
 }
