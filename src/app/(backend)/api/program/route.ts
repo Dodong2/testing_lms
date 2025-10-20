@@ -94,6 +94,8 @@ export async function GET(req: NextRequest) {
                 if(m.user.role === "INSTRUCTOR") instructors++
             })
 
+            const totalMembers = program.members.filter(m => m.user.role !== "ADMIN").length
+
             // joined flag for beneficiary
             const joined = user.role === 'BENEFICIARY' ? program.members.some((m) => m.userId === user.id) : true
             const pending = user.role === 'BENEFICIARY' && program.JoinRequest.length > 0
@@ -104,7 +106,7 @@ export async function GET(req: NextRequest) {
             subtitle: program.subtitle,
             explanation: program.explanation,
             createdAt: program.createdAt,
-            totalMembers: program._count.members,
+            totalMembers,
             memberCounts: {
                 beneficiaries,
                 instructors,
