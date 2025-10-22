@@ -23,7 +23,7 @@ export function SearchBar({ onSearch, placeholder = "Search...", delay = 300 }: 
   }, [debouncedSearch, onSearch])
 
   return (
-    <div  className=" bg-white flex items-center rounded-md px-3 w-64 focus-within:w-96 shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out border-b border-transparent hover:border-b-blue-500 focus-within:border-blue-500 ">
+    <div  className="bg-[#EFEFEF] flex items-center rounded-md px-3 w-64 focus-within:w-96 shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out border-b border-transparent hover:border-b-blue-500 focus-within:border-blue-500 ">
       <input
         type="text"
         placeholder={placeholder}

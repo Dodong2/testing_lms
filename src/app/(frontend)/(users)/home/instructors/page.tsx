@@ -29,12 +29,13 @@ export default function Instructors() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold italic text-gray-800">Your Programs</h2>
-      <div className="mt-6">
+      <div className="mt-2">
         {/* search bar */}
-        <div className="flex items-center justify-between mb-4">
+        {/* <div className="flex items-center justify-between mb-4">
           <SearchBar onSearch={setSearch} placeholder="Search program title..." />
-        </div>
+        </div> */}
+
+        <h2 className="text-2xl font-bold italic text-[#EFEFEF]">Your Programs</h2>
 
         {/* Program Card 1 */}
         {isLoading ? (
@@ -50,15 +51,15 @@ export default function Instructors() {
                       <div>
                         <Link href={`/home/participants/programs/${program.id}`}>
                           {/* Top gray box */}
-                          <div className="flex justify-between bg-[#EFEFEF] p-2 w-full">
+                          <div className="flex justify-between bg-[#FFBD17] p-2 w-full">
                             <div>
-                              <div className="relative flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners </div>
-                              <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
-                              <div className="flex items-center text-gray-600 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
+                              <div className="relative flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners </div>
+                              <div className="flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
+                              <div className="flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
                             </div>
-                            <div className="">
-                              <span className="text-xs bg-amber-300 p-1 rounded-2xl text-center whitespace-nowrap">since {format(new Date(program.createdAt), "MMM/dd/yyyy")}</span>
-                            </div>
+                            {/* <div className=""> */}
+                              <span className="text-xs text-gray-950 p-1 rounded-2xl text-center whitespace-nowrap">since {format(new Date(program.createdAt), "MMM/dd/yyyy")}</span>
+                            {/* </div> */}
                           </div>
 
                           {/* Bottom content */}

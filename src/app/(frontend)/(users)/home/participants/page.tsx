@@ -20,6 +20,7 @@ export default function Programs() {
   // search & pagination for future purposes 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
+  const [loading, setLoading] = useState(false)
   const [joiningProgramId, setJoiningProgramId] = useState<string | null>(null)
   const [cancelingProgramId, setCancelingProgramId] = useState<string | null>(null)
   const [filter, setFilter] = useState<"ALL" | "JOINED">("ALL")
@@ -42,7 +43,7 @@ export default function Programs() {
     <div>
       {/* Search bar & filter */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-        <SearchBar
+        {/* <SearchBar
           onSearch={(value) => {
             setSearch(value)
             if (value.trim() !== "") {
@@ -50,7 +51,8 @@ export default function Programs() {
             }
           }}
           placeholder="Search program title..."
-        />
+        /> */}
+        <div></div>
 
         <div className="flex gap-2 md:mt-0 mt-2">
           <button
