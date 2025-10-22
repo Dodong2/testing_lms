@@ -18,7 +18,7 @@ const ChartAllUsers = () => {
     ]
 
     return (
-        <div className="bg-white p-4 rounded-2xl shadow-md md:col-span-2">
+        <div className="bg-[#00306E] p-4 rounded-2xl shadow-md md:col-span-2">
             {/* Pie Chart */}
             <div className="flex flex-col">
                 <h2 className="text-lg font-semibold mb-1">User Roles Distribution</h2>

@@ -19,7 +19,14 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
             where: { id: programId },
             include: {
                 members: {
-                    include: { user: true }
+                    where: {
+                        user: {
+                            role: "INSTRUCTOR"
+                        }
+                    },
+                    include: {
+                        user: true
+                    }
                 }
             }
         })

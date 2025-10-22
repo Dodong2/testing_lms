@@ -76,13 +76,13 @@ export default function ProgramManage() {
                     <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 whitespace-nowrap"
                         onClick={() => openAddModal(program)}>
                       <FaList className="inline-block mr-2" />
-                      <p>View Members</p>
+                      <p>instructors</p>
                     </button>
-                <Link href={`/home/participants/programs/${program.id}`}>
+                {/* <Link href={`/home/participants/programs/${program.id}`}>
                     <button className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 whitespace-nowrap"> 
                       <FaRegArrowAltCircleRight className="inline-block mr-2"/>
                       <p>View Programs</p></button>
-                </Link>
+                </Link> */}
               </div>
               </div>
               

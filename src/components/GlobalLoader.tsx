@@ -8,11 +8,15 @@ export default function GlobalLoader() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    // show loader immediately when user clicks any internal link
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      const link = target.closest('a')
-      if (link && link.href.startsWith(window.location.origin)) {
+      const link = target.closest('a') as HTMLAnchorElement | null
+
+      if (
+        link && 
+        link.href.startsWith(window.location.origin) && 
+        link.pathname !== window.location.pathname // ✅ skip if same page
+      ) {
         setIsLoading(true)
       }
     }
@@ -21,9 +25,8 @@ export default function GlobalLoader() {
     return () => window.removeEventListener('click', handleClick)
   }, [])
 
-  // hide loader after route has changed and rendered
+  // hide loader when route changes
   useEffect(() => {
-    // Add a tiny delay so it looks smooth and ensures new page is mounted
     const timeout = setTimeout(() => setIsLoading(false), 400)
     return () => clearTimeout(timeout)
   }, [pathname])
@@ -32,7 +35,7 @@ export default function GlobalLoader() {
     <>
       {isLoading && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm"
+          className="fixed inset-0 flex items-center justify-center z-50"
           style={{ backgroundColor: 'rgba(70,70,70,0.3)' }}
         >
           <div className="flex flex-col items-center justify-center h-full py-10 animate-pulse">

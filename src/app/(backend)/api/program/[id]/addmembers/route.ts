@@ -8,6 +8,7 @@ import { sendProgramInviteEmail } from "@/lib/email/sendProgramInvite";
 
 // pang add ng members sa existing program for admin only
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  try {
   const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -65,5 +66,9 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   )
 
   return NextResponse.json({ success: true });
+} catch(error) {
+  console.error("Failed to add in program")
+  return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+}
 }
 

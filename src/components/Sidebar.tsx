@@ -37,9 +37,17 @@ const SidebarItem = ({ href, icon, text, onClick }: SidebarItem) => {
   const pathname = usePathname()
   const isActive = pathname === href
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (isActive) {
+      e.preventDefault() // ✅ prevent navigation
+      return
+    }
+    onClick?.()
+  }
+
   return (
   <Link
-    href={href} onClick={onClick}
+    href={href} onClick={handleClick}
     className={`group relative flex items-center gap-3 px-4 py-2 font-medium text-1xl rounded-md transition-colors  hover:animate-pulse ${isActive ? "text-blue-500" : "text-[#EFEFEF] hover:text-blue-500"}`}>
       {/* 🔵 Active indicator bar (left side lang) */}
       {isActive && (

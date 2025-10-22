@@ -24,12 +24,12 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
         <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
             <div className="bg-white p-3 rounded-xl shadow-2xl max-w-4xl w-full relative">
                 <form onSubmit={handleSubmit}>
-                    <h1 className="text-2xl font-bold text-gray-800 text-center mb-3">Add/Remove Members for: <span className="text-blue-600">{title}</span></h1>
+                    <h1 className="text-2xl font-bold text-gray-800 text-center mb-3">Add Instructors for: <span className="text-blue-600">{title}</span></h1>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Left Side: Add Members */}
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-700 mb-4">Add New Members</h3>
+                            <h3 className="text-lg font-semibold text-gray-700 mb-4">Add Instructors</h3>
                             <input
                                 type="email"
                                 placeholder="Add emails (comma separated)"
@@ -62,7 +62,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
                         {/* Right Side: Existing Members */}
                         <div>
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-semibold text-gray-700">Existing Members</h3>
+                                <h3 className="text-lg font-semibold text-gray-700">Instructors</h3>
                                 <button
                                     type="button"
                                     onClick={handleRemove}
