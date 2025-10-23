@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserRegisterStats, UserRegisterStats } from "@/services/statsServices";
+import { getUserRegisterStats, getPostsPerMonth } from "@/services/statsServices";
+import { UserRegisterStats, PostsPerMonth } from "@/types/statstypes";
 
 export const useStats = () => {
     
@@ -10,5 +11,12 @@ export const useStats = () => {
         })
     }
     
-    return { userUserRegistrations }
+    const usePostStats = () => {
+        return useQuery<PostsPerMonth[]>({
+            queryKey: ["posts-per-month"],
+            queryFn: getPostsPerMonth
+        })
+    }
+
+    return { userUserRegistrations, usePostStats }
 }

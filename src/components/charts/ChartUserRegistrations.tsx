@@ -19,7 +19,7 @@ import { useStats } from "@/hooks/stats/useStats";
   if (error || !data) return <p>Failed to load user registration stats</p>;
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md md:col-span-2">
+    <div className="bg-[#00306E] border border-gray-100 p-4 rounded-2xl shadow-md md:col-span-2 ">
       <h2 className="text-lg font-semibold mb-2 text-gray-800">Monthly User Registrations</h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>

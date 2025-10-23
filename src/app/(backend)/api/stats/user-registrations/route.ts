@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import Instructors from "@/app/(frontend)/(users)/home/instructors/page";
 
 export async function GET() {
     try {

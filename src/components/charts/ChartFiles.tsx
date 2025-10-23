@@ -5,7 +5,7 @@ import { useUsers } from "@/hooks/users/useUsers";
 
 const COLORS = ["#2563eb", "#16a34a", "#f59e0b"];
 
-const ChartAllUsers = () => {
+const ChartFiles = () => {
     const { data: userRoleStats, isLoading, error } = useUsers().useUserRoleStats()
 
     if (isLoading) return <p>Loading...</p>
@@ -21,7 +21,7 @@ const ChartAllUsers = () => {
         <div className="bg-[#00306E] p-4 rounded-2xl shadow-md flex flex-col  text-white border border-gray-100">
             {/* Pie Chart */}
             <div className="flex flex-col text-left">
-                <h2 className="text-lg text-white font-semibold mb-1">User Roles Distribution</h2>
+                <h2 className="text-lg text-white font-semibold mb-1">Files</h2>
                 <div className="text-white"> Total Users: <span className="text-2xl font-bold">{userRoleStats.total}</span></div>
             </div>
             <div className="w-full h-[250px]">
@@ -57,4 +57,4 @@ const ChartAllUsers = () => {
     )
 }
 
-export default ChartAllUsers
+export default ChartFiles
