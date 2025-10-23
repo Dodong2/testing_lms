@@ -15,15 +15,31 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         const { id } = await context.params
         const programId = id
 
+        let memberFilter: Record<string, any> = {}
+
+        if(session.user.role === "ADMIN") {
+            memberFilter = {
+                user: {
+                    role: {
+                        not: "ADMIN"
+                    }
+                }
+            }
+        } else {
+            memberFilter = {
+                user: {
+                    role: {
+                        in: ["INSTRUCTOR", "BENEFICIARY"]
+                    }
+                }
+            }
+        }
+
         const program = await prisma.program.findUnique({
             where: { id: programId },
             include: {
                 members: {
-                    where: {
-                        user: {
-                            role: "INSTRUCTOR"
-                        }
-                    },
+                    where: memberFilter,
                     include: {
                         user: true
                     }

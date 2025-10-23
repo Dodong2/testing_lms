@@ -112,10 +112,10 @@ export default function MemberContent({ programId }: { programId: string }) {
 
       <h2 className="text-xl font-semibold mb-4 text-gray-900">Members</h2>
 
-      <div>
+      {/* <div>
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Admins</h3>
         {renderMembers(groupedMembers.ADMIN)}
-      </div>
+      </div> */}
 
       <div>
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Instructors</h3>

@@ -21,7 +21,7 @@ interface Program {
 interface ProgramClientProps {
     program: Program
     username: string
-    role: "INSTRUCTOR" | "BENEFICIARY"
+    role: "INSTRUCTOR" | "BENEFICIARY" | "ADMIN"
 }
 
 export const useNavbarTabs = ({ program, username, role }: ProgramClientProps) => {
@@ -31,21 +31,25 @@ export const useNavbarTabs = ({ program, username, role }: ProgramClientProps) =
     const renderContent = () => {
         switch (activeTab) {
             case 'updates':
-                return <UpdatesContent programId={program.id} />
+                return role === 'ADMIN' || role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<UpdatesContent programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only admin and beneficiary can view this tab.</p> )
             case 'assignments':
-                return <AssignmentContent programId={program.id} />
+                return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<AssignmentContent programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors and beneficiary can view this tab.</p> )
             case 'members':
-                return <MemberContent programId={program.id} />
+                return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<MemberContent programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors and beneficiary can view this tab.</p> )
             case 'meetings':
-                return <MeetingContent programId={program.id} />
+                return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<MeetingContent programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors and beneficiary can view this tab.</p> )
             case 'eda':
-                return role === "INSTRUCTOR" ? (<EDA programId={program.id} />)
+                return role === "INSTRUCTOR" || role === 'ADMIN' ? (<EDA programId={program.id} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p>)
             case 'evaluation':
-                return role === "INSTRUCTOR" ? ( <Evaluation programId={program.id} />)
+                return role === "INSTRUCTOR" || role === 'ADMIN' ? ( <Evaluation programId={program.id} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
             case 'attendance':
-                return role === "INSTRUCTOR" ? (<Attendance programId={program.id} />)
+                return role === "INSTRUCTOR" || role === 'ADMIN' ? (<Attendance programId={program.id} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
             default:
                 return <UpdatesContent programId={program.id} />

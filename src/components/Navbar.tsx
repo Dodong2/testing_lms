@@ -26,8 +26,15 @@ const Navbar: React.FC<TabProps> = ({ activeTab, setActiveTab, role }) => {
     { title: "Members", key: "members" },
   ]
 
+  const adminTabs = [
+    { title: "Updates", key: "updates" },
+    { title: "EDA", key: "eda" },
+    { title: "Evaluation", key: "evaluation" },
+    { title: "Attendance", key: "attendance" },
+  ]
+
   // Combine based on role
-  const tabs = role === "INSTRUCTOR" ? instructorTabs : beneficiaryTabs
+  const tabs = role === "ADMIN" ? adminTabs : role === 'INSTRUCTOR' ? instructorTabs : beneficiaryTabs
 
   return (
     <div className="bg-gray-100 flex justify-around text-sm font-medium rounded-b-sm">

@@ -18,20 +18,27 @@ const ChartAllUsers = () => {
     ]
 
     return (
-        <div className="bg-[#00306E] p-4 rounded-2xl shadow-md md:col-span-2">
+        <div className="bg-[#00306E] p-4 rounded-2xl shadow-md flex flex-col items-center justify-center text-white">
             {/* Pie Chart */}
-            <div className="flex flex-col">
-                <h2 className="text-lg font-semibold mb-1">User Roles Distribution</h2>
+            <div className="flex flex-col items-start">
+                <h2 className="text-lg text-white font-semibold mb-1">User Roles Distribution</h2>
                 <div className="text-gray-600"> Total Users <span className="text-2xl font-bold">{userRoleStats.total}</span></div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <div className="w-full h-[250px]">
+            <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
+                    <Legend
+                        layout="vertical"
+                        verticalAlign="middle"
+                        align="right"
+                        iconType="circle"
+                    />
                     <Pie
                         data={pieData}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={120}
+                        outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
                         label
@@ -41,9 +48,10 @@ const ChartAllUsers = () => {
                         ))}
                     </Pie>
                     <Tooltip />
-                    <Legend />
+
                 </PieChart>
             </ResponsiveContainer>
+        </div>
         </div>
     )
 }

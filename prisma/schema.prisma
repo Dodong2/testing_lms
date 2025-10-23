@@ -33,6 +33,8 @@ model User {
   Submission Submission[]
 
   JoinRequest JoinRequest[]
+
+  createdAt DateTime @default(now())
 }
 
 //account for google auth

@@ -18,7 +18,9 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
     const { emailInput, setEmailInput, emailLists, handleAddToList, handleSubmit, isPending } = useAddMembers({ programId, onSuccess })
     const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
 
-
+    const filteredMembers = existingMembers.filter(
+        (member) => member.role === "INSTRUCTOR"
+    );
 
     return (
         <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
@@ -76,11 +78,11 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-h-[200px] h-96 overflow-y-auto">
                                 {isLoading ? (
                                     <p className="text-gray-500 animate-pulse">Loading members...</p>
-                                ) : existingMembers.length === 0 ? (
-                                    <p className="text-gray-500 italic">No members found.</p>
+                                ) : filteredMembers.length === 0 ? (
+                                    <p className="text-gray-500 italic">No instructors found.</p>
                                 ) : (
                                     <ul className="space-y-2 w-full">
-                                        {existingMembers.map((member) => (
+                                        {filteredMembers.map((member) => (
                                             <li
                                                 key={member.email}
                                                 className="flex justify-between items-center py-2 px-3 hover:bg-white rounded-md transition-colors duration-150"
