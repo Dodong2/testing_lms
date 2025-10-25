@@ -13,7 +13,7 @@ const PostsContent = ({ content }: PostProps) => {
 
     return (
         <div className="mb-1">
-            <div className="text-sm text-gray-700 whitespace-pre-wrap">
+            <div className="text-sm text-[#E9E9E9] whitespace-pre-wrap">
                 {displayText}
                 {!expanded && isLong && "..."}
                 {/* Toggle button kung mahaba */}

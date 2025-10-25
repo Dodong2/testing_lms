@@ -15,6 +15,8 @@ import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePostModal } from "@/hooks/post/usePostModal";
 import { useOpenPostModal } from "@/hooks/post/useOpenPostModal";
+// icons
+import { FaPlus } from "react-icons/fa";
 
 
 export default function UpdatesContent({ programId }: { programId: string }) {
@@ -48,7 +50,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
       <div className="w-full">
         <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start">
           {/* Main content - LEFT SIDE */}
-          <div className="bg-white rounded-md overflow-hidden">
+          <div className="rounded-md overflow-hidden">
             {/* Post input area for beneficiary for bawal mag post si beneficiary*/}
             {/* {session?.user.role === 'BENEFICIARY' && (
               <div className="p-2 bg-gray-100 mt-2 rounded-md">
@@ -74,11 +76,14 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
             {/* for Admin & instructor for post with file for TASK */}
             {session?.user.role === 'ADMIN' || session?.user.role === 'INSTRUCTOR' && (
-              <div className="p-2 bg-gray-100 mt-2 rounded-md">
-                <div
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full"
-                  onClick={handleToggleTaskModal}
-                >
+              <div className="relative mt-2 rounded-md">
+                <div className="relative group grid grid-cols-[auto_1fr] items-center gap-3 w-full">
+                  <div className="fixed z-10 bottom-10 right-3 bg-[#222222] rounded-4xl p-2 active:scale-95 transition-all duration-150 border-2 border-transparent hover:border-white" onClick={handleToggleTaskModal}>
+                    <FaPlus className="text-white" size={25} />
+                  </div>
+                  {/* Hover overlay div */}
+                  <div className="fixed flex items-center gap-1.5 right-16 bottom-7 bg-white shadow-lg rounded-xl p-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300 z-10 ">
+                  <div className="absolute top-6 -right-1 w-3 h-3 bg-white  rotate-45"></div>
                   <div className="w-10 h-10 rounded-full bg-gray-300">
                     {session?.user.image && (
                       <Image
@@ -90,7 +95,10 @@ export default function UpdatesContent({ programId }: { programId: string }) {
                       />
                     )}
                   </div>
-                  <p>Post something</p>
+                    <p className="text-md text-gray-700 font-medium italic">
+                      Post something (e.g., Announcements or Tasks)
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -98,7 +106,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             {/* Posts List */}
             <div className="space-y-6 rounded-md shadow mt-3">
               {!posts?.length ? (
-                <EmptyState message="no post yet."/>
+                <EmptyState message="no post yet." />
               ) : (
                 posts.map((post) =>
                   post.tag === "TASK" ? (

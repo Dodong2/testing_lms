@@ -59,7 +59,7 @@ export default function UserManage() {
             <button
               key={role}
               onClick={() => setRoleFilter(role as "ALL" | "ADMIN" | "INSTRUCTOR" | "BENEFICIARY")}
-              className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200
+              className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95
                 ${roleFilter === role
                   ? "bg-green-500 text-white shadow-md"
                   : "bg-white text-gray-700 border border-gray-300 hover:bg-green-100"}`}

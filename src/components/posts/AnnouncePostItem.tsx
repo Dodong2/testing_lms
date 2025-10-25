@@ -44,7 +44,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
     };
 
     return (
-        <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
+        <div key={post.id} className="bg-[#222222] p-3 rounded-md border focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -60,15 +60,15 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                         )}
                     </div>
                     <div>
-                        <p className="font-semibold text-xs sm:text-sm md:text-base text-gray-800 whitespace-nowrap">{post.author.name}</p>
-                        <p className="text-xs text-gray-500">{formatCreatedAt(post.createdAt)}</p>
+                        <p className="font-semibold text-xs sm:text-sm md:text-base text-[#E9E9E9] whitespace-nowrap">{post.author.name}</p>
+                        <p className="text-xs text-[#E9E9E9]">{formatCreatedAt(post.createdAt)}</p>
                     </div>
                 </div>
 
                 {/* right side */}
                 <div className="flex justify-center items-center gap-1 text-lg">
                     {/* tags */}
-                    <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span className="text-xs sm:text-sm">{post.tag}</span></div>
+                    {/* <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span className="text-xs sm:text-sm">{post.tag}</span></div> */}
                     {/* Edit / Delete */}
                     <div className="relative">
                         {/* Menu Toggle Button */}
@@ -100,24 +100,24 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
 
             {/* Files & Deadline */}
             {post.files && post.files?.length > 0 && (
-                 <div key={post.id} className="border border-gray-200 rounded-lg shadow-sm bg-white mt-3">
-                    <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-150">
+                 <div key={post.id} className="shadow-sm mt-3 border-1 border-t-0 border-gray-400 rounded-t-2xl">
+                    <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center bg-white p-3 shadow-2xl rounded-t-2xl cursor-pointer transition duration-150">
                         <div className="flex items-center gap-2">
                             {showFiles ? (
-                               < FaRegFolderOpen className="text-gray-400"/>
+                               < FaRegFolderOpen className="text-gray-800"/>
                             ) : (
-                                < FaRegFolder className="text-gray-400"/>
+                                < FaRegFolder className="text-gray-800"/>
                             )}
 
                             {/* Text at File Count */}
-                            <span className="font-medium text-gray-700">
+                            <span className="font-medium text-gray-800">
                                 Files ({post.files?.length || 0})
                             </span>
                         </div>
 
-                        {/* DEADLINE AT TOGGLE ARROW */}
+                      
                         <div className="flex items-center gap-3">
-                            <span className="text-sm text-red-600 font-medium">
+                            <span className="text-sm text-gray-800 font-medium">
                                 View files
                             </span>
 
@@ -127,7 +127,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                     </div>
                         
                     {showFiles && post.files && post.files.length > 0 && (
-                        <div className="border-t border-gray-100 p-3 space-y-1">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
                             {post.files?.map((file, idx) => (
                                 <PostFiles key={idx}
                                     name={file.name}
@@ -135,7 +135,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                                     onClick={(f) => setSelectedFile(f)}
                                 />
                             ))}
-                        </div>
+                        </div>                        
                     )}
                     {showFiles && (!post.files || post.files.length === 0) && (
                         <div className="border-t border-gray-100 p-3 text-sm text-gray-500 text-center italic">

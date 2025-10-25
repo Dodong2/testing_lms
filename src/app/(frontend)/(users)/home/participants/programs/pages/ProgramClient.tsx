@@ -47,7 +47,7 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
     <div className="w-full">
       <div className="max-w-5xl mx-auto  gap-4">
         {/* Main content - LEFT SIDE */}
-        <div className="bg-white rounded-md overflow-hidden">
+        <div className="rounded-md overflow-hidden">
           {/* Header */}
           <div className="relative bg-gray-800 rounded-t-1xl text-white p-5">
             <h2 className="text-3xl font-semibold">{program.title}</h2>

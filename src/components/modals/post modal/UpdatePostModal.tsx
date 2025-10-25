@@ -19,7 +19,7 @@ interface UpdatePostProps {
 
 const UpdatePostModal = ({ programId, postId, title, content, files = [], deadline = "", onSuccess, onClose, tags }: UpdatePostProps) => {
     const { data: session } = useSession()
-    const { isPending, setTitleData, setContentData, filesData, setFilesData, setDeadlineData, handleSubmit } = UpdatePost({ programId, postId, title, content, files, deadline, onSuccess })
+    const { isPending, titleData, setTitleData, setContentData, filesData, setFilesData, setDeadlineData, handleSubmit } = UpdatePost({ programId, postId, title, content, files, deadline, onSuccess })
     useLockBodyScroll(true)
 
     return (
@@ -31,7 +31,7 @@ const UpdatePostModal = ({ programId, postId, title, content, files = [], deadli
                     <input 
                         type="text"
                         name="title"
-                        defaultValue={title}
+                        value={titleData}
                         onChange={(e) => setTitleData(e.target.value)} 
                         placeholder="title"
                         className="border p-2 w-full"

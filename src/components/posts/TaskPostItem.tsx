@@ -45,7 +45,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
     };
 
     return (
-        <div key={post.id} className="bg-gray-100 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 hover:ring-gray-500">
+        <div key={post.id} className="bg-[#222222] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -75,8 +75,6 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                         <div className="absolute right-0 top-full mt-1 w-[220px] bg-white shadow-lg rounded-xl border border-gray-200 p-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300 z-10">
                             {/* Arrow pointer */}
                             <div className="absolute -top-2 left-6 w-3 h-3 bg-white border-t border-l border-gray-200 rotate-45"></div>
-
-                            {}
                             <p className="text-sm text-gray-700 font-medium">
                                 Click to view instructions and submit your assignment.
                             </p>
@@ -123,17 +121,17 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
 
             {/* Files & Deadline */}
             {session?.user.role === 'INSTRUCTOR' && (
-                <div key={post.id} className="border border-gray-200 rounded-lg shadow-sm bg-white mt-3">
-                    <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-50 transition duration-150">
+                <div key={post.id} className="shadow-sm mt-3 border-1 border-t-0 border-gray-400 rounded-t-2xl">
+                    <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center bg-white p-3 shadow-2xl rounded-t-2xl cursor-pointer transition duration-150 hover:bg-[#FFBD17]">
                         <div className="flex items-center gap-2">
                             {showFiles ? (
-                                < FaRegFolderOpen className="text-gray-400" />
+                                < FaRegFolderOpen className="text-gray-800" />
                             ) : (
-                                < FaRegFolder className="text-gray-400" />
+                                < FaRegFolder className="text-gray-800" />
                             )}
 
                             {/* Text at File Count */}
-                            <span className="font-medium text-gray-700">
+                            <span className="font-medium text-gray-800">
                                 Files ({post.files?.length || 0})
                             </span>
                         </div>
@@ -150,7 +148,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                     </div>
 
                     {showFiles && post.files && post.files.length > 0 && (
-                        <div className="border-t border-gray-100 p-3 space-y-1">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
                             {post.files?.map((file, idx) => (
                                 <PostFiles key={idx}
                                     name={file.name}
