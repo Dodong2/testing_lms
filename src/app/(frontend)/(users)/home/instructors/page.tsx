@@ -9,6 +9,7 @@ import { useProgramEvents } from "@/hooks/socket/useProgramSocket";
 /* components */
 import { SearchBar } from "@/components/SearchBar";
 import EmptyState from "@/components/EmptyState";
+import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2, FiArrowRight } from 'react-icons/fi';
 import { FaList } from "react-icons/fa";
@@ -24,7 +25,7 @@ export default function Instructors() {
   const { usePrograms } = useProgram()
   const { data: programData, isLoading } = usePrograms(page, search)
 
-  if (status === "loading") return <div>Loading...</div>
+  if (status === "loading") return <SkeletonGrid count={6} variant="card" />
   if (!session) return null
 
   return (
@@ -37,9 +38,9 @@ export default function Instructors() {
 
         <h2 className="text-2xl font-bold italic text-[#EFEFEF]">Your Programs</h2>
 
-        {/* Program Card 1 */}
+        {/* dahsboard */}
         {isLoading ? (
-          <p className="text-center py-4 text-gray-500">Loading...</p>
+          <SkeletonGrid count={6} variant="card" />
         ) : (
           <div>{(session.user.role === 'ADMIN' || session.user.role === 'INSTRUCTOR') && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">

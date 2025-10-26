@@ -10,6 +10,7 @@ import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 import { SearchBar } from "@/components/SearchBar"
 import EmptyState from "@/components/EmptyState"
 import Loading from "@/components/Loading"
+import { SkeletonGrid } from "@/components/SkeletonGrid"
 /* icons */
 import { FiArrowRight, FiUser } from "react-icons/fi"
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6"
@@ -30,14 +31,15 @@ export default function Programs() {
   const { mutate: joinProgram, isPending: joining } = useJoinRequests().useJoinProgram()
   const { mutate: cancelProgram, isPending: canceling } = useJoinRequests().useCancelJoin()
 
-  if (status === "loading") return <div>Loading...</div>
+  if (status === "loading") return <SkeletonGrid count={6} variant="card" />
   if (!session) return null // Prevent render flicker
 
   // for button filter all & joined program
   const filteredPrograms = programData?.programs?.filter((program) => {
-    if (filter === "JOINED") return program.joined === true
+    if (filter === "JOINED") return program.joined
     return true
   })
+  
 
   return (
     <div>
@@ -57,13 +59,13 @@ export default function Programs() {
         <div className="flex gap-2 md:mt-0 mt-2">
           <button
             onClick={() => setFilter("ALL")}
-            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "ALL" ? "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md" : "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100"}`}>
+            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "ALL" ?  "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100" : "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md"}`}>
             All Programs
           </button>
 
           <button
             onClick={() => setFilter("JOINED")}
-            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "JOINED" ? "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md" : "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100"}`}>
+            className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "JOINED" ?  "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100" : "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md"}`}>
             Your Programs
           </button>
         </div>
@@ -73,11 +75,11 @@ export default function Programs() {
       <h2 className="text-2xl font-bold italic text-[#EFEFEF]">{filter === 'ALL' ? 'All Programs' : 'Your Programs'}</h2>
 
       {/* Dashboard content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {isLoading ? (
-          <Loading />
+          <SkeletonGrid count={6} variant="card" />
         ) : filteredPrograms && filteredPrograms.length > 0 ? (
-          filteredPrograms.map((program) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          {filteredPrograms.map((program) => {
             const isJoined = program.joined
             const isPending = program.pending;
 
@@ -160,11 +162,10 @@ export default function Programs() {
                 {/* Bottom content */}
               </div>
             )
-          })
-        ) : (
+          })}
+        </div>) : (
           <EmptyState message="No programs available yet." />
         )}
-      </div>
 
 
       {/* pagination control, for future purposes */}

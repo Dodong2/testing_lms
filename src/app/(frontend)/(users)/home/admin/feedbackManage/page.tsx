@@ -19,14 +19,39 @@ export default function FeedbackManagePage() {
     const [page, setPage] = useState(1)
     const { data, isLoading } = useFeedback().useGetFeedbacks(page, 5)
     const { openId, readIds, handleToggle } = useLocalStorageAdmin()
+    const [filter, setFilter] = useState<"All" | "Identified" | "Anonymous">("All")
 
     const feedbacksData = data?.feedbacks || []
     const totalPages = data?.totalPages || 1
 
+    const filterFeedbacks = feedbacksData.filter((f) => {
+        if(filter === 'All') return true
+        if(filter === 'Anonymous') return f.visibility === 'Anonymous' 
+        if(filter === 'Identified') return f.visibility !== 'Anonymous'
+        return true
+    })
 
     return (
         <div className="p-2 md:p-5">
             <h1 className="text-2xl font-bold italic text-gray-800 mb-6">Feedback Management</h1>
+
+             {/* 🔘 Filter Buttons */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        {["ALL", "Anonymous", "Identified"].map((type) => (
+          <button
+            key={type}
+            onClick={() => setFilter(type as "All" | "Anonymous" | "Identified")}
+            className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95 border-b-2 border-transparent hover:border-b-green-500
+              ${filter === type
+                ? "bg-green-500 text-white shadow-md"
+                : "bg-white text-gray-700"}`}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
+            <div>{feedbacksData.length}</div>
             {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : feedbacksData.length > 0 ? (<>
                 <div className="space-y-4">
                     {feedbacksData?.map((f) => {

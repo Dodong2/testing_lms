@@ -24,20 +24,20 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
 
     return (
         <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
-            <div className="bg-white p-3 rounded-xl shadow-2xl max-w-4xl w-full relative">
+            <div className="bg-[#525252] p-3 rounded-xl shadow-2xl max-w-4xl w-full relative">
                 <form onSubmit={handleSubmit}>
-                    <h1 className="text-2xl font-bold text-gray-800 text-center mb-3">Add Instructors for: <span className="text-blue-600">{title}</span></h1>
+                    <h1 className="text-2xl font-bold text-white mb-3">Add Instructors for: <span className="text-blue-600">{title}</span></h1>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Left Side: Add Members */}
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-700 mb-4">Add Instructors</h3>
+                            <h3 className="text-lg font-semibold text-white mb-4">Add Instructors</h3>
                             <input
                                 type="email"
                                 placeholder="Add emails (comma separated)"
                                 value={emailInput}
                                 onChange={(e) => setEmailInput(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 mb-4"
+                                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 mb-4"
                             />
 
                             <button
@@ -64,7 +64,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
                         {/* Right Side: Existing Members */}
                         <div>
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-semibold text-gray-700">Instructors</h3>
+                                <h3 className="text-lg font-semibold text-white">Instructors</h3>
                                 <button
                                     type="button"
                                     onClick={handleRemove}
@@ -112,7 +112,7 @@ const ViewMemberModal = ({ programId, title, onClose, onSuccess, existingMembers
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"                        >
+                            className="px-6 py-2 text-white hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"                        >
                             Cancel
                         </button>
                         {emailLists.length > 0 && (

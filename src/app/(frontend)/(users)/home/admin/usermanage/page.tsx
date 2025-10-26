@@ -13,6 +13,7 @@ import EditUserModal from "@/components/modals/user modal/EditUserModal"
 import DeleteUserModal from "@/components/modals/user modal/DeleteUserModal"
 import { SearchBar } from "@/components/SearchBar"
 import EmptyState from "@/components/EmptyState"
+import { SkeletonGrid } from "@/components/SkeletonGrid"
 /* icons */
 import { FiUserPlus, FiTrash2 } from 'react-icons/fi';
 import { MdEdit } from "react-icons/md";
@@ -30,7 +31,7 @@ export default function UserManage() {
   const { deleteModal, selectedDeleteUser, openDeleteModal, handleConfirmDelete, closeDeleteModal, isDeleting } = DeleteUser()
   const { selectedUser, isUpdateModal, openUpdateModal, closeUpdateModal } = useUpdateUserModal()
 
-  if (status === "loading") return <div>Loading...</div>
+  if (status === "loading") return <SkeletonGrid count={6} variant='tableRow' />
   if (!session) return null
 
   // Apply filter locally (no backend 
@@ -39,9 +40,9 @@ export default function UserManage() {
   )
 
   return (
-    <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
+    <div className="bg-[#525252] p-0 rounded-md shadow-md">
       {/* search & add members */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="p-4 flex items-center justify-between mb-1">
         <SearchBar onSearch={(value) => {
           setSearch(value);
 
@@ -59,10 +60,10 @@ export default function UserManage() {
             <button
               key={role}
               onClick={() => setRoleFilter(role as "ALL" | "ADMIN" | "INSTRUCTOR" | "BENEFICIARY")}
-              className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95
+              className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95 border-b-3 border-transparent hover:border-b-blue-500
                 ${roleFilter === role
-                  ? "bg-green-500 text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-green-100"}`}
+                  ? "bg-blue-500 text-white shadow-md"
+                  : "bg-white text-gray-700"}`}
             >
               {role}
             </button>
@@ -78,36 +79,36 @@ export default function UserManage() {
       </div>
 
       {isLoading ? (
-        <p className="text-center py-4 text-gray-500">Loading...</p>
+        <SkeletonGrid count={6} variant="tableRow" />
       ) : (
         <>
           {session.user.role === 'ADMIN' && (
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div >
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-[#E3FDE7]">
+                <table className="min-w-full">
+                  <thead className="bg-[#FFBD17] text-gray-900">
                     <tr>
-                      <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-4 text-left text-xs font-bold  uppercase tracking-wider">
                         USER
                       </th>
-                      <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-4 text-left text-xs font-bold uppercase tracking-wider">
                         EMAIL
                       </th>
-                      <th className="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-4 text-left text-xs font-bold uppercase tracking-wider">
                         ROLE
                       </th>
-                      <th className="py-3 px-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-4 text-right text-xs font-bold uppercase tracking-wider">
                         ACTION
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="">
                     {filteredUsers && filteredUsers?.length > 0 ? (
                       filteredUsers.map((user) => (
-                        <tr key={user.id} className="hover:bg-[#E3FDE7] transition-colors duration-150">
-                          <td className="py-3 px-4 whitespace-nowrap text-gray-700">{user.name}</td>
-                          <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
-                          <td className="py-3 px-4 whitespace-nowrap text-sm text-gray-500">{user.role}</td>
+                        <tr key={user.id} className="hover:bg-[#E3FDE7] hover:text-gray-900 text-white transition-colors duration-150">
+                          <td className="py-3 px-4 whitespace-nowrap">{user.name}</td>
+                          <td className="py-3 px-4 whitespace-nowrap text-sm ">{user.email}</td>
+                          <td className="py-3 px-4 whitespace-nowrap text-sm ">{user.role}</td>
                           <td className="py-3 px-4 whitespace-nowrap text-right text-sm font-medium">
                             <button
                               onClick={() => openUpdateModal(user)}
@@ -137,12 +138,12 @@ export default function UserManage() {
                 </table>
 
                 {/* pagination control */}
-                <div className="flex justify-end items-center gap-4 mt-4">
-                  <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
-                    <span>Prev</span> <FaAngleLeft />
+                <div className="flex justify-end items-center gap-3 mt-4 p-3">
+                  <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-2 px-1 py-1 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
+                    <FaAngleLeft /> <span>Prev</span> 
                   </button>
                   <span className="text-gray-700 font-medium">Page {usersData?.page} of {usersData?.totalPages}</span>
-                  <button onClick={() => setPage((p) => p + 1)} disabled={page === usersData?.totalPages} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+                  <button onClick={() => setPage((p) => p + 1)} disabled={page === usersData?.totalPages} className="flex items-center justify-center gap-2 px-1 py-1 text-gray-700 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
                     <span>Next</span> <FaAngleRight />
                   </button>
                 </div>

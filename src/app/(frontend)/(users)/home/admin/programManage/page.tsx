@@ -17,6 +17,7 @@ import UpdateProgamsModal from "@/components/modals/programs modal/UpdateProgram
 import ViewMemberModal from "@/components/modals/programs modal/ViewMemberModal";
 import DeleteProgramsModal from "@/components/modals/programs modal/DeleteProgramsModal";
 import EmptyState from "@/components/EmptyState";
+import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* icons */
 import { FiPlus, FiUser, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { FaList } from "react-icons/fa";/* components */
@@ -37,11 +38,11 @@ export default function ProgramManage() {
   const { selectedAdd, addModal, openAddModal, closeAddModal, existingMembers, loadingMembers } = useViewMemberModal()
   const { data: programData, isLoading } = usePrograms(page, search)
 
-  if (status === "loading") return <EmptyState message="" />
+  if (status === "loading") return <SkeletonGrid count={6} variant="card" />
   if (!session) return null
 
   return (
-    <div className="bg-[#E3FDE7] p-6 rounded-md shadow-md">
+    <div className="bg-[#525252] p-6 rounded-md shadow-md">
       {/* search bar */}
       <div className="flex items-center justify-between mb-4">
         <SearchBar onSearch={setSearch} placeholder="Search program title..." />
@@ -54,7 +55,7 @@ export default function ProgramManage() {
 
       {/* Program Card 1 */}
       {isLoading ? (
-        <p className="text-center py-4 text-gray-500">Loading...</p>
+        <SkeletonGrid count={6} variant="card" />
       ) : (
         <div>{session.user.role === 'ADMIN' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,8 +99,8 @@ export default function ProgramManage() {
                             <FiTrash2 className="h-5 w-5" />
                           </button>
                         </div>
-                        <div className="col-span-2 text-xs bg-[#E3FDE7] p-1 rounded-2xl text-gray-500 whitespace-nowrap text-center mt-2">
-                          <span className="text-xs text-gray-500 whitespace-nowrap">Added on ({format(new Date(program.createdAt), "MM/dd/yy")})</span>
+                        <div className="col-span-2 text-xs bg-[#626262] p-1 rounded-2xl whitespace-nowrap text-center mt-2">
+                          <span className="text-xs text-white whitespace-nowrap">Added on ({format(new Date(program.createdAt), "MM/dd/yy")})</span>
                         </div>
                       </div>
 
@@ -114,12 +115,12 @@ export default function ProgramManage() {
           </div>)}
 
           {/* pagination control */}
-          <div className="flex justify-end items-center gap-4 mt-4">
-            <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
-              <span>Prev</span> <FaAngleLeft />
+          <div className="flex justify-end items-center gap-3 mt-4 p-3">
+            <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-2 px-1 py-1 text-gray-700 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
+              <FaAngleLeft /> <span>Prev</span> 
             </button>
             <span className="text-gray-700 font-medium">Page {programData?.page} of {programData?.totalPages}</span>
-            <button onClick={() => setPage((p) => p + 1)} disabled={page === programData?.totalPages} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+            <button onClick={() => setPage((p) => p + 1)} disabled={page === programData?.totalPages} className="flex items-center justify-center gap-2 px-1 py-1 text-gray-700 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
               <span>Next</span> <FaAngleRight />
             </button>
           </div>
