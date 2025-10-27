@@ -33,17 +33,21 @@ export async function GET(req: NextRequest) {
         const search = params.search ?? ''
         const page = Number(params.page) || 1
         const limit = Number(params.limit) || 6
+        const joinedOnly = req.nextUrl.searchParams.get("joinedOnly") === "true"
 
 
         // search filter
         const searchFilter: Prisma.ProgramWhereInput = search ? { title: { contains: search, mode: "insensitive" } } : {}
+        
 
         // role-based filter
         const roleFilter: Prisma.ProgramWhereInput = user.role === 'ADMIN' 
         ? {} // admin see all
         : user.role === 'INSTRUCTOR'
-        ? { members: { some: { userId: user.id } } // instructor only their program can see
-        } : {} // beneficiary: see a
+        ? { members: { some: { userId: user.id } } } // instructor only their program can see 
+        : joinedOnly 
+        ? { members: { some: { userId: user.id } } } // beneficiary see joined
+        : {} // beneficiary all
 
         const where: Prisma.ProgramWhereInput = {
             AND: [searchFilter, roleFilter]

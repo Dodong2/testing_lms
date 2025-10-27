@@ -6,10 +6,10 @@ import { getPrograms, createProgram, addProgramMembers, deletePrograms, updatePr
 export const useProgram = () => {
 
     // pang get ng program
-    const usePrograms = (page: number, search: string) => {
+    const usePrograms = (page: number, search: string, joinedOnly = false) => {
         return useQuery({
-            queryKey: ["programs", page, search],
-            queryFn: () =>  getPrograms(page, search),
+            queryKey: ["programs", page, search, joinedOnly],
+            queryFn: () =>  getPrograms(page, search, joinedOnly),
             placeholderData: keepPreviousData
         })
     }

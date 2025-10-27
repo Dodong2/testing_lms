@@ -27,7 +27,7 @@ export default function Programs() {
   const [filter, setFilter] = useState<"ALL" | "JOINED">("ALL")
   const { data: session, status } = useSession()
   const { usePrograms } = useProgram()
-  const { data: programData, isLoading } = usePrograms(page, search)
+  const { data: programData, isLoading } = usePrograms(page, search, filter === 'JOINED')
   const { mutate: joinProgram, isPending: joining } = useJoinRequests().useJoinProgram()
   const { mutate: cancelProgram, isPending: canceling } = useJoinRequests().useCancelJoin()
 
@@ -58,13 +58,13 @@ export default function Programs() {
 
         <div className="flex gap-2 md:mt-0 mt-2">
           <button
-            onClick={() => setFilter("ALL")}
+            onClick={() => {setFilter("ALL"), setPage(1)}}
             className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "ALL" ?  "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100" : "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md"}`}>
             All Programs
           </button>
 
           <button
-            onClick={() => setFilter("JOINED")}
+            onClick={() => {setFilter("JOINED"), setPage(1)}}
             className={`px-2 py-1 rounded-md text-sm font-semibold transition-all duration-200 ${filter === "JOINED" ?  "bg-[#EFEFEF] text-gray-800 hover:bg-blue-100" : "bg-[#00306E] hover:bg-[#06234a] text-[#EFEFEF] shadow-md"}`}>
             Your Programs
           </button>
@@ -169,12 +169,12 @@ export default function Programs() {
 
 
       {/* pagination control, for future purposes */}
-      <div className="flex justify-end items-center gap-4 mt-4">
-        <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
-          <span>Prev</span> <FaAngleLeft />
+      <div className="flex justify-end items-center gap-3 mt-4">
+        <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-2 px-1 py-1 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
+          <FaAngleLeft /> <span>Prev</span> 
         </button>
         <span className="text-gray-700 font-medium">Page {programData?.page} of {programData?.totalPages}</span>
-        <button onClick={() => setPage((p) => p + 1)} disabled={page === programData?.totalPages} className="flex items-center justify-center gap-3 px-2 py-2 text-gray-700 bg-yellow-100 shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+        <button onClick={() => setPage((p) => p + 1)} disabled={page === programData?.totalPages} className="flex items-center justify-center gap-2 px-1 py-1 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
           <span>Next</span> <FaAngleRight />
         </button>
       </div>

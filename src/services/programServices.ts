@@ -7,12 +7,14 @@ export interface ProgramResponse {
   total: number
   page: number
   totalPages: number
+  joinedOnly: boolean
 }
 
 
 // pang get lahat ng programs for all roles (paginated & search)
-export const getPrograms = async (page: number, search: string): Promise<ProgramResponse> => {
-  return apiFetch<ProgramResponse>(`/api/program?page=${page}&limit=6&search=${encodeURIComponent(search)}`)
+export const getPrograms = async (page: number, search: string, joinedOnly = false): Promise<ProgramResponse> => {
+    const query = new URLSearchParams({ page: String(page), search, joinedOnly: String(joinedOnly) })
+  return apiFetch<ProgramResponse>(`/api/program?${query.toString()}`)
 }
 
 // types ng create Program

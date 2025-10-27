@@ -52,9 +52,9 @@ export default function FeedbackManagePage() {
       </div>
 
             <div>{feedbacksData.length}</div>
-            {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : feedbacksData.length > 0 ? (<>
+            {isLoading ? (<p className="text-center text-gray-500">Loading feedbacks...</p>) : filterFeedbacks.length > 0 ? (<>
                 <div className="space-y-4">
-                    {feedbacksData?.map((f) => {
+                    {filterFeedbacks?.map((f) => {
 
                         const isAnon = f.visibility === 'Anonymous'
                         const isOpen = openId === f.id
