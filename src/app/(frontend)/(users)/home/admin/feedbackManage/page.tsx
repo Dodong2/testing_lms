@@ -55,6 +55,7 @@ export default function FeedbackManagePage() {
                     ))}
                 </div>
             </div>
+
             <div className="bg-[#525252] p-3 rounded-b-2xl">
                 {isLoading ? (<SkeletonGrid count={5} variant='feedbackLists' />) : filterFeedbacks.length > 0 ? (<>
                     <div className="space-y-4">
@@ -71,9 +72,9 @@ export default function FeedbackManagePage() {
                             const createdAt = f.createdAt ? new Date(f.createdAt).toLocaleDateString() : 'Unknown Date'
 
                             return (
-                                <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-red-500" : ""}`}>
+                                <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-amber-500" : ""}`}>
                                     {/* Summary row */}
-                                    <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-red-50" : "hover:bg-amber-200"} ${isOpen ? 'bg-white' : ''}`}>
+                                    <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-red-50" : "hover:bg-amber-200"} ${isOpen ? 'bg-amber-200' : ''}`}>
                                         <div className="flex-1 min-w-0">
                                             <div className={`font-semibold ${!isRead ? "text-amber-800" : "text-gray-900"} truncate`}>
                                                 {isAnon ? `Anonymous Feedback` : `${userName}`}
@@ -93,7 +94,7 @@ export default function FeedbackManagePage() {
 
                                     {/* Expanded details */}
                                     {isOpen && (
-                                        <div className={`p-4 border-t border-white bg-amber-50`}>
+                                        <div className={`p-4 border-t border-white bg-amber-200`}>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
                                                 <div className="flex items-center">
                                                     <FiGlobe className="mr-2 text-green-500" />
