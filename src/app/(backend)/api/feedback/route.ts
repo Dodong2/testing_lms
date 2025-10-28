@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
 
         const skip = (page - 1) * limit
 
-        const [feedbacks, total] = await Promise.all([
+        const [feedbacks, total, anonymousCount, identifiedCount] = await Promise.all([
             prisma.feedback.findMany({
                 include: {
                     user: true,
@@ -82,13 +82,19 @@ export async function GET(req: NextRequest) {
                 take: limit,
             }),
             prisma.feedback.count(),
+            prisma.feedback.count({ where: { visibility: "Anonymous" } }),
+            prisma.feedback.count({ where: { visibility: "Identified" } }),
         ])
 
         return NextResponse.json({
             feedbacks,
             total,
             page,
-            totalPages: Math.ceil(total / limit)
+            totalPages: Math.ceil(total / limit),
+            counts: {
+                anonymous: anonymousCount,
+                identified: identifiedCount,
+            }
         })
 
     } catch (error) {

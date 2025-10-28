@@ -2,7 +2,7 @@
 import React from 'react'
 import { SkeletonItem } from './SkeletonItem'
 
-type Variant = 'card' | 'list' | 'tableRow'
+type Variant = 'card' | 'list' | 'tableRow' | 'feedbackLists'
 
 interface SkeletonGridProps {
   count?: number
@@ -22,9 +22,14 @@ export const SkeletonGrid: React.FC<SkeletonGridProps> = ({
     <SkeletonItem key={i} variant={variant} />
   ))
 
+  const baseContainerClass =
+    variant === 'feedbackLists'
+      ? 'flex flex-col gap-3 mt-4'
+      : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6'
+
   return (
     <div
-      className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 ${className}`}
+      className={`${baseContainerClass} ${className}`}
       aria-busy="true"
       aria-live="polite"
     >

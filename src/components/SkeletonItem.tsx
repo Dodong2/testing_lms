@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 
-type Variant = 'card' | 'list' | 'tableRow'
+type Variant = 'card' | 'list' | 'tableRow' | 'feedbackLists'
 
 interface SkeletonItemProps {
   variant?: Variant
@@ -18,6 +18,20 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({ variant = 'card' }) 
             <div className="h-2 rounded bg-gray-300/60 w-1/2" />
           </div>
           <div className="w-6 h-6 rounded bg-gray-300/60" />
+        </div>
+      </div>
+    )
+  }
+
+  if(variant === 'feedbackLists') {
+    return (
+      <div className="w-full rounded-md p-4 bg-gray-300/30 dark:bg-gray-700/30 animate-pulse">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2 w-full">
+            <div className="h-4 w-1/4 rounded bg-gray-400/60" /> {/* name */}
+            <div className="h-3 w-1/3 rounded bg-gray-400/50" /> {/* program + role */}
+          </div>
+          <div className="h-3 w-20 rounded bg-gray-400/50" /> {/* date */}
         </div>
       </div>
     )

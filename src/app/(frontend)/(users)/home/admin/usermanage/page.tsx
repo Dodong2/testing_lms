@@ -142,7 +142,7 @@ export default function UserManage() {
                   <button onClick={() => setPage((p) => p - 1)} disabled={page === 1} className="flex items-center justify-center gap-2 px-1 py-1 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
                     <FaAngleLeft /> <span>Prev</span> 
                   </button>
-                  <span className="text-gray-700 font-medium">Page {usersData?.page} of {usersData?.totalPages}</span>
+                  <span className="text-white font-medium">Page {usersData?.page} of {usersData?.totalPages}</span>
                   <button onClick={() => setPage((p) => p + 1)} disabled={page === usersData?.totalPages} className="flex items-center justify-center gap-2 px-1 py-1 text-gray-700 bg-white shadow-lg rounded disabled:opacity-50 border-b border-transparent hover:border-b-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer active:scale-95 transition-transform">
                     <span>Next</span> <FaAngleRight />
                   </button>

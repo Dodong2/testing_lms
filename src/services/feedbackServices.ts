@@ -34,6 +34,10 @@ interface FeedbackPagination {
     total: number
     page: number
     totalPages: number
+    counts: {
+        anonymous: number
+        identified: number
+    }
 }
 
 // create feedback
