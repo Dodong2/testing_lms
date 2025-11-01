@@ -47,80 +47,60 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
     return (
         <div key={post.id} className="bg-[#222222] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
-            <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-2">
-                    {/* <div className="w-10 h-10 rounded-full overflow-hidden">
-                        {post.author.image && (
-                            <Image
-                                src={post.author.image}
-                                alt="Profile"
-                                width={40}
-                                height={40}
-                                className="w-10 h-10 rounded-full"
-                            />
-                        )}
-                    </div> */}
+            <div className="relative flex gap-2">
 
                     {/* left side */}
-                    <div className="relative group">
+                    <div className="group mr-5">
                         {/* Main clickable card */}
-                        <div className="bg-gray-300 hover:bg-amber-400 p-3 rounded-2xl transition-colors duration-200">
-                            <Link href={`/home/participants/programs/${programId}/${post.id}/Submission`}>
-                                <h1 className="font-bold text-2xl text-gray-800">{post.title}</h1>
+                        <div className=" p-2 rounded-2xl transition-colors duration-200 w-full max-w-full overflow-hidden">
+                            <Link href={`/home/participants/programs/${programId}/${post.id}/Submission`} className="block w-full">
+                                <h1 className="font-bold text-white break-words whitespace-normal leading-tight sm:text-xl md:text-2xl hover:text-amber-500 transition-colors duration-200">{post.title}</h1>
                             </Link>
-                            <p className="text-xs text-gray-600">{formatCreatedAt(post.createdAt)}</p>
+                            {/* <p className="text-xs text-gray-600">{formatCreatedAt(post.createdAt)}</p> */}
+                              <span className="text-sm text-red-600 font-medium">
+                                Deadline: {post.deadline ? format(new Date(post.deadline), "MMM dd, yyyy") : "N/A"}
+                            </span>
                         </div>
-                        
-                        {/* Hover overlay div */}
-                        <div className="absolute right-0 top-full mt-1 w-[220px] bg-white shadow-lg rounded-xl border border-gray-200 p-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300 z-10">
-                            {/* Arrow pointer */}
-                            <div className="absolute -top-2 left-6 w-3 h-3 bg-white border-t border-l border-gray-200 rotate-45"></div>
-                            <p className="text-sm text-gray-700 font-medium">
-                                Click to view instructions and submit your assignment.
-                            </p>
-
-                        </div>
-
                     </div>
-                </div>
 
                 {/* right side */}
-                <div className="flex justify-center items-center gap-1 text-lg">
-                    {/* tags */}
-                    <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span className="text-xs sm:text-sm">{post.tag}</span></div>
+                <div className="absolute right-0 -top-1">
+                    
+                    {(session?.user.email && session.user.role !== 'BENEFICIARY') && (<>
                     {/* Edit / Delete */}
                     <div className="relative">
                         {/* Menu Toggle Button */}
                         <button
-                            onClick={() => setMenuOpen((prev) => !prev)} className="p-1 rounded-full hover:bg-amber-500 cursor-pointer active:scale-75 transition-transform">
-                            <FiMoreVertical className="text-gray-700 text-lg" />
+                            onClick={() => setMenuOpen((prev) => !prev)} className="text-white hover:text-gray-800 p-1 rounded-full hover:bg-amber-500 cursor-pointer active:scale-75 transition-transform">
+                            <FiMoreVertical className="text-lg " />
                         </button>
 
                         {/* Dropdown Menu */}
                         {menuOpen && (
                             <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-md flex flex-col items-stretch animate-fadeIn z-10">
-                                <button onClick={() => { handleToggleUpdateModal(post); setMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-yellow-50 transition-colors">
+                                <button onClick={() => { handleToggleUpdateModal(post); setMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-amber-200 rounded-t-2xl transition-colors">
                                     <FiEdit className="text-yellow-500" /> Edit
                                 </button>
 
-                                <button onClick={() => { handleToggleDeleteModal(post); setMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors">
+                                <button onClick={() => { handleToggleDeleteModal(post); setMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-amber-200 rounded-b-2xl transition-colors">
                                     <FiTrash2 className="text-red-500" /> Delete
                                 </button>
                             </div>
                         )}
                     </div>
+                   </> )}
                 </div>
             </div>
 
 
             {/* Content */}
-            {session?.user.role === 'INSTRUCTOR' && (
+            {/* {session?.user.role === 'INSTRUCTOR' && (
                 <PostsContent content={post.content} />
-            )}
+            )} */}
 
 
             {/* Files & Deadline */}
-            {session?.user.role === 'INSTRUCTOR' && (
+            {/* {session?.user.role === 'INSTRUCTOR' && (
                 <div key={post.id} className="shadow-sm mt-3 border-1 border-t-0 border-gray-400 rounded-t-2xl">
                     <div onClick={() => setShowFiles((prev) => !prev)} className="flex justify-between items-center bg-white p-3 shadow-2xl rounded-t-2xl cursor-pointer transition duration-150 hover:bg-[#FFBD17]">
                         <div className="flex items-center gap-2">
@@ -130,19 +110,14 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                                 < FaRegFolder className="text-gray-800" />
                             )}
 
-                            {/* Text at File Count */}
                             <span className="font-medium text-gray-800">
                                 Files ({post.files?.length || 0})
                             </span>
                         </div>
 
-                        {/* DEADLINE AT TOGGLE ARROW */}
                         <div className="flex items-center gap-3">
-                            <span className="text-sm text-red-600 font-medium">
-                                Deadline: {post.deadline ? format(new Date(post.deadline), "MMM dd, yyyy") : "N/A"}
-                            </span>
+                           
 
-                            {/* Arrow Icon na umiikot */}
                             <HiChevronDown className={`h-5 w-5 text-gray-500 transform transition-transform duration-300 ${showFiles ? 'rotate-180' : ''}`} />
                         </div>
                     </div>
@@ -164,7 +139,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                         </div>
                     )}
                 </div>
-            )}
+            )} */}
 
             {/* submission for beneficiary */}
             {/* {session?.user.role === 'BENEFICIARY' && (

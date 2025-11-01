@@ -79,7 +79,7 @@ export default function UserManage() {
       </div>
 
       {isLoading ? (
-        <SkeletonGrid count={6} variant="tableRow" />
+        <SkeletonGrid count={9} variant="tableRow" />
       ) : (
         <>
           {session.user.role === 'ADMIN' && (

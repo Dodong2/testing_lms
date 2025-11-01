@@ -44,7 +44,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
     };
 
     return (
-        <div key={post.id} className="bg-[#222222] p-3 rounded-md border focus:outline-none focus:ring-2 hover:ring-gray-500">
+        <div key={post.id} className="bg-[#222222] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -69,27 +69,29 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
                 <div className="flex justify-center items-center gap-1 text-lg">
                     {/* tags */}
                     {/* <div className="text-sm font-medium font-serif flex items-center justify-center gap-0.5 text-gray-800 bg-white p-0.5 rounded-md"><CiPen className="text-xs" /> <span className="text-xs sm:text-sm">{post.tag}</span></div> */}
+                    {(session?.user.email && session.user.role !== 'BENEFICIARY') && (<>
                     {/* Edit / Delete */}
                     <div className="relative">
                         {/* Menu Toggle Button */}
                         <button
-                            onClick={() => setMenuOpen((prev) => !prev)}  className="p-1 rounded-full hover:bg-amber-500 cursor-pointer active:scale-75 transition-transform">
-                            <FiMoreVertical className="text-gray-700 text-lg" />
+                            onClick={() => setMenuOpen((prev) => !prev)}  className="text-white hover:text-gray-800 p-1 rounded-full hover:bg-amber-500 cursor-pointer active:scale-75 transition-transform">
+                            <FiMoreVertical className="text-lg" />
                         </button>
 
                         {/* Dropdown Menu */}
                         {menuOpen && (
                             <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-lg shadow-md flex flex-col items-stretch animate-fadeIn z-10">
-                                <button onClick={() => {handleToggleUpdateModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-yellow-50 transition-colors">
+                                <button onClick={() => {handleToggleUpdateModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-amber-200 rounded-t-2xl transition-colors">
                                     <FiEdit className="text-yellow-500" /> Edit
                                 </button>
 
-                                <button onClick={() => {handleToggleDeleteModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors">
+                                <button onClick={() => {handleToggleDeleteModal(post); setMenuOpen(false);}} className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-amber-200 rounded-b-2xl transition-colors">
                                     <FiTrash2 className="text-red-500" /> Delete
                                 </button>
                             </div>
                         )}
                     </div>
+                    </>)}
                 </div>
 
             </div>

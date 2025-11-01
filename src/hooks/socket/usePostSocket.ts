@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 interface Post {
     id: string,
+    title: string
     content: string
     authorId: string
     programId: string
