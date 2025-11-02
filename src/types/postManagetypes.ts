@@ -51,3 +51,11 @@ export interface UpdatePayload {
   postId: string
   payload: UpdatePayload
 }
+
+export interface SubmissionPostTypes {
+  id: string
+  title: string
+  content: string
+  files?: FileMeta[]
+  createdAt: string  // or Date, depende sa format
+}

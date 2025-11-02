@@ -112,7 +112,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
             type="url"
             placeholder="Optional link (e.g., Google Drive, Docs)"
             value={links}
-            onChange={(e) => setLinks(e.target.value)}
+            onChange={(e) => setLinks(e.target.value)} required
             className="border p-2 rounded w-full"
           />
 

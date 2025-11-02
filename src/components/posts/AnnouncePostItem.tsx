@@ -14,10 +14,11 @@ import { PostGetTypes } from "@/types/postManagetypes";
 import { format } from "date-fns";
 /* icons */
 import { FiEdit, FiMoreVertical, FiTrash2 } from "react-icons/fi";
-import { formatCreatedAt } from "@/util/formatCreatedAt";
 import { CiPen } from "react-icons/ci";
 import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
 import { HiChevronDown } from 'react-icons/hi';
+/* utils */
+import { formatCreatedAt } from "@/util/formatCreatedAt";
 
 interface TaskPostItemProps {
     post: PostGetTypes
