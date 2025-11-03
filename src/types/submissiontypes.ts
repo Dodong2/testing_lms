@@ -2,7 +2,7 @@ import { FileMeta } from "./postManagetypes"
 
 export interface SubmitWorkPayload {
     files?: FileMeta[]   // from UploadThing
-    links?: string  
+    links?: string[]  
 }
 
 export interface gradeSubmissionTypes {
@@ -20,7 +20,7 @@ export interface Submission {
     name: string;
     image: string
   };
-  links?: string
+  links?: string[]
   grade?: number;
   feedback?: string;
   files?: FileMeta[];

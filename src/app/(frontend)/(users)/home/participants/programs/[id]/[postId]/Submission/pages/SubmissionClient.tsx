@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { Session } from "next-auth";
 import dynamic from "next/dynamic";
-import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
-import { HiChevronDown } from "react-icons/hi";
+/* components */
 import PostFiles from "@/components/posts/PostFiles";
 import ModalFileViewer from "@/components/ModalFileViewer";
 import FileViewer from "@/components/FileViewer";
+/* types */
 import { PostGetTypes, FileMeta, SubmissionPostTypes } from "@/types/postManagetypes";
-
+/* pages */
 const SubmissionForm = dynamic(() => import("./SubmissionForm"));
 const SubmissionList = dynamic(() => import("./SubmissionList"));
+/* icons */
+import { RiCalendarTodoFill } from "react-icons/ri";
 
 export interface SubmissionClientProps {
     session: Session;
@@ -42,11 +44,17 @@ export default function SubmissionClient({
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-6 bg-[#222222] rounded-2xl">
-            <div>
-                <h1 className="font-bold text-2xl text-white">{post.title}</h1>
-                <p className="text-xs text-white">{post.content}</p>
 
-                <div className="shadow-sm mt-3 border border-gray-400 rounded-t-2xl">
+            {/* left - instructions */}
+            <div>
+                    <h1 className="font-bold text-2xl text-white">{post.title}</h1>           
+                
+                
+                <div className="p-0.5 rounded-md w-full bg-white mt-2 mb-2"></div>
+
+                <p className="text-xs text-white">{post.content}</p>
+                
+                <div>
                     {files.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-3 p-3">
                             {files.map((file, idx) => (
@@ -61,11 +69,13 @@ export default function SubmissionClient({
                     )}
                 </div>
             </div>
-
+            
+            {/* right - submit */}
             <div>
                 {session.user.role === "BENEFICIARY" && <SubmissionForm postId={postId} programId={programId} />}
             </div>
             {/* {session.user.role === "INSTRUCTOR" && <SubmissionList postId={postId} programId={programId} />} */}
+
 
             <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>
                 {selectedFile && <FileViewer fileUrl={selectedFile.url} fileType={getFileType(selectedFile.url)} />}
