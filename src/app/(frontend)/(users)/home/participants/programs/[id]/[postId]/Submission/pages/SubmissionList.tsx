@@ -72,17 +72,41 @@ const SubmissionList = ({ postId, programId }: SubmissionLists) => {
           </div>
 
           {/* links */}
+          {/* links */}
           {submission.links && (
-            <a
-              href={submission.links}
-              className="text-blue-500"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-            >
-              View Link
-            </a>
+            <div className="mt-2">
+              <p className="font-medium text-sm text-gray-700">Links:</p>
+              {Array.isArray(submission.links) ? (
+                <ul className="list-disc list-inside text-sm">
+                  {submission.links.map((link, idx) => (
+                    <li key={idx}>
+                      🔗{" "}
+                      <a
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-blue-500 underline"
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <a
+                  href={submission.links}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-blue-500 underline"
+                >
+                  🔗 {submission.links}
+                </a>
+              )}
+            </div>
           )}
+
 
           {/* files */}
           {submission.files && submission.files.length > 0 && (
