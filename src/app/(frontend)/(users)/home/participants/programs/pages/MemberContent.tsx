@@ -47,7 +47,8 @@ export default function MemberContent({ programId }: { programId: string }) {
         members.map((member) => (
           <li key={member.user.id} className="flex items-center gap-3 ">
 
-            {removeMode && (
+            {/* remove check */}
+            {(removeMode && member.user.role !== 'INSTRUCTOR') && (
               <input
                 type="checkbox"
                 checked={selectedEmails.includes(member.user.email)}
@@ -58,6 +59,7 @@ export default function MemberContent({ programId }: { programId: string }) {
                 checked:before:content-['✔'] checked:before:text-white checked:before:absolute checked:before:top-0 checked:before:left-[1px] checked:before:text-sm"              />
             )}
 
+            {/* member lists */}
             <div className="flex items-center gap-3">
               {member.user.image ? (
                 <Image
@@ -123,8 +125,6 @@ export default function MemberContent({ programId }: { programId: string }) {
           </button>
         )}
       </div>
-
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">Members</h2>
 
       {/* <div>
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Admins</h3>
