@@ -62,7 +62,7 @@ export default function UserManage() {
               onClick={() => setRoleFilter(role as "ALL" | "ADMIN" | "INSTRUCTOR" | "BENEFICIARY")}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95 border-b-3 border-transparent hover:border-b-blue-500
                 ${roleFilter === role
-                  ? "bg-blue-500 text-white shadow-md"
+                  ? "bg-[#00306E] text-white shadow-md"
                   : "bg-white text-gray-700"}`}
             >
               {role}

@@ -23,10 +23,10 @@ const CreateProgramModal = ({ onClose, onSuccess }: ActionProps) => {
           <textarea rows={5} placeholder="description" value={formData.explanation} onChange={(e) => setFormData({ ...formData, explanation: e.target.value})} required className="w-full p-2 pb-2 rounded border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-colors duration-200"/>
           {/* <input placeholder="Emails (comma-separated)" value={formData.emails} onChange={(e) => setFormData({ ...formData, emails: e.target.value})} /> */}
           <div className="flex justify-center space-x-6 pt-4">
-          <button onClick={onClose} className="px-6 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed">
+          <button onClick={onClose} className="px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed">
             Cancel
             </button>
-            <button type="submit" disabled={isPending} className="px-6 py-2 bg-[#2ECC40] text-white font-medium rounded-full shadow-lg hover:bg-green-600 duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer active:scale-95 transition-transform">
+            <button type="submit" disabled={isPending} className="px-4 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-700 duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer active:scale-95 transition-transform">
             {isPending ? 'Creating...' : 'Create'}
           </button>
           </div>

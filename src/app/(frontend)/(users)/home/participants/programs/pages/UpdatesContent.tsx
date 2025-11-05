@@ -78,7 +78,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             {session?.user.role === 'ADMIN' || session?.user.role === 'INSTRUCTOR' && (
               <div className="relative mt-2 rounded-md">
                 <div className="relative group grid grid-cols-[auto_1fr] items-center gap-3 w-full">
-                  <div className="fixed z-10 bottom-10 right-3 bg-[#222222] rounded-4xl p-2 active:scale-95 transition-all duration-150 border-2 border-transparent hover:border-white" onClick={handleToggleTaskModal}>
+                  <div className="fixed z-10 bottom-10 right-3 bg-[#00306E] rounded-4xl p-2 active:scale-95 transition-all duration-150 border-2 border-transparent hover:border-white" onClick={handleToggleTaskModal}>
                     <FaPlus className="text-white" size={25} />
                   </div>
                   {/* Hover overlay div */}

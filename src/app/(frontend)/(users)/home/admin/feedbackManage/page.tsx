@@ -48,7 +48,7 @@ export default function FeedbackManagePage() {
                     {["All", "Anonymous", "Identified"].map((type) => (
                         <button key={type} onClick={() => setFilter(type as "All" | "Anonymous" | "Identified")} className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 active:scale-95 border-b-3 border-transparent hover:border-b-blue-500
                 ${filter === type
-                                ? "bg-blue-500 text-white shadow-md"
+                                ? "bg-[#00306E] text-white shadow-md"
                                 : "bg-white text-gray-700"}`}>
                             {type}
                         </button>

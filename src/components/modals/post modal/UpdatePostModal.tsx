@@ -46,6 +46,7 @@ const UpdatePostModal = ({ programId, postId, title, content, files = [], deadli
                         className="border p-2 w-full"
                     />
 
+
                     {/* file upload only for ADMIN/INSTRUCTOR */}
                     {(session?.user.role === "ADMIN" || session?.user.role === "INSTRUCTOR") && (
                         <div>

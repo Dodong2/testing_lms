@@ -35,7 +35,7 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
     e.preventDefault();
     if (!content.trim()) return;
 
-    if(postType === 'TASK' && !title.trim()) {
+    if (postType === 'TASK' && !title.trim()) {
       toast.error("Title is required for task posts.")
       return
     }
@@ -70,89 +70,91 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
   ];
 
   return (
-    <div
-      className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm"
-      style={{ backgroundColor: "rgba(70, 70, 70, 0.3)" }}
-    >
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
-        <form onSubmit={handleCreateTask} className="flex flex-col gap-3">
+    <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: "rgba(70, 70, 70, 0.3)" }}>
+      <div className="bg-[#E7E7E7] rounded-lg shadow-lg max-w-md w-full relative max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleCreateTask} className="flex flex-col gap-3 rounded-lg">
           {/* Post type select */}
-          <div className="flex gap-4 mb-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="radio"
-                name="postType"
-                value="TASK"
-                checked={postType === "TASK"}
-                onChange={() => setPostType("TASK")}
-              />
-              Task
-            </label>
-            <label className="flex items-center gap-2">
+          <div className="flex rounded-t-lg">
+            <label className={`flex items-center justify-center gap-2 w-full rounded-tl-lg p-2 cursor-pointer transition-colors font-semibold ${postType === 'ANNOUNCEMENT' ? 'bg-[#00306E] text-white' : 'bg-gray-100 hover:bg-gray-300'}`}>
               <input
                 type="radio"
                 name="postType"
                 value="ANNOUNCEMENT"
                 checked={postType === "ANNOUNCEMENT"}
                 onChange={() => setPostType("ANNOUNCEMENT")}
+                className="hidden"
               />
               Announcement
             </label>
+
+            <label className={`flex items-center justify-center gap-2 w-full p-2 cursor-pointer transition-colors font-semibold rounded-tr-lg ${postType === 'TASK' ? 'bg-[#00306E] text-white' : 'bg-gray-100 hover:bg-gray-300'}`}>
+              <input
+                type="radio"
+                name="postType"
+                value="TASK"
+                checked={postType === "TASK"}
+                onChange={() => setPostType("TASK")}
+                className="hidden"
+              />
+              Task
+            </label>
           </div>
 
-          {/* title */}
-          {postType === 'TASK' && (
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
-             placeholder="Enter title for this task"
-             className="w-full border p-2 rounded-md"
-             required
-             />
-          )}
 
-          {/* Content */}
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder={
-              postType === "TASK" ? "Write a task description..." : "Write an announcement..."
-            }
-            className="w-full p-2 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            rows={2}
-            required
-          />
-
-          {/* Deadline input */}
-          {postType === "TASK" && (
-            <div>
-              <label className="text-sm font-medium">Deadline</label>
-              <input
-                type="date"
-                value={deadline}
-                onChange={(e) => setDeadline(e.target.value)}
-                className="w-full border rounded-md p-2"
-                required={postType === "TASK"}
+          <div className="p-2 flex flex-col gap-3">
+            {/* title */}
+            {postType === 'TASK' && (
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter title for this task"
+                className="bg-white shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                required
               />
+            )}
+
+            {/* Content */}
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder={
+                postType === "TASK" ? "Write a task description..." : "Write an announcement..."
+              }
+              className="bg-white shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              rows={5}
+              required
+            />
+
+            {/* Deadline input */}
+            {postType === "TASK" && (
+              <div>
+                <label className="text-sm font-medium text-red-500">Deadline</label>
+                <input
+                  type="date"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  className="bg-white shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                  required={postType === "TASK"}
+                />
+              </div>
+            )}
+
+            {/* File Upload */}
+            <FileUpload files={files} setFiles={setFiles} />
+
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                className="px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"
+                onClick={onClose}>
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-700 duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer active:scale-95 transition-transform" disabled={isPending}
+              >
+                {isPending ? "Posting..." : "Post"}
+              </button>
+
             </div>
-          )}
-
-          {/* File Upload */}
-          <FileUpload files={files} setFiles={setFiles}/>
-
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="bg-gray-800 text-white px-3 py-2 rounded text-sm sm:text-base"
-              disabled={isPending}
-            >
-              {isPending ? "Posting..." : postType === "TASK" ? "Post Task" : "Post Announcement"}
-            </button>
-            <button
-              type="button"
-              className="bg-gray-500 text-white px-3 py-2 rounded text-sm sm:text-base"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
           </div>
         </form>
       </div>

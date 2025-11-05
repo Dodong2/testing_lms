@@ -57,8 +57,7 @@ const PostFiles = ({ name, url, onClick }: PostFileProps) => {
         className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
         onClick={(e) => e.stopPropagation()} // 👈 para di ma-trigger modal pag download
       >
-        <FiDownload className="w-4 h-4" />
-        Download
+        View
       </a>
     </div>
   );

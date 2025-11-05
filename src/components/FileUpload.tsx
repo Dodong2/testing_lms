@@ -43,7 +43,7 @@ export const FileUpload = ({ files, setFiles }: FileUploadProps) => {
     <>
     <div>
         {files.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-3 p-3">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-3 p-1">
             {files.map((file, idx) => (
               <PostFiles key={idx} name={file.name} url={file.url} onClick={(f) => setSelectedFile(f)} />
             ))}
