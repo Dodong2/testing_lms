@@ -12,6 +12,7 @@ import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 import RequestProgramModal from "@/components/modals/programs modal/RequestProgramModal"
 /* icons */
 import { FaUserCircle } from "react-icons/fa"
+import { request } from "http"
 
 export default function MemberContent({ programId }: { programId: string }) {
   useProgramEvents()
@@ -44,7 +45,19 @@ export default function MemberContent({ programId }: { programId: string }) {
         <li className="text-gray-500 italic">No members found.</li>
       ) : (
         members.map((member) => (
-          <li key={member.user.id} className="flex items-center gap-3 justify-between">
+          <li key={member.user.id} className="flex items-center gap-3 ">
+
+            {removeMode && (
+              <input
+                type="checkbox"
+                checked={selectedEmails.includes(member.user.email)}
+                onChange={(e) =>
+                  handleToggleEmail(member.user.email, e.target.checked)
+                }
+                className="h-5 w-5 appearance-none rounded-md border border-gray-400 checked:bg-red-500 checked:border-red-500 focus:outline-none cursor-pointer relative 
+                checked:before:content-['✔'] checked:before:text-white checked:before:absolute checked:before:top-0 checked:before:left-[1px] checked:before:text-sm"              />
+            )}
+
             <div className="flex items-center gap-3">
               {member.user.image ? (
                 <Image
@@ -63,16 +76,6 @@ export default function MemberContent({ programId }: { programId: string }) {
               </div>
             </div>
 
-            {removeMode && (
-              <input
-                type="checkbox"
-                checked={selectedEmails.includes(member.user.email)}
-                onChange={(e) =>
-                  handleToggleEmail(member.user.email, e.target.checked)
-                }
-                className="form-checkbox h-5 w-5 text-red-500 rounded-md"
-              />
-            )}
           </li>
         ))
       )}
@@ -81,34 +84,45 @@ export default function MemberContent({ programId }: { programId: string }) {
 
   return (
     <div className="bg-gray-100 space-y-6 rounded-md shadow mt-3 p-6">
-      {session.user.role === 'INSTRUCTOR' && (
-        <button onClick={toggleJoinOpen} className="flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 mt-2 whitespace-nowrap">requests ({requests?.length})</button>
-      )}
 
-      {session.user.role === 'INSTRUCTOR' && (
-        <div className="flex gap-2">
-          <button
-            onClick={() => setRemoveMode((prev) => !prev)}
-            className={`px-4 py-2 rounded-md font-medium shadow 
-        ${removeMode ? "bg-gray-400 text-white" : "bg-red-500 text-white hover:bg-red-600"}`}
-          >
-            {removeMode ? "Cancel" : "Remove"}
-          </button>
-
-          {removeMode && (
+      {/* member - actions */}
+      <div className="flex justify-end gap-2">
+        {/* remove button */}
+        {session.user.role === 'INSTRUCTOR' && (
+          <div className="flex gap-2">
             <button
-              onClick={handleRemove}
-              disabled={isRemoving || selectedEmails.length === 0}
-              className={`px-4 py-2 rounded-md font-medium shadow
-                ${selectedEmails.length === 0
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-red-600 hover:bg-red-700 text-white"}`}
+              onClick={() => setRemoveMode((prev) => !prev)}
+              className={`px-2 py-2 rounded-md font-medium shadow 
+              ${removeMode ? "bg-gray-400 text-white" : "bg-red-500 text-white hover:bg-red-600"}`}
             >
-              {isRemoving ? "Removing..." : `Confirm Remove (${selectedEmails.length})`}
+              {removeMode ? "Cancel" : "Remove"}
             </button>
-          )}
-        </div>
-      )}
+
+            {removeMode && (
+              <button
+                onClick={handleRemove}
+                disabled={isRemoving || selectedEmails.length === 0}
+                className={`relative px-2 py-2 rounded-md font-medium shadow
+                ${selectedEmails.length === 0
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-red-600 hover:bg-red-700 text-white"}`}
+              >
+                {isRemoving ? "Removing..." : `Confirm remove`}
+                {selectedEmails.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{selectedEmails.length}</span>
+                )}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* request button */}
+        {session.user.role === 'INSTRUCTOR' && (
+          <button onClick={toggleJoinOpen} className="relative flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+            requests {requests?.length ? (<span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{requests?.length}</span>) : null}
+          </button>
+        )}
+      </div>
 
       <h2 className="text-xl font-semibold mb-4 text-gray-900">Members</h2>
 

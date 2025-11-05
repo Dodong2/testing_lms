@@ -74,7 +74,7 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
       <div className="bg-[#E7E7E7] rounded-lg shadow-lg max-w-md w-full relative max-h-[80vh] overflow-y-auto">
         <form onSubmit={handleCreateTask} className="flex flex-col gap-3 rounded-lg">
           {/* Post type select */}
-          <div className="flex rounded-t-lg">
+          <div className="flex rounded-t-lg sticky top-0 z-10">
             <label className={`flex items-center justify-center gap-2 w-full rounded-tl-lg p-2 cursor-pointer transition-colors font-semibold ${postType === 'ANNOUNCEMENT' ? 'bg-[#00306E] text-white' : 'bg-gray-100 hover:bg-gray-300'}`}>
               <input
                 type="radio"
