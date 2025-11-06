@@ -13,6 +13,7 @@ import RequestProgramModal from "@/components/modals/programs modal/RequestProgr
 /* icons */
 import { FaUserCircle } from "react-icons/fa"
 import { request } from "http"
+import { FiUser } from "react-icons/fi"
 
 export default function MemberContent({ programId }: { programId: string }) {
   useProgramEvents()
@@ -37,6 +38,13 @@ export default function MemberContent({ programId }: { programId: string }) {
     ADMIN: program.members.filter((m) => m.user.role === "ADMIN"),
     INSTRUCTOR: program.members.filter((m) => m.user.role === "INSTRUCTOR"),
     BENEFICIARY: program.members.filter((m) => m.user.role === "BENEFICIARY")
+  }
+
+  // counts members
+  const counts = {
+    beneficiaries: program.members.filter((m) => m.user.role === 'BENEFICIARY').length,
+    instructors: program.members.filter((m) => m.user.role === 'INSTRUCTOR').length,
+    totalMembers: program.members.length,
   }
 
   const renderMembers = (members: typeof program.members) => (
@@ -73,8 +81,7 @@ export default function MemberContent({ programId }: { programId: string }) {
                 <FaUserCircle className="text-gray-600 w-10 h-10" />
               )}
               <div>
-                <p className="font-medium text-gray-800">{member.user.name}</p>
-                <p className="text-sm text-gray-500">{member.user.role}</p>
+                <p className="font-medium text-white">{member.user.name}</p>
               </div>
             </div>
 
@@ -85,45 +92,55 @@ export default function MemberContent({ programId }: { programId: string }) {
   )
 
   return (
-    <div className="bg-gray-100 space-y-6 rounded-md shadow mt-3 p-6">
-
+    <div className="bg-[#525252] space-y-6 rounded-md shadow mt-3 p-6">
       {/* member - actions */}
-      <div className="flex justify-end gap-2">
-        {/* remove button */}
-        {session.user.role === 'INSTRUCTOR' && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => setRemoveMode((prev) => !prev)}
-              className={`px-2 py-2 rounded-md font-medium shadow 
-              ${removeMode ? "bg-gray-400 text-white" : "bg-red-500 text-white hover:bg-red-600"}`}
-            >
-              {removeMode ? "Cancel" : "Remove"}
-            </button>
+      <div className="flex justify-between gap-2">
+        {/* members - count */}
+        <div className="text-white font-semibold flex flex-col gap-1 lg:flex-row lg:items-center lg:justify-between">
+          <div className="bg-[#222222] p-2 flex items-center text-sm mt-1 rounded-lg shadow"><FiUser className="mr-1" /> Learners: <span className="text-amber-400 ml-1">{counts?.beneficiaries ?? 0}</span>  </div>
+          <div className="bg-[#222222] p-2 flex items-center text-sm mt-1 rounded-lg shadow"><FiUser className="mr-1" /> Instructors: <span className="text-amber-400 ml-1">{counts?.instructors ?? 0}</span> </div>
+          <div className="bg-[#222222] p-2 flex items-center text-sm mt-1 rounded-lg shadow"><FiUser className="mr-1" /> total members: <span className="text-amber-400 ml-1">{counts?.totalMembers}</span> </div>
+        </div>
 
-            {removeMode && (
+        {/* actions */}
+        <div className="flex gap-2 h-10">
+          {/* remove button */}
+          {session.user.role === 'INSTRUCTOR' && (
+            <div className="flex gap-2">
               <button
-                onClick={handleRemove}
-                disabled={isRemoving || selectedEmails.length === 0}
-                className={`relative px-2 py-2 rounded-md font-medium shadow
-                ${selectedEmails.length === 0
-                    ? "bg-gray-300 cursor-not-allowed"
-                    : "bg-red-600 hover:bg-red-700 text-white"}`}
+                onClick={() => setRemoveMode((prev) => !prev)}
+                className={`px-2 py-2 rounded-md font-medium shadow 
+              ${removeMode ? "bg-gray-400 text-white" : "bg-red-500 text-white hover:bg-red-600"}`}
               >
-                {isRemoving ? "Removing..." : `Confirm remove`}
-                {selectedEmails.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{selectedEmails.length}</span>
-                )}
+                {removeMode ? "Cancel" : "Remove"}
               </button>
-            )}
-          </div>
-        )}
 
-        {/* request button */}
-        {session.user.role === 'INSTRUCTOR' && (
-          <button onClick={toggleJoinOpen} className="relative flex justify-center items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
-            requests {requests?.length ? (<span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{requests?.length}</span>) : null}
-          </button>
-        )}
+              {removeMode && (
+                <button
+                  onClick={handleRemove}
+                  disabled={isRemoving || selectedEmails.length === 0}
+                  className={`relative px-2 py-2 rounded-md font-medium shadow
+                ${selectedEmails.length === 0
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-red-500 hover:bg-red-700 text-white"}`}
+                >
+                  {isRemoving ? "Removing..." : `Confirm remove`}
+                  {selectedEmails.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{selectedEmails.length}</span>
+                  )}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* request button */}
+          {session.user.role === 'INSTRUCTOR' && (
+            <button onClick={toggleJoinOpen} className="relative flex justify-center items-center bg-[#00306E] hover:bg-blue-600 text-white font-semibold py-2 px-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">
+              Requests {requests?.length ? (<span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">{requests?.length}</span>) : null}
+            </button>
+          )}
+        </div>
+
       </div>
 
       {/* <div>
@@ -132,12 +149,12 @@ export default function MemberContent({ programId }: { programId: string }) {
       </div> */}
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">Instructors</h3>
+        <h3 className="text-lg font-semibold text-white mb-2">Instructors</h3>
         {renderMembers(groupedMembers.INSTRUCTOR)}
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">Beneficiaries</h3>
+        <h3 className="text-lg font-semibold text-white mb-2">Learners</h3>
         {renderMembers(groupedMembers.BENEFICIARY)}
       </div>
 

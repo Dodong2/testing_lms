@@ -45,7 +45,7 @@ const AnnouncePostItem = ({ post, session, programId, handleToggleUpdateModal, h
     };
 
     return (
-        <div key={post.id} className="bg-[#222222] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
+        <div key={post.id} className="bg-[#525252] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-2">

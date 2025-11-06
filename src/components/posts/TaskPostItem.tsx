@@ -5,20 +5,12 @@ import { Session } from "next-auth";
 import Link from "next/link";
 /* components */
 import Comments from "../Comments";
-import PostsContent from "./PostsContent";
-import PostFiles from "./PostFiles";
-import ModalFileViewer from "../ModalFileViewer";
-import FileViewer from "../FileViewer";
 /* types */
 import { PostGetTypes } from "@/types/postManagetypes";
 /* date format */
 import { format } from "date-fns";
 /* icons */
 import { FiEdit, FiMoreVertical, FiTrash2 } from "react-icons/fi";
-import { formatCreatedAt } from "@/util/formatCreatedAt";
-import { CiPen } from "react-icons/ci";
-import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa";
-import { HiChevronDown } from 'react-icons/hi';
 
 interface TaskPostItemProps {
     post: PostGetTypes
@@ -30,22 +22,10 @@ interface TaskPostItemProps {
 }
 
 const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handleToggleDeleteModal, createComment }: TaskPostItemProps) => {
-    const [showFiles, setShowFiles] = useState(false)
-    const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const getFileType = (url: string): string => {
-        if (url.match(/\.(jpg|jpeg|png|gif|svg)$/i)) return "image";
-        if (url.match(/\.pdf$/i)) return "pdf";
-        if (url.match(/\.(mp4|webm)$/i)) return "video";
-        if (url.match(/\.(mp3|wav)$/i)) return "audio";
-        if (url.match(/\.docx?$/i)) return "docx";
-        if (url.match(/\.pptx?$/i)) return "pptx";
-        return "text";
-    };
-
     return (
-        <div key={post.id} className="bg-[#222222] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
+        <div key={post.id} className="bg-[#525252] p-3 rounded-md focus:outline-none focus:ring-2 hover:ring-gray-500">
             {/* Header */}
             <div className="relative flex gap-2">
 
@@ -165,15 +145,6 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                     createComment({ programId, postId: post.id, content })
                 }
             />
-
-            <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>
-                {selectedFile && (
-                    <FileViewer
-                        fileUrl={selectedFile.url}
-                        fileType={getFileType(selectedFile.url)}
-                    />
-                )}
-            </ModalFileViewer>
         </div>
     )
 }

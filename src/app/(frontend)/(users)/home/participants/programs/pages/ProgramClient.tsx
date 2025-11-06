@@ -49,19 +49,19 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
         {/* Main content - LEFT SIDE */}
         <div className="rounded-md overflow-hidden">
           {/* Header */}
-          <div className="relative bg-gray-800 rounded-t-1xl text-white p-5">
+          <div className="relative bg-gradient-to-r from-yellow-400 via-yellow-400 to-white rounded-t-1xl text-gray-900 p-5">
             <h2 className="text-3xl font-semibold">{program.title}</h2>
             <h4 className="text-1xl font-semibold">{program.subtitle}</h4>
 
             {/* explanations */}
             <div>
-              <button onClick={ToggleExplanations} className={`absolute top-5 right-5`} title="view program description">
-                {showExplanation ? <IoMdInformationCircle size={30} /> : <IoMdInformationCircleOutline size={30} />}
+              <button onClick={ToggleExplanations} className={`absolute top-5 right-5 transition-all duration-200`} title="view program description">
+                {showExplanation ? <IoMdInformationCircle className="text-amber-600" size={30} /> : <IoMdInformationCircleOutline size={30} />}
               </button>
               {showExplanation && (
-                <div className="bg-white p-2 rounded-md border border-gray-300 mt-2">
+                <div className="bg-white/30 p-2 rounded-md border border-gray-300 mt-2">
                   <h1 className="text-1xl font-bold text-gray-700 whitespace-pre-wrap">Program descriptions:</h1>
-                  <div className="p-0.5 rounded-md w-full bg-gray-700"></div>
+                  {/* <div className="p-0.5 rounded-md w-full bg-gray-700"></div> */}
                   <span className="text-sm text-gray-700 whitespace-pre-wrap">{program.explanation}</span>
                 </div>
               )}
