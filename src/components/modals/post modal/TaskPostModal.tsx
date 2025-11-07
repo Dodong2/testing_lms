@@ -119,7 +119,7 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
                 postType === "TASK" ? "Write a task description..." : "Write an announcement..."
               }
               className="bg-white shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-              rows={5}
+              rows={7}
               required
             />
 
@@ -141,19 +141,15 @@ const TaskPostModal = ({ programId, onSuccess, onClose }: TaskPostModalProps) =>
             <FileUpload files={files} setFiles={setFiles} />
 
             <div className="flex gap-2 justify-end">
-              <button
-                type="button"
+              <button type="button"
                 className="px-4 py-2 text-gray-700 hover:bg-red-500 hover:text-white font-medium rounded-full hover:shadow-lg transition-colors duration-200 disabled:bg-blue-300 disabled:cursor-not-allowed"
                 onClick={onClose}>
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-700 duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer active:scale-95 transition-transform" disabled={isPending}
-              >
+              <button type="submit"
+                className="px-4 py-2 bg-blue-500 text-white font-medium rounded-full shadow-lg hover:bg-blue-700 duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer active:scale-95 transition-transform" disabled={isPending}>
                 {isPending ? "Posting..." : "Post"}
               </button>
-
             </div>
           </div>
         </form>

@@ -2,7 +2,7 @@
 /* hooks */
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { ReactEventHandler, useState } from "react";
 /* hooks */
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
 import { usePost } from "@/hooks/post/usePost";
@@ -48,6 +48,15 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
 
   const handleDelete = (commentId: string) => {
     deleteComment({ postId, commentId })
+  }
+
+  // for adjust text
+  const adjustText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // auto-resize logic
+    const target = e.target;
+    target.style.height = "auto"; // reset height
+    const maxHeight = 6 * 24; // assuming ~24px per line height
+    target.style.height = `${Math.min(target.scrollHeight, maxHeight)}px`;
   }
 
   return (
@@ -129,22 +138,20 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
           ))}
 
 
-
           {/* comments input */}
-          <div className="flex items-center gap-2 mt-1">
-            <input
-              type="text" value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add Comment"
-              required
-              className="flex-1 p-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
-            <button className={`text-gray-600 hover:text-gray-800 active:scale-95 transition-transform ${!newComment.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
-              onClick={handleSubmitComment} disabled={!newComment.trim()} >
-              <FiSend />
-            </button>
+            <div className="bg-white flex items-center rounded-3xl px-3 w-64 focus-within:w-96 shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out border-b-3 border-l-3 border-transparent hover:border-b-amber-500 hover:border-l-amber-500 focus-within:border-amber-500">
+              <textarea
+                value={newComment}
+                onChange={(e) => { setNewComment(e.target.value), adjustText(e) }} placeholder="Add Comment" required className="flex-grow py-2 bg-transparent focus:outline-none resize-none overflow-hidden" rows={1} />
+              <button
+                className={`text-[#00306E] flex items-center justify-center hover:text-gray-800 active:scale-95 transition-transform   ${!newComment.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={handleSubmitComment}
+                disabled={!newComment.trim()}>
+                <FiSend size={20} />
+              </button>
+            </div>
+
           </div>
-        </div>
       )}
     </div>
   );
