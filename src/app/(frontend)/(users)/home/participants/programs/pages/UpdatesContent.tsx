@@ -46,8 +46,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
 
   return (
-    <>
-      <div className="w-full">
+    <div>
         <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start">
           {/* Main content - LEFT SIDE */}
           <div className="rounded-md overflow-hidden">
@@ -104,7 +103,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             )}
 
             {/* Posts List */}
-            <div className="space-y-6 rounded-md shadow mt-3">
+            <div className="space-y-6 rounded-md shadow mt-1">
               {!posts?.length ? (
                 <EmptyState message="no post yet." />
               ) : (
@@ -174,7 +173,6 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             onSuccess={() => handleToggleDeleteModal(selectedPost)}
           />
         )}
-      </div>
-    </>
+    </div>
   );
 }

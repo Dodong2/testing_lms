@@ -11,7 +11,6 @@ import FileViewer from "@/components/FileViewer";
 import { PostGetTypes, FileMeta, SubmissionPostTypes } from "@/types/postManagetypes";
 /* pages */
 const SubmissionForm = dynamic(() => import("./SubmissionForm"));
-const SubmissionList = dynamic(() => import("./SubmissionList"));
 /* icons */
 import { FaArrowLeft } from "react-icons/fa6";
 
@@ -73,7 +72,6 @@ export default function SubmissionClient({
             <div>
                 {session.user.role === "BENEFICIARY" && <SubmissionForm postId={postId} programId={programId} />}
             </div>
-            {/* {session.user.role === "INSTRUCTOR" && <SubmissionList postId={postId} programId={programId} />} */}
 
 
             <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>

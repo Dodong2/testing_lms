@@ -53,8 +53,8 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({ variant = 'card' }) 
 
   // default: card
   return (
-    <div className="p-1 rounded-lg border border-transparent bg-white/5 shadow-sm animate-pulse">
-      <div className="w-full h-30 rounded-md bg-gray-300/60 mb-2" />
+    <div className=" rounded-lg border border-transparent bg-white/5 shadow-sm animate-pulse">
+      <div className="w-full h-25 rounded-md bg-gray-300/60 mb-2" />
       {/* <div className="h-4 rounded bg-gray-300/60 w-3/4 mb-2" />  */}
       {/* <div className="h-3 rounded bg-gray-300/60 w-1/2" /> */}
       <div className="flex items-center justify-between">
