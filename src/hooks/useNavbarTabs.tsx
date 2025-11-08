@@ -21,8 +21,8 @@ interface Program {
 interface ProgramClientProps {
     program: Program
     username: string
-    role: "INSTRUCTOR" | "BENEFICIARY" | "ADMIN"
     postId?: string
+    role: "INSTRUCTOR" | "BENEFICIARY" | "ADMIN"
 }
 
 export const useNavbarTabs = ({ program, username, role, postId }: ProgramClientProps) => {
@@ -35,7 +35,7 @@ export const useNavbarTabs = ({ program, username, role, postId }: ProgramClient
                 return role === 'ADMIN' || role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<UpdatesContent programId={program.id} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only admin and beneficiary can view this tab.</p> )
             case 'assignments':
-                return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<AssignmentContent programId={program.id} postId={""} />)
+                return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<AssignmentContent programId={program.id} postId={postId ?? ""} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only instructors and beneficiary can view this tab.</p> )
             case 'members':
                 return role === 'BENEFICIARY' || role === 'INSTRUCTOR' ? (<MemberContent programId={program.id} />)
