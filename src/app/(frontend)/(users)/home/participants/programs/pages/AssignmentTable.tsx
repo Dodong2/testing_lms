@@ -39,9 +39,9 @@ export const AssignmentTable = ({ programId, beneficiaries, submissions }: Assig
       <table border={1} className="min-w-1.5 border-collapse text-left text-sm text-gray-200 rounded-lg">
         <thead>
           <tr  className="border-b border-white">
-            <th className="px-2 py-1 font-semibold bg-gray-400 border-r">Name</th>
+            <th className="px-2 py-1 font-semibold border-r">Name</th>
             {taskPosts.map(post => (
-              <th key={post.id}  className="bg-gray-400 px-2 py-1 border-r font-semibold max-w-[200px] truncate whitespace-nowrap overflow-hidden text-ellipsis">{post.title}</th>
+              <th key={post.id}  className=" px-2 py-1 border-r font-semibold max-w-[200px] truncate whitespace-nowrap overflow-hidden text-ellipsis">{post.title}</th>
             ))}
           </tr>
         </thead>
@@ -53,7 +53,7 @@ export const AssignmentTable = ({ programId, beneficiaries, submissions }: Assig
                 const submission = submissions.find(sub => sub.student.id === student.id && sub.id === post.id)
                 const hasSubmission = !!submission
                 return (
-                  <td key={post.id} onClick={() => handleCellClick(student.id, student.name, post.id, post.title, hasSubmission)} className="px-2 py-1">
+                  <td key={post.id} onClick={() => handleCellClick(student.id, student.name, post.id, post.title, hasSubmission)} className="px-2 py-1 hover:bg-gray-400 transition-colors duration-200">
                     <div className="flex items-center gap-2 text-1xl">
                     {hasSubmission ? `0/100 ` : `0/100 `}
                     {hasSubmission ? <FaCheck size={20} className="text-green-500" /> : <IoClose size={20} className="text-red-600"/>}
