@@ -10,13 +10,19 @@ export const submitWork = async (programId: string, postId: string, payload: Sub
     })
 }
 
-export const getSubmissions = async (programId: string, postId: string): Promise<Submission[]> => {
-    const data = await apiFetch<Submission[] | Submission | null>(`/api/program/${programId}/posts/${postId}/submissions`, {
+export const getSubmissions = async (programId: string, postId: string, getAll: boolean = false): Promise<Submission[]> => {
+    const url = `/api/program/${programId}/posts/${postId}/submissions${getAll ? '?getAll=true' : ''}`
+    const data = await apiFetch<Submission[] | Submission | null>(url, {
         method: 'GET',
         credentials: 'include'
     })
     if (!data) return [];
     return Array.isArray(data) ? data : [data];
+}
+
+//getting all submissions
+export const getAllSubmissions = async(programId: string): Promise<Submission[]> => {
+    return getSubmissions(programId, 'dummy', true)
 }
 
 export const gradeSubmission = async ({ programId, postId, submissionId, grade, feedback }: gradeSubmissionTypes) => {

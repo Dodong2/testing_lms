@@ -131,7 +131,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
                     updated[index] = e.target.value
                     setLinks(updated)
                   }}
-                  required={index === 0}
+                  // required={index === 0}
                   className="bg-white shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
                 />
                 {links.length > 1 && (

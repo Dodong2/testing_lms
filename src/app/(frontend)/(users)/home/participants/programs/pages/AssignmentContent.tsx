@@ -17,7 +17,7 @@ export default function AssignmentContent({ programId, postId }: { programId: st
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
   const { data: program, isLoading: programLoading } = useProgram().useProgramById(programId)
-  const { data: submissions, isLoading: subsLoading } = useSubmission(programId, postId).useGetSubmssions()
+  const { data: AllSubmissions, isLoading: subsLoading } = useSubmission(programId, '').useGetAllSubmissions()
 
   usePostEvents(programId)
 
@@ -34,12 +34,13 @@ export default function AssignmentContent({ programId, postId }: { programId: st
     image: m.user.image
   })) || []
 
+  const taskPost = posts?.filter(post => post.tag === 'TASK') || []
 
   return (
    <div>
     {/* for instructor */}
     {session?.user.role === 'INSTRUCTOR' && (
-      <AssignmentTable programId={programId} beneficiaries={beneficiaries} submissions={submissions || []}/>
+      <AssignmentTable programId={programId} beneficiaries={beneficiaries} taskPosts={taskPost} submissions={AllSubmissions || []}/>
     )}
 
     {session?.user.role === 'BENEFICIARY' && (

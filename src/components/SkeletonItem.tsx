@@ -25,7 +25,7 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({ variant = 'card' }) 
 
   if(variant === 'feedbackLists') {
     return (
-      <div className="w-full rounded-md p-4 bg-gray-300/30 dark:bg-gray-700/30 animate-pulse">
+      <div className="w-full rounded-md p-3 bg-gray-300/30 dark:bg-gray-700/30 animate-pulse">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-2 w-full">
             <div className="h-4 w-1/4 rounded bg-gray-400/60" /> {/* name */}

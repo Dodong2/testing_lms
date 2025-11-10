@@ -33,7 +33,7 @@ export default function FeedbackManagePage() {
     })
 
     return (
-        <div className="">
+        <div>
             <div className="flex gap-2">
                 <div className="flex flex-col bg-[#525252] p-3 rounded-2xl font-bold text-white"><h2>Total Feedbacks</h2> <span className="text-2xl">{feedbacksData.length}</span></div>
                 <div className="flex flex-col bg-[#525252] p-3 rounded-2xl font-bold text-white"><h2>Total Anonymous</h2><span className="text-2xl">{data?.counts.anonymous}</span></div>
@@ -41,7 +41,7 @@ export default function FeedbackManagePage() {
             </div>
 
 
-            {/* 🔘 Filter Buttons */}
+            {/* Filter Buttons */}
             <div className="flex flex-wrap justify-between items-center gap-2 mt-3 bg-[#FFBD17] p-2 rounded-t-2xl">
                 <h1 className="text-2xl font-medium">Feedback Management</h1>
                 <div className="flex gap-1.5">
@@ -74,7 +74,7 @@ export default function FeedbackManagePage() {
                             return (
                                 <div key={f.id} className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ${!isRead ? "border-l-4 border-amber-500" : ""}`}>
                                     {/* Summary row */}
-                                    <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-red-50" : "hover:bg-amber-200"} ${isOpen ? 'bg-amber-200' : ''}`}>
+                                    <div onClick={() => handleToggle(f.id, isOpen)} className={`flex items-center justify-between p-2 cursor-pointer transition-colors duration-200 ${!isRead ? "bg-red-50" : "hover:bg-amber-200"} ${isOpen ? 'bg-amber-200' : ''}`}>
                                         <div className="flex-1 min-w-0">
                                             <div className={`font-semibold ${!isRead ? "text-amber-800" : "text-gray-900"} truncate`}>
                                                 {isAnon ? `Anonymous Feedback` : `${userName}`}

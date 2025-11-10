@@ -61,19 +61,41 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
 
     const user = await prisma.user.findUnique({ where: { email: session.user.email } })
     const { postId } = await context.params
+    const url = new URL(req.url)
+    const getAll = url.searchParams.get('getAll') === 'true'
 
     if (user?.role === "BENEFICIARY") {
         const mySubmission = await prisma.submission.findFirst({
-            where: { postId, studentId: user.id }
+            where: { postId, studentId: user.id },
+            include: { 
+                student: { select: { id: true, name: true, image: true } },
+                post: { select: { id: true, title: true } }
+            }
         })
         return NextResponse.json(mySubmission)
     }
 
     if (user?.role === "INSTRUCTOR") {
+        if(getAll) {
+            const AllSubmissions = await prisma.submission.findMany({
+                where: {
+                    post: {
+                        programId: (await context.params).id,
+                        tag: 'TASK'
+                    }
+                },
+                include: {
+                    student: { select: { id: true, name: true, image: true } },
+                    post: { select: { id: true, title: true } }
+                }
+            })
+            return NextResponse.json(AllSubmissions)
+        }
         const all = await prisma.submission.findMany({
             where: { postId },
             include: {
-                student: { select: { id: true, name: true, image: true } }
+                student: { select: { id: true, name: true, image: true } },
+                post: { select: { id: true, title: true } }
             }
         })
         return NextResponse.json(all)

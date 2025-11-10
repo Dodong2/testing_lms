@@ -190,7 +190,7 @@ model Submission {
   studentId   String
   student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
   files       Json?
-  links       String
+  links       Json?
   grade       Int?
   feedback    String?
   submittedAt DateTime  @default(now())

@@ -47,7 +47,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
   return (
     <div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start mt-3">
           {/* Main content - LEFT SIDE */}
           <div className="rounded-md overflow-hidden">
             {/* Post input area for beneficiary for bawal mag post si beneficiary*/}

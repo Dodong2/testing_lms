@@ -63,7 +63,7 @@ export default function ProgramManage() {
               programData.programs?.map(program => {
                 const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0, totalMembers: 0 }
                 return (
-                  <div key={program.id} className="bg-white rounded-xl shadow-md p-5 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.02]">
+                  <div key={program.id} className="bg-[#E7E7E7] rounded-xl shadow-md p-5 flex flex-col justify-between transition-transform duration-200 hover:scale-[1.02]">
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900">{program.title}</h3>

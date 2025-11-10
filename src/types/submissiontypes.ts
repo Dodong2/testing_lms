@@ -15,6 +15,7 @@ export interface gradeSubmissionTypes {
 
 export interface Submission {
   id: string;
+  postId: string
   student: {
     id: string;
     name: string;
