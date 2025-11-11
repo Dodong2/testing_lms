@@ -1,7 +1,8 @@
 "use client"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, HTMLInputTypeAttribute } from "react"
 import Image from "next/image"
 import { Submission } from "@/types/submissiontypes"
+import { toast } from "react-hot-toast"
 /* hooks */
 import { useSubmission } from "@/hooks/submission/useSubmission"
 /* components */
@@ -9,7 +10,8 @@ import FileViewer from "@/components/FileViewer"
 import PostFiles from "@/components/posts/PostFiles"
 import ModalFileViewer from "@/components/ModalFileViewer"
 /* icons */
-import { toast } from "react-hot-toast"
+import { FaCheckCircle } from "react-icons/fa";
+import { IoLink } from "react-icons/io5";
 
 interface GradeModalProps {
   programId: string
@@ -24,9 +26,12 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
   const [grade, setGrade] = useState<number>(0)
   const [feedback, setFeedback] = useState<string>("")
   const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
-  
+
   const { useGradeSubmission } = useSubmission(programId, postId)
   const { mutate: gradeWorks, isPending } = useGradeSubmission()
+
+  const [grade50, setGrade50] = useState(50)
+  const [grade100, setGrade100] = useState(100)
 
   // Initialize form with existing grade/feedback if submission exists - SAME LOGIC AS SUBMISSIONLIST
   useEffect(() => {
@@ -39,6 +44,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
     }
   }, [submission])
 
+  // for submit grade
   const handleSubmit = () => {
     if (!submission) {
       toast.error("No submission found to grade")
@@ -64,6 +70,18 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
     )
   }
 
+  // for logic if nothing changes the can't submit
+  const isChanged = submission && (grade !== (submission.grade ?? 0) || feedback !== (submission.feedback ?? 0))
+  // for all around logic
+  const canSubmit = submission && !isPending && isChanged
+
+  const gradeCap = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = Number(e.target.value);
+    // Enforce 0–100 range strictly
+    const capped = Math.max(0, Math.min(100, input));
+    setGrade(capped);
+  }
+
   const getFileType = (url: string): string => {
     if (url.match(/\.(jpg|jpeg|png|gif|svg)$/i)) return "image";
     if (url.match(/\.pdf$/i)) return "pdf";
@@ -77,9 +95,10 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
   return (
     <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm">
       <div className="bg-[#E7E7E7] p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-start mb-4">
+        <div className="mb-2">
           <div>
-            <h1 className="text-2xl text-gray-900 font-bold">{postTitle}</h1>
+            <h1 className="text-[20px] text-gray-900 font-bold mb-2">{postTitle}</h1>
+            <div className="p-0.5 rounded-md w-full bg-gray-500"></div>
             <div className="flex items-center gap-2 mt-2">
               {student.image && (
                 <Image
@@ -95,35 +114,29 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   {student.name}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {submission?.grade != null ? `Grade: ${submission.grade}` : 'Not graded yet'}
+                  {submission?.grade != null ? <span className="text-green-500">Grade: {submission.grade}</span> : 'Not graded yet'}
                 </p>
               </div>
             </div>
           </div>
-          <button 
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
-          >
-            ×
-          </button>
         </div>
 
         {/* Submission Content - SAME STRUCTURE AS SUBMISSIONLIST */}
         {submission ? (
           <div className="mb-6">
-            <h4 className="font-semibold text-gray-900 mb-3">Submitted Work:</h4>
-            
+            <h4 className="font-semibold mb-3">Submitted Work:</h4>
+
             {/* Files - SAME AS SUBMISSIONLIST */}
             {submission.files && submission.files.length > 0 && (
               <div className="mb-4">
-                <p className="text-sm font-medium text-gray-700 mb-2">Files:</p>
+                <p className="text-sm font-medium text-amber-500 mb-2">Files:</p>
                 <div className="space-y-2">
                   {submission.files.map((file, idx) => (
-                    <PostFiles 
-                      key={idx} 
-                      name={file.name} 
-                      url={file.url} 
-                      onClick={(f) => setSelectedFile(f)} 
+                    <PostFiles
+                      key={idx}
+                      name={file.name}
+                      url={file.url}
+                      onClick={(f) => setSelectedFile(f)}
                     />
                   ))}
                 </div>
@@ -132,18 +145,18 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
 
             {/* Links - SAME LOGIC AS SUBMISSIONLIST */}
             {submission.links && submission.links.length > 0 && (
-              <div className="mb-4">
-                <p className="text-sm font-medium text-gray-700 mb-2">Links:</p>
+              <div className="mb-2">
+                <p className="text-sm font-medium text-amber-500 mb-2">Links:</p>
                 <div className="space-y-2">
                   {Array.isArray(submission.links) ? (
                     submission.links.map((link, idx) => (
                       <div key={idx} className="flex items-center">
-                        <span className="mr-2">🔗</span>
-                        <a 
-                          href={link} 
-                          target="_blank" 
+                        <span className="mr-2 text-blue-600"><IoLink size={20}/></span>
+                        <a
+                          href={link}
+                          target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 underline text-sm break-all"
+                          className="text-blue-600 underline text-sm break-all hover:text-green-600 transition-colors duration-200"
                         >
                           {link}
                         </a>
@@ -152,9 +165,9 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   ) : (
                     <div className="flex items-center">
                       <span className="mr-2">🔗</span>
-                      <a 
+                      <a
                         href={submission.links}
-                        target="_blank" 
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-800 underline text-sm break-all"
                       >
@@ -172,52 +185,73 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
 
             {/* Existing Grade & Feedback - SAME AS SUBMISSIONLIST */}
             {submission.grade != null && (
-              <div className="mt-4 p-3 bg-gray-50 rounded border">
-                <p className="text-sm text-gray-600">
-                  <span className="font-medium">Current Grade:</span> {submission.grade}
-                </p>
-                {submission.feedback && (
-                  <p className="text-sm text-gray-600 mt-1">
-                    <span className="font-medium">Current Feedback:</span> {submission.feedback}
+              <div>
+                <div className="flex items-center gap-1 font-bold italic text-green-500"><h1>Graded</h1> <FaCheckCircle /></div>
+                <div className="p-3 bg-gray-50 rounded border border-gray-300">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Current Grade:</span> {submission.grade}
                   </p>
-                )}
+                  {submission.feedback && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      <span className="font-medium">Current Feedback:</span> {submission.feedback}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="mb-6 p-4 bg-yellow-50 rounded border border-yellow-200">
+          <div className="mb-3 p-4 bg-yellow-50 rounded border border-yellow-200">
             <p className="text-yellow-700">This student hasn't submitted work for this task yet.</p>
           </div>
         )}
 
         {/* Grading Form - SAME STRUCTURE AS SUBMISSIONLIST */}
-        <div className="border-t pt-4">
+        <div className="p-0.5 rounded-md w-full bg-gray-500"></div>
+        <div className="mt-2">
           <h4 className="font-semibold text-gray-700 mb-3">Grade this submission</h4>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Grade (0-100):
+                Grade <span className="text-amber-500">(0-100)</span>:
               </label>
-              <input 
-                type="number" 
-                min="0" 
-                max="100" 
-                value={grade} 
-                onChange={e => setGrade(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={!submission || isPending}
-              />
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={grade}
+                  onChange={(e) => { gradeCap }}
+                  className="bg-white shadow w-[100px] px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={!submission || isPending}
+                  required
+                />
+                {/* Quick-grade buttons */}
+                <button
+                  onClick={() => setGrade(50)}
+                  disabled={!submission || isPending}
+                  className={`relative flex justify-center items-center shadow px-3 py-1 rounded-md text-sm font-medium active:scale-95 transition ${grade === 50 ? "bg-[#00306E] text-white cursor-not-allowed" : "bg-white text-gray-700 hover:bg-blue-100"}`}>
+                  50
+                </button>
+
+                <button
+                  onClick={() => setGrade(100)}
+                  disabled={!submission || isPending}
+                  className={`relative flex justify-center items-center shadow px-3 py-1 rounded-md text-sm font-medium active:scale-95 transition ${grade === 100 ? "bg-[#00306E] text-white cursor-not-allowed" : "bg-white text-gray-700 hover:bg-blue-100"}`}>
+                  100
+                </button>
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Feedback:
+                Comments:
               </label>
-              <textarea 
-                value={feedback} 
+              <textarea
+                value={feedback}
                 onChange={e => setFeedback(e.target.value)}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-white shadow w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Provide feedback for the student..."
                 disabled={!submission || isPending}
               />
@@ -227,18 +261,17 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3 mt-6">
-          <button 
+          <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition"
+            className="px-2 py-2 rounded-md font-medium shadow bg-red-500 text-white hover:bg-red-600 transition"
             disabled={isPending}
           >
             Cancel
           </button>
-          <button 
+          <button
             onClick={handleSubmit}
-            disabled={!submission || isPending}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-          >
+            disabled={!canSubmit}
+            className={`px-2 py-2 rounded-md font-medium shadow text-white ${!canSubmit ? "bg-[#00306E] cursor-not-allowed opacity-50" : "bg-[#00306E] hover:bg-blue-700"}`}>
             {isPending ? "Submitting..." : "Submit Grade"}
           </button>
         </div>
@@ -247,9 +280,9 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
       {/* File Viewer Modal */}
       <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>
         {selectedFile && (
-          <FileViewer 
-            fileUrl={selectedFile.url} 
-            fileType={getFileType(selectedFile.url)} 
+          <FileViewer
+            fileUrl={selectedFile.url}
+            fileType={getFileType(selectedFile.url)}
           />
         )}
       </ModalFileViewer>

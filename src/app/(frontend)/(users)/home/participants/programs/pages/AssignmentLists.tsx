@@ -32,7 +32,7 @@ export const AssignmentLists = ({ programId }: { programId: string }) => {
 
   const taskPosts = posts?.filter((post) => post.tag === "TASK") ?? []
   return (
-     <div className="space-y-6 rounded-md shadow mt-3">
+     <div className="space-y-3 rounded-md shadow mt-3">
       {/* assigments lists */}
       {taskPosts.length > 0 ? (
         taskPosts.map((post) =>  (

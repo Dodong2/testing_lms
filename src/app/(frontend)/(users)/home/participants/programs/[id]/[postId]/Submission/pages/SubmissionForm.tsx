@@ -1,15 +1,20 @@
 'use client'
-import React, { useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast"
-/* util */
-import { UploadButton } from "@/util/Uploadthing"
+/* components */
+import FileViewer from "@/components/FileViewer"
+import PostFiles from "@/components/posts/PostFiles"
+import ModalFileViewer from "@/components/ModalFileViewer"
 /* hooks */
 import { useSubmission } from "@/hooks/submission/useSubmission"
 import { useSubmissionEvents } from "@/hooks/socket/useSubmissionEvents"
+/* types */
 import { Submission } from "@/types/submissiontypes"
 /* components */
 import { FileUpload } from "@/components/FileUpload"
 /* icons */
+import { FaCheckCircle } from "react-icons/fa";
+import { IoLink } from "react-icons/io5";
 
 interface SubmissionFormProps {
   postId: string
@@ -28,6 +33,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
   const { data: submissions, isLoading } = useSubmission(programId, postId).useGetSubmssions()
   const [files, setFiles] = useState<FileMeta[]>([]);
   const [links, setLinks] = useState<string[]>([""]);
+  const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
 
   const mySubmission = submissions?.[0] as Submission | undefined
 
@@ -41,26 +47,36 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
     submitWork({ links: validLinks, files })
   }
 
+  const getFileType = (url: string): string => {
+    if (url.match(/\.(jpg|jpeg|png|gif|svg)$/i)) return "image";
+    if (url.match(/\.pdf$/i)) return "pdf";
+    if (url.match(/\.(mp4|webm)$/i)) return "video";
+    if (url.match(/\.(mp3|wav)$/i)) return "audio";
+    if (url.match(/\.docx?$/i)) return "docx";
+    if (url.match(/\.pptx?$/i)) return "pptx";
+    return "text";
+  };
 
   return (
-    <div className="space-y-1 bg-[#00306E] p-3 rounded-2xl">
-      <div></div>
-      <h2 className="font-bold text-2xl text-white">Task Submission</h2>
-
+    <div className="rounded-2xl">
+      <div className="p-2 bg-[#00306E] rounded-t-md"><h2 className="font-bold text-2xl text-white">Task Submission</h2></div>
       {/* If user has already submitted */}
       {mySubmission ? (
-        <div className="p-3 border rounded bg-gray-50">
-          <p className="text-sm">
-            <span className="font-semibold">Status:</span>{" "}
-            ✅ Already submitted on{" "}
+        <div className="p-3 rounded-b-md bg-[#E7E7E7]">
+          <h1 className="font-semibold text-gray-900">Status</h1>
+          <div className="text-sm flex items-center gap-1">
+            <FaCheckCircle className="text-green-500" size={15}/> 
+            <div className="text-gray-900">
+              Already submitted on
             {new Date(mySubmission.createdAt).toLocaleDateString()}
-          </p>
+            </div>
+          </div>
 
-          <p className="text-sm mt-2">
+          <p className="text-sm mt-2 flex items-center gap-2">
             <span className="font-semibold">Grade:</span>{" "}
             {mySubmission.grade !== null && mySubmission.grade !== undefined
-              ? `${mySubmission.grade}/100`
-              : "0/100 (Not graded yet)"}
+              ? <div className="font-semibold"><span className="text-green-600">{mySubmission.grade}</span>/100</div>
+              : <div className="font-semibold"><span className="text-red-600">0</span>/100 <span className="text-amber-500">(Not graded yet)</span></div>}
           </p>
 
           {mySubmission.feedback && (
@@ -70,21 +86,16 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
           )}
 
           <div className="mt-2">
-            <p className="font-medium text-sm">Your Files:</p>
+            <p className="text-gray-900 font-medium text-sm">File Submmited:</p>
             {mySubmission.files && mySubmission.files.length > 0 ? (
               <ul className="text-sm mt-1">
                 {mySubmission.files.map((f, idx) => (
-                  <li key={idx}>
-                    📎{" "}
-                    <a
-                      href={f.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      {f.name}
-                    </a>
-                  </li>
+                  <PostFiles
+                    key={idx}
+                    name={f.name}
+                    url={f.url}
+                    onClick={(f) => setSelectedFile(f)}
+                  />
                 ))}
               </ul>
             ) : (
@@ -94,18 +105,20 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
             {mySubmission.links && mySubmission.links.length > 0 && (
               <div className="mt-2">
                 <p className="font-medium text-sm">Submitted Links:</p>
-                <ul className="list-disc list-inside text-sm">
+                <ul className="text-sm">
                   {mySubmission.links.map((link, idx) => (
                     <li key={idx}>
-                      🔗{" "}
+                      <div className="flex items-center gap-1">
+                      <IoLink className="text-blue-600" size={20}/>
                       <a
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 underline"
+                        className="text-blue-600 underline hover:text-green-600 transition-colors duration-200 mb-1"
                       >
                         {link}
                       </a>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -115,8 +128,8 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
         </div>
       ) : (
         // If no submission yet
-         <form onSubmit={handleSubmit} className="space-y-3">
-          <p className="text-sm text-white">Submit your work below:</p>
+        <form onSubmit={handleSubmit} className="p-3 rounded-b-md bg-[#E7E7E7]">
+          <h1 className="font-semibold text-gray-900">Submit your work below:</h1>
 
           {/* Dynamic Links Section */}
           <div className="space-y-2">
@@ -156,7 +169,7 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
           </div>
 
           {/* File Upload Section */}
-          <p className="text-lg font-semibold text-white">Files:</p>
+          <p className="text-gray-900 font-medium text-sm mt-2"></p>
           <FileUpload files={files} setFiles={setFiles} />
 
           {/* Submit Button */}
@@ -171,6 +184,16 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
           </div>
         </form>
       )}
+
+      {/* File Viewer Modal */}
+      <ModalFileViewer isOpen={!!selectedFile} onClose={() => setSelectedFile(null)}>
+        {selectedFile && (
+          <FileViewer
+            fileUrl={selectedFile.url}
+            fileType={getFileType(selectedFile.url)}
+          />
+        )}
+      </ModalFileViewer>
     </div>
   )
 }

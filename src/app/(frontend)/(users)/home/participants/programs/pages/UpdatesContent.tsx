@@ -47,7 +47,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
 
   return (
     <div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start mt-3">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 gap-4 items-start mt-2">
           {/* Main content - LEFT SIDE */}
           <div className="rounded-md overflow-hidden">
             {/* Post input area for beneficiary for bawal mag post si beneficiary*/}
@@ -103,7 +103,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
             )}
 
             {/* Posts List */}
-            <div className="space-y-6 rounded-md shadow mt-1">
+            <div className="space-y-3 rounded-md shadow mt-1">
               {!posts?.length ? (
                 <EmptyState message="no post yet." />
               ) : (

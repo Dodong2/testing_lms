@@ -18,7 +18,7 @@ interface AssignmentTableProps {
 export const AssignmentTable = ({ programId, beneficiaries, taskPosts, submissions }: AssignmentTableProps) => {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
   const [selectedPost, setSelectedPost] = useState<{ id: string; title: string } | null>(null)
-  const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string } | null>(null)
+  const [selectedStudent, setSelectedStudent] = useState<{ id: string; name: string, image?: string } | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Create a map for quick submission lookup
@@ -31,13 +31,13 @@ export const AssignmentTable = ({ programId, beneficiaries, taskPosts, submissio
     return map;
   }, [submissions]);
 
-  const handleCellClick = (studentId: string, studentName: string, postId: string, postTitle: string) => {
+  const handleCellClick = (studentId: string, studentName: string, postId: string, postTitle: string, studentImage?: string) => {
     const key = `${studentId}-${postId}`;
     const submission = submissionMap.get(key);
     
     setSelectedSubmission(submission || null);
     setSelectedPost({ id: postId, title: postTitle });
-    setSelectedStudent({ id: studentId, name: studentName });
+    setSelectedStudent({ id: studentId, name: studentName, image: studentImage });
     setIsModalOpen(true);
   }
 
@@ -72,16 +72,7 @@ export const AssignmentTable = ({ programId, beneficiaries, taskPosts, submissio
           {beneficiaries.map(student => (
             <tr key={student.id} className="border-b border-gray-600 hover:bg-[#5c5c5c] transition">
               <td className="px-2 py-1 w-[200px] whitespace-normal break-words text-left">
-                <div className="flex items-center gap-2">
-                  {student.image && (
-                    <img 
-                      src={student.image} 
-                      alt={student.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
                   <span>{student.name}</span>
-                </div>
               </td>
               {taskPosts.map(post => {
                 const submission = getSubmissionForStudentAndPost(student.id, post.id);
@@ -91,7 +82,7 @@ export const AssignmentTable = ({ programId, beneficiaries, taskPosts, submissio
                 return (
                   <td 
                     key={post.id} 
-                    onClick={() => handleCellClick(student.id, student.name, post.id, post.title)}
+                    onClick={() => handleCellClick(student.id, student.name, post.id, post.title, student.image)}
                     className="px-2 py-1 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
                   >
                     <div className="flex items-center justify-center gap-2 text-1xl">
