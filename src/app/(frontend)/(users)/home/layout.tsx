@@ -6,9 +6,6 @@ import Header from "@/components/Header";
 import { useFeedbackEvents } from "@/hooks/socket/useFeedbackSocket";
 /* icons */
 import { HiHome } from "react-icons/hi";
-// import { IoMdPeople } from "react-icons/io";
-import { LuFileSpreadsheet } from "react-icons/lu";
-// import { MdOutlineHelpOutline } from "react-icons/md";
 import { MdOutlineFeedback } from "react-icons/md";
 import { FaChartBar } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
@@ -25,13 +22,13 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
   const sidebarItems = [
     ...(session.user.role === 'BENEFICIARY' ? [
     { href: "/home/participants", icon: <HiHome />, text: "Programs" },
-    { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
+    // { href: "/home/participants/files", icon: <LuFileSpreadsheet />, text: "Files" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
   ]: []),
 
     ...(session.user.role === 'INSTRUCTOR' ? [
     { href: "/home/instructors", icon: <HiHome />, text: "Programs" },
-    { href: "/beneficiary/files", icon: <LuFileSpreadsheet />, text: "Files" },
+    // { href: "/home/participants/files", icon: <LuFileSpreadsheet />, text: "Files" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
     ]: []),
     
