@@ -64,7 +64,7 @@ export default function MemberContent({ programId }: { programId: string }) {
                   handleToggleEmail(member.user.email, e.target.checked)
                 }
                 className="h-5 w-5 appearance-none rounded-md border border-gray-400 checked:bg-red-500 checked:border-red-500 focus:outline-none cursor-pointer relative 
-                checked:before:content-['✔'] checked:before:text-white checked:before:absolute checked:before:top-0 checked:before:left-[1px] checked:before:text-sm"              />
+                checked:before:content-['✔'] checked:before:text-white checked:before:absolute checked:before:top-0 checked:before:left-[1px] checked:before:text-sm"/>
             )}
 
             {/* member lists */}

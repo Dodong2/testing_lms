@@ -10,6 +10,7 @@ import { MdOutlineFeedback } from "react-icons/md";
 import { FaChartBar } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { RiOrganizationChart } from "react-icons/ri";
+import { FaWpforms } from "react-icons/fa";
 /* for session */
 import { useSession } from "next-auth/react";
 
@@ -22,7 +23,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
   const sidebarItems = [
     ...(session.user.role === 'BENEFICIARY' ? [
     { href: "/home/participants", icon: <HiHome />, text: "Programs" },
-    // { href: "/home/participants/files", icon: <LuFileSpreadsheet />, text: "Files" },
+    { href: "/home/participants/evaluation", icon: <FaWpforms />, text: "Evaluation" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
   ]: []),
 
