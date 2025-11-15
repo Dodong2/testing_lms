@@ -218,36 +218,18 @@ enum JoinStatus {
 }
 
 model Evaluation {
-  id        String  @id @default(cuid())
-  programId String
-  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String  @id @default(cuid())
+  programId      String
+  program        Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  titleOfSeminar String
+  date           String
+  venue          String
+  suggestions    String?
+  name           String?
 
-  // Form data
-  seminarTitle String
-  date         String
-  venue        String
-  suggestions  String?
-  signature    String?
-
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  evaluationResponses EvaluationResponse[]
-
-  @@unique([programId, userId]) // One evaluation per user per program
-}
-
-model EvaluationResponse {
-  id           String     @id @default(cuid())
-  evaluationId String
-  evaluation   Evaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
-
-  // Question info
-  section     String // "CONTENT", "MATERIALS", "RESOURCE_PERSON", "OVERALL"
-  question    String // The question text
-  questionNum Int // Question number within section
-  rating      Int // 1-5 rating
+  ratings Json
 
   createdAt DateTime @default(now())
 }
