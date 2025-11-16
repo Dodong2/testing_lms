@@ -28,7 +28,16 @@ export type QuestionDistribution = {
   ratings: RatingCount[];      // distribution per rating
 };
 
+export type SummaryDistribution = {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+};
+
 export type EDAResponse = {
   totalRespondents: number;               // daily/weekly/monthly count
   questionDistributions: QuestionDistribution[];
+  summary: SummaryDistribution
 };

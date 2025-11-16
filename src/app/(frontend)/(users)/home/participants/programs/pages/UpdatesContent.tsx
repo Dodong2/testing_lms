@@ -10,6 +10,7 @@ import TaskPostItem from "@/components/posts/TaskPostItem";
 import AnnouncePostItem from "@/components/posts/AnnouncePostItem";
 // import BeneficiaryPostItem from "@/components/posts/BeneficiaryPostItem";
 import EmptyState from "@/components/EmptyState";
+import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* hooks */
 import { usePost } from "@/hooks/post/usePost";
 import { usePostEvents } from "@/hooks/socket/usePostSocket";
@@ -41,7 +42,7 @@ export default function UpdatesContent({ programId }: { programId: string }) {
     return <div>Invalid program ID</div>;
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <SkeletonGrid variant="post" count={2}/>
 
 
 
