@@ -1,4 +1,3 @@
-// api/program/[id]/eda/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
@@ -36,13 +35,6 @@ type EDAResponse = {
   summary: SummaryDistribution;
 };
 
-function isNotSameWeek(startDate: Date): boolean {
-  const today = new Date();
-  const todayIsMonday = today.getDay() === 1;
-  const savedIsMonday = startDate.getDay() === 1;
-  return todayIsMonday && !savedIsMonday;
-}
-
 function extractRatings(raw: EvaluationRatings): Record<string, number[]> {
   const map: Record<string, number[]> = {};
   Object.entries(raw).forEach(([category, values]) => {
@@ -57,42 +49,26 @@ function extractRatings(raw: EvaluationRatings): Record<string, number[]> {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string; date: string }> }
 ) {
   try {
-    const { id: programId } = await params;
-    
-    // ✅ Get today's date in YYYY-MM-DD format
-    const today = new Date();
-    const todayDate = today.toISOString().split('T')[0]; // e.g., "2025-11-17"
+    const { id: programId, date } = await params;
 
-    // ✅ Fetch evaluations for TODAY only
+    // Fetch evaluations for this specific date ONLY
     const evaluations = await prisma.evaluation.findMany({
-      where: { 
-        programId,
-        date: todayDate // ✅ Filter by today's date
-      },
-      select: { ratings: true, createdAt: true }
+      where: { programId, date },
+      select: { ratings: true }
     });
 
-    // Weekly reset logic - check if we need to show empty data
-    if (evaluations.length > 0) {
-      const latest = evaluations[evaluations.length - 1];
-
-      if (isNotSameWeek(latest.createdAt)) {
-        const empty: SummaryDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-
-        const resetData: EDAResponse = {
-          totalRespondents: 0,
-          questionDistributions: [],
-          summary: empty
-        };
-
-        return NextResponse.json(resetData);
-      }
+    if (evaluations.length === 0) {
+      return NextResponse.json({
+        totalRespondents: 0,
+        questionDistributions: [],
+        summary: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+      });
     }
 
-    // Process data
+    // Process ratings
     const questionMap: Record<string, number[]> = {};
     const summary: Distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
@@ -133,17 +109,15 @@ export async function GET(
       };
     });
 
-    const totalRespondents = evaluations.length;
-
     const response: EDAResponse = {
-      totalRespondents,
+      totalRespondents: evaluations.length,
       questionDistributions,
       summary
     };
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error(error);
+    console.error("ERROR getting historical EDA for date:", error);
     return NextResponse.json(
       { error: "Failed to load EDA data" },
       { status: 500 }

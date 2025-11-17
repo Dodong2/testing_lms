@@ -1,6 +1,6 @@
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createEvaluation } from "@/services/evaluationServices";
-import { CreateEvaluationInput } from "@/types/evaluationManagetypes";
+import { QueryClient, useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { createEvaluation, getEvaluationDates, getEvaluationsByDate, getEvaluationEDAByDate } from "@/services/evaluationServices";
+import { CreateEvaluationInput, EvaluationEntry, EDAResponse } from "@/types/evaluationManagetypes";
 
 
 export const useEvaluation = () => {
@@ -14,5 +14,28 @@ export const useEvaluation = () => {
         })
     }
 
-    return{ useCreateEval }
+    // for evaluation pages to get per date
+    const useEvaluationDates = (programId: string) => {
+        return useQuery({
+            queryKey: ["evaluation-dates", programId],
+            queryFn: () => getEvaluationDates(programId)
+        });
+    };
+
+    // for evaluation to view submissions by date
+    const useEvaluationsByDate = (programId: string, date: string) => {
+        return useQuery<EvaluationEntry[]>({
+            queryKey: ["evaluations-by-date", programId, date],
+            queryFn: () => getEvaluationsByDate(programId, date),
+        });
+    }
+
+    const useEvaluationEDAByDate = (programId: string, date: string) => {
+        return useQuery<EDAResponse>({
+            queryKey: ["evaluation-eda-by-date", programId, date],
+            queryFn: () => getEvaluationEDAByDate(programId, date),
+        });
+    }
+
+    return { useCreateEval, useEvaluationDates, useEvaluationsByDate, useEvaluationEDAByDate }
 }

@@ -41,3 +41,20 @@ export type EDAResponse = {
   questionDistributions: QuestionDistribution[];
   summary: SummaryDistribution
 };
+
+export type EvaluationEntry = {
+  id: string;
+  name: string | null;
+  titleOfSeminar: string;
+  venue: string;
+  suggestions?: string;
+  ratings: RatingData;
+  createdAt: string;
+
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string | null;
+  };
+};
