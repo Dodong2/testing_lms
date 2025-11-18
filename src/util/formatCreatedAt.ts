@@ -42,7 +42,7 @@ export function formatCreatedAt(date: Date | string): string {
   // ✅ If within months
   const months = differenceInMonths(now, parsedDate)
   if (months < 12) {
-    return format(parsedDate, "MM/dd/yy")
+    return format(parsedDate, "MMM d, yyyy")
   }
 
   // ✅ Otherwise full date

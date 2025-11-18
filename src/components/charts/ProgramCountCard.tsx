@@ -16,7 +16,7 @@ const ProgramCountCard = ({ className }: ProgramCountCardProps) => {
     if (error || !programCounts) return <p>Failed to load program data</p>;
 
     return (
-        <div className="bg-[#00306E] p-4 rounded-2xl border border-gray-100 shadow-md flex flex-col items-start justify-center">
+        <div className="bg-[#00306E] p-4 rounded-2xl border border-transparent hover:border-gray-100 transition shadow-md flex flex-col items-start justify-center">
             <h2 className="text-lg font-semibold text-white mb-1">Total Existing Programs</h2>
             <span className="text-4xl font-bold text-white">{programCounts.total}</span>
         </div>

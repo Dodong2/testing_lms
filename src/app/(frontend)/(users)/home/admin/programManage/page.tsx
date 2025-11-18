@@ -55,7 +55,7 @@ export default function ProgramManage() {
 
       {/* Program Card 1 */}
       {isLoading ? (
-        <SkeletonGrid count={6} variant="card" />
+        <SkeletonGrid count={2} variant="adminPrograms" />
       ) : (
         <div>{session.user.role === 'ADMIN' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,7 +100,7 @@ export default function ProgramManage() {
                           </button>
                         </div>
                         <div className="col-span-2 text-xs bg-[#626262] p-1 rounded-2xl whitespace-nowrap text-center mt-2">
-                          <span className="text-xs text-white whitespace-nowrap">Added on ({format(new Date(program.createdAt), "MM/dd/yy")})</span>
+                          <span className="text-xs text-white whitespace-nowrap">Added on ({format(new Date(program.createdAt), "MMM d, yyyy")})</span>
                         </div>
                       </div>
 
