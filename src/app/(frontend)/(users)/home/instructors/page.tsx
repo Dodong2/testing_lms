@@ -52,14 +52,14 @@ export default function Instructors() {
                       <div>
                         <Link href={`/home/participants/programs/${program.id}`}>
                           {/* Top gray box */}
-                          <div className="flex justify-between bg-[#FFBD17] p-2 w-full">
+                          <div className="flex justify-between relative bg-gradient-to-r from-yellow-400 via-yellow-400 to-white p-2 w-full">
                             <div>
                               <div className="relative flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners </div>
                               <div className="flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
                               <div className="flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
                             </div>
                             {/* <div className=""> */}
-                              <span className="text-xs text-gray-950 p-1 rounded-2xl text-center whitespace-nowrap">since {format(new Date(program.createdAt), "MMM/dd/yyyy")}</span>
+                              <span className="text-xs text-gray-950 p-1 rounded-2xl text-center whitespace-nowrap">since {format(new Date(program.createdAt), "MMM d, yyyy")}</span>
                             {/* </div> */}
                           </div>
 

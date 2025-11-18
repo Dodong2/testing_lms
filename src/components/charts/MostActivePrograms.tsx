@@ -56,7 +56,7 @@ const MostActivePrograms = () => {
             )}
 
             {/* Responsive wrapper */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded">
                 {/* Table */}
                 <table className="min-w-full divide-y divide-gray-200 table-auto">
                     <thead className='bg-[#5c5c5c]'>
@@ -123,7 +123,7 @@ const MostActivePrograms = () => {
 
             {/* Show More Button */}
             {data?.hasMore && (
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-end mt-1">
                     <button
                         onClick={handleShowMore}
                         disabled={isLoading}

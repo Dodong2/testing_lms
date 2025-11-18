@@ -37,7 +37,7 @@ const Header = () => {
         <h1 className="text-ml font-bold text-white text-center">{pageTitle}</h1>
         
           {session.user.image && (
-            <div className="absolute top-2 right-4 border-2 border-cyan-700 sm:w-5 sm:h-5 md:w-11 md:h-11 rounded-full overflow-hidden cursor-pointer active:scale-95 transition-transform duration-75"
+            <div className="absolute top-1 right-3 w-12 h-12 lg:top-2 lg:right-4 border-2 border-cyan-700 sm:w-5 sm:h-5 lg:w-11 lg:h-11 rounded-full overflow-hidden cursor-pointer active:scale-95 transition-transform duration-75"
             onClick={showProfile}>
               <Image src={session.user.image} alt="Profile" width={48} height={48}
               className="rounded-full object-cover w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-10" /> 
@@ -45,7 +45,7 @@ const Header = () => {
                 )}
 
             {show && (
-              <div className="absolute text-white top-18 right-1 bg-[#00306E] p-4 rounded-2xl before:content-[''] before:absolute before:-top-1 before:right-6 before:w-5 before:h-3 before:bg-[#00306E] before:rotate-45">
+              <div className="absolute text-white top-17 right-1 bg-[#00306E] p-4 rounded-2xl before:content-[''] before:absolute before:-top-1 before:right-6 before:w-5 before:h-3 before:bg-[#00306E] before:rotate-45">
               <p className="font-bold text-lg">{name}</p>
               <div className="flex items-center justify-left"><p className="text-xs text-blue-600 font-bold opacity-90 mt-1 mb-2 bg-white p-1  rounded-2xl">{role}</p></div>
                             <p className="text-sm opacity-90 mt-1">{email}</p>

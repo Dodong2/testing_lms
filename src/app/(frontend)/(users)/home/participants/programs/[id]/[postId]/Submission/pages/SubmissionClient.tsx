@@ -42,8 +42,12 @@ export default function SubmissionClient({
         return "text";
     };
 
+    const handleBack = () => {
+    router.push(`/home/participants/programs/${programId}?tab=assignments`)
+  }
+
     return (<>
-        <button onClick={() => router.back()} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20}/></button>
+        <button onClick={handleBack} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20}/></button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-6 bg-[#222222] rounded-2xl">
             {/* left - instructions */}
             <div>

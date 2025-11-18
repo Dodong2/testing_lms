@@ -105,7 +105,7 @@ export default function UserManage() {
                   <tbody className="">
                     {filteredUsers && filteredUsers?.length > 0 ? (
                       filteredUsers.map((user) => (
-                        <tr key={user.id} className="hover:bg-[#E3FDE7] hover:text-gray-900 text-white transition-colors duration-150">
+                        <tr key={user.id} className="hover:bg-gray-100 hover:text-gray-900 text-white transition-colors duration-150">
                           <td className="py-3 px-4 whitespace-nowrap">{user.name}</td>
                           <td className="py-3 px-4 whitespace-nowrap text-sm ">{user.email}</td>
                           <td className="py-3 px-4 whitespace-nowrap text-sm ">{user.role}</td>

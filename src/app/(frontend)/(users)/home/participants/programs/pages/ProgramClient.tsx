@@ -1,5 +1,6 @@
 'use client'
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 /* hooks */
 import { useNavbarTabs } from "@/hooks/useNavbarTabs"
@@ -25,12 +26,16 @@ interface ProgramClientProps {
 const ProgramClient = ({ programId, program, username }: ProgramClientProps) => {
   const { data: session } = useSession()
   const [showExplanation, setExplanation] = useState(false)
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
    const role = (session?.user?.role as "INSTRUCTOR" | "BENEFICIARY") || "BENEFICIARY"
 
   const ToggleExplanations = () => {
     setExplanation((prev) => !prev)
   }
+
+  const currentTab = searchParams.get('tab') || 'updates'
 
   const { activeTab, setActiveTab, renderContent } = useNavbarTabs({
     program: {
@@ -39,9 +44,17 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
       explanation: program.explanation,
       subtitle: program.subtitle
 
-    }, username, role
+    }, username, role, initialTab: currentTab
   })
 
+  
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', tab)
+    router.push(`?${params.toString()}`, { scroll: false })
+  }
 
   return (
     <div className="w-full">
@@ -70,7 +83,7 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
           </div>
 
           {/* Tabs */}
-          <Navbar activeTab={activeTab} setActiveTab={setActiveTab} role={role} />
+          <Navbar activeTab={activeTab} setActiveTab={handleTabChange} role={role} />
 
           {/* Dynamic Content based on active tab */}
           {renderContent()}

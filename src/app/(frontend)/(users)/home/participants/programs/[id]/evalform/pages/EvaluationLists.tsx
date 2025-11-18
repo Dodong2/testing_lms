@@ -1,8 +1,11 @@
 "use client"
-
-import { useEvaluation } from "@/hooks/evaluations/useEvaluation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+/* hooks */
+import { useEvaluation } from "@/hooks/evaluations/useEvaluation";
+/* components */
 import EvaluationDetailModal from "@/components/modals/EvaluationDetailModal";
+/* types */
 import { EvaluationEntry, RatingCount } from "@/types/evaluationManagetypes";
 import {
   BarChart,
@@ -14,13 +17,21 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+/* icons */
+import { FaArrowLeft } from "react-icons/fa6";
+import Link from "next/link";
 
 const EvaluationLists = ({ programId, date }: { programId: string, date: string }) => {
   const { data: evaluations, isLoading: evalLoading } = useEvaluation().useEvaluationsByDate(programId, date);
   const { data: edaData, isLoading: edaLoading } = useEvaluation().useEvaluationEDAByDate(programId, date);
   const [selectedEval, setSelectedEval] = useState<EvaluationEntry | null>(null);
+  const router = useRouter()
 
   if (evalLoading || edaLoading) return <p className="text-white">Loading...</p>;
+
+  const handleBack = () => {
+    router.push(`/home/participants/programs/${programId}?tab=evaluation`)
+  }
 
   // Format for summary chart
   const summaryData = edaData ? [
@@ -51,6 +62,8 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   return (
     <>
       <div>
+        <button onClick={handleBack} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20}/></button>
+        
         <h1 className="text-white text-2xl font-bold italic mb-6">
           Submitted on {date}
         </h1>

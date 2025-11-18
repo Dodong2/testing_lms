@@ -25,7 +25,6 @@ const Navbar: React.FC<TabProps> = ({ activeTab, setActiveTab, role }) => {
     { title: "Meetings", key: "meetings" },
     { title: "EDA", key: "eda" },
     { title: "Evaluation", key: "evaluation" },
-    { title: "Attendance", key: "attendance" },
     { title: "Members", key: "members" },
   ];
 
@@ -33,7 +32,6 @@ const Navbar: React.FC<TabProps> = ({ activeTab, setActiveTab, role }) => {
     { title: "Updates", key: "updates" },
     { title: "EDA", key: "eda" },
     { title: "Evaluation", key: "evaluation" },
-    { title: "Attendance", key: "attendance" },
   ];
 
   {/* for filter role tabs */}

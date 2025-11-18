@@ -72,12 +72,12 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
             </div>
           </div>
 
-          <p className="text-sm mt-2 flex items-center gap-2">
+          <div className="text-sm mt-2 flex items-center gap-2">
             <span className="font-semibold">Grade:</span>{" "}
             {mySubmission.grade !== null && mySubmission.grade !== undefined
               ? <div className="font-semibold"><span className="text-green-600">{mySubmission.grade}</span>/100</div>
               : <div className="font-semibold"><span className="text-red-600">0</span>/100 <span className="text-amber-500">(Not graded yet)</span></div>}
-          </p>
+          </div>
 
           {mySubmission.feedback && (
             <p className="text-sm mt-1 italic text-gray-600">
