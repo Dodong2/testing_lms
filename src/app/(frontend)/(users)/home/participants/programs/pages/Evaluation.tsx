@@ -17,7 +17,7 @@ export default function Evaluation({ programId }: { programId: string }) {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-3">
         {dates?.map((item) => (
           <Link href={`/home/participants/programs/${programId}/evalform/${item.date}`} key={item.date}>
-            <div className="bg-[#525252] p-2 flex items-center justify-center gap-2 text-white rounded-md">
+            <div className="bg-[#525252] p-2 flex items-center justify-center gap-2 text-white rounded-md border border-transparent hover:border-gray-100 transition">
               <FaBook />
               <p>{item.date}</p>
             </div>

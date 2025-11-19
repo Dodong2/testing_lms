@@ -48,7 +48,7 @@ const EvaluationDetailModal = ({ evaluation, onClose }: EvaluationDetailModalPro
     };
 
     return (
-        <div className="fixed flex inset-0 items-center justify-center z-50" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
+        <div className="fixed flex inset-0 items-center justify-center z-50 bg-black/30 backdrop-blur-sm" style={{ backgroundColor: 'rgba(70, 70, 70, 0.3)' }}>
             <div className="bg-[#E7E7E7] rounded-lg shadow-lg max-w-3xl w-full relative max-h-[80vh] overflow-y-auto p-6">
                 <button
                     onClick={onClose}

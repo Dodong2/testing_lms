@@ -5,26 +5,18 @@ import { useRouter } from "next/navigation";
 import { useEvaluation } from "@/hooks/evaluations/useEvaluation";
 /* components */
 import EvaluationDetailModal from "@/components/modals/EvaluationDetailModal";
+import SummaryChart from "@/components/charts/evalListsPerDate/SummaryChart";
+import QuestionCharts from "@/components/charts/evalListsPerDate/QuestionCharts";
 /* types */
 import { EvaluationEntry, RatingCount } from "@/types/evaluationManagetypes";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
 /* icons */
 import { FaArrowLeft } from "react-icons/fa6";
-import Link from "next/link";
 
 const EvaluationLists = ({ programId, date }: { programId: string, date: string }) => {
   const { data: evaluations, isLoading: evalLoading } = useEvaluation().useEvaluationsByDate(programId, date);
   const { data: edaData, isLoading: edaLoading } = useEvaluation().useEvaluationEDAByDate(programId, date);
   const [selectedEval, setSelectedEval] = useState<EvaluationEntry | null>(null);
+  const [showQuestions, setShowQuestions] = useState(false)
   const router = useRouter()
 
   if (evalLoading || edaLoading) return <p className="text-white">Loading...</p>;
@@ -32,6 +24,11 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   const handleBack = () => {
     router.push(`/home/participants/programs/${programId}?tab=evaluation`)
   }
+
+  const handleToggle = () => {
+    setShowQuestions((prev) => !prev)
+  }
+
 
   // Format for summary chart
   const summaryData = edaData ? [
@@ -62,84 +59,87 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   return (
     <>
       <div>
-        <button onClick={handleBack} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20}/></button>
-        
+        <button onClick={handleBack} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20} /></button>
+
         <h1 className="text-white text-2xl font-bold italic mb-6">
           Submitted on {date}
         </h1>
 
         {/* Overall Summary Chart */}
         {edaData && (
-          <div className="bg-[#00306E] p-4 rounded shadow text-white mb-6">
-            <h2 className="font-semibold mb-2">Overall Summary (All Questions)</h2>
-            <p className="text-sm mb-4">Total Respondents: {edaData.totalRespondents}</p>
-            <div style={{ width: "100%", height: 250 }}>
-              <ResponsiveContainer>
-                <BarChart data={summaryData}>
-                  <CartesianGrid stroke="#FFF" strokeDasharray="3 3" />
-                  <XAxis dataKey="label" tick={{ fill: "#FFF", fontSize: 10 }} />
-                  <YAxis allowDecimals={false} tick={{ fill: "#FFF" }} />
-                  <Tooltip formatter={(value: number) => [value, "Students"]} />
-                  <Legend />
-                  <Bar dataKey="value" fill="#FFBD17" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+          <SummaryChart totalRespondents={edaData.totalRespondents} data={summaryData} />
         )}
+
+        {/* hover */}
+        <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2">
+          <div className="p-0.5 rounded-md w-full bg-white" />
+          <span className="text-center whitespace-nowrap">Per Questions</span>
+          <div className="p-0.5 rounded-md w-full bg-white" />
+
+          {/* Simple tooltip shown only on hover */}
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+            Breakdown of student responses per question
+          </div>
+        </div>
+
+        <button onClick={handleToggle} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-3 transition-all duration-200 active:scale-95 font-bold">{showQuestions ? 'close' : 'Show Per Questions'}</button>
 
         {/* Detail Per Question */}
-        {groupedQuestions && (
-          <div className="space-y-6 mb-6">
-            {Object.keys(groupedQuestions)
-              .sort((a, b) => {
-                if (a === "overall") return 1;
-                if (b === "overall") return -1;
-                return 0;
-              })
-              .map((category) => (
-                <div key={category}>
-                  <h2 className="font-bold text-white text-lg mb-2">{category.toUpperCase()}</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {groupedQuestions[category].map((q) => (
-                      <div key={q.question} className="bg-[#00306E] p-4 rounded shadow text-white">
-                        <h3 className="font-semibold mb-1">{q.question}</h3>
-                        <div style={{ width: "100%", height: 200 }}>
-                          <ResponsiveContainer>
-                            <BarChart data={formatChartData(q.ratings)}>
-                              <CartesianGrid stroke="#FFF" strokeDasharray="3 3" />
-                              <XAxis dataKey="rating" tick={{ fill: "white" }} />
-                              <YAxis allowDecimals={false} tick={{ fill: "white" }} />
-                              <Tooltip
-                                formatter={(value: number) => [value, "Students"]}
-                                cursor={{ fill: "rgba(255, 255, 255, 0.2)" }}
-                              />
-                              <Legend wrapperStyle={{ color: "white" }} />
-                              <Bar dataKey="count" fill="#FFBD17" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-          </div>
+        {showQuestions && groupedQuestions && (
+          <QuestionCharts groupedQuestions={groupedQuestions} />
         )}
 
-        {/* List of Evaluations */}
-        <h2 className="text-white text-xl font-bold mb-4">Individual Submissions</h2>
-        <div className="space-y-2">
-          {evaluations?.map((evalData) => (
-            <div
-              key={evalData.id}
-              onClick={() => setSelectedEval(evalData)}
-              className="p-3 rounded-md bg-[#424242] text-white hover:bg-[#5a5a5a] cursor-pointer"
-            >
-              <p className="font-semibold">{evalData.user.name}</p>
-              <p className="text-xs opacity-75">{evalData.user.email}</p>
-            </div>
-          ))}
+        {/* hover */}
+        <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2">
+          <div className="p-0.5 rounded-md w-full bg-white" />
+          <span className="text-center whitespace-nowrap">Individual Submissions</span>
+          <div className="p-0.5 rounded-md w-full bg-white" />
+
+          {/* Simple tooltip shown only on hover */}
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+            Those who submitted the evaluation form are automatically counted as present (attendance).
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-lg mt-4">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-[#303030] text-white">
+                <th className="p-3">Name</th>
+                <th className="p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {evaluations?.map((evalData) => (
+                <tr
+                  key={evalData.id}
+                  className="border-b border-gray-600 hover:bg-[#4d4d4d] transition cursor-pointer"
+                >
+                  {/* NAME */}
+                  <td
+                    className="p-3"
+                    onClick={() => setSelectedEval(evalData)}
+                  >
+                    <p className="font-semibold text-white">{evalData.user.name}</p>
+                    <p className="text-xs opacity-70 text-gray-300">
+                      {evalData.user.email}
+                    </p>
+                  </td>
+
+                  {/* ACTIONS */}
+                  <td className="p-3 text-center">
+                    <button
+                      onClick={() => setSelectedEval(evalData)}
+                      className="px-2 py-1 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-95"
+                    >
+                      View Form
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 

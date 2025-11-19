@@ -1,6 +1,7 @@
 "use client"
 /* hooks */
 import { useState, ReactNode } from "react";
+import Image from "next/image";
 /* links */
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -95,8 +96,11 @@ const Sidebar = ({ defaultOpen = false, items }: SidebarProps) => {
         ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Sidebar header */}
-        <div className="p-4 font-bold shadow-2xl bg-[#00306E] whitespace-nowrap">
-         <p className="ml-10 text-white">Extenstion Portal</p> 
+        <div className="relative flex items-center p-4 font-bold shadow-2xl bg-[#00306E] whitespace-nowrap">
+          <div className="absolute lg:block">
+          <Image src="/logo.png" alt='logo' width={35} height={35}/>
+          </div>
+         <p className="ml-10 text-white">EduLink</p> 
         </div>
 
         {/* NAVIGATION LINKS */}

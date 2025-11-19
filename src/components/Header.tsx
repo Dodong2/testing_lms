@@ -6,9 +6,10 @@ import Image from "next/image"
 import NotificationBell from "./notifAdmin/NotificationBell"
 
 const titles: Record<string, string> = {
-    "/beneficiary": "Home",
-    "/beneficiary/files": "Files",
-    "/beneficiary/feedback": "Feeback",
+    "/home/participants": "Home",
+    "/home/participants/evaluation": "Evaluation Form",
+    "/home/participants/feedback": "Feedback",
+    "/home/participants/programs": "Programs",
     "/home/admin": "Dashboard",
     "/home/admin/usermanage": "User Management",
     "/home/admin/programManage": "Program Management",

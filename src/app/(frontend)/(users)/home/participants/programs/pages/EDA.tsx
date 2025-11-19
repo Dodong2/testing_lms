@@ -28,7 +28,7 @@ export default function EDA({ programId }: { programId: string }) {
   return (
     <div className="space-y-6 rounded-md shadow mt-3">
       <h1 className="font-bold text-lg text-white">Evaluation Summary (Daily)</h1>
-      <div className="bg-[#00306E] p-4 rounded-2xl border border-gray-100 shadow-md flex flex-col items-start justify-center">
+      <div className="bg-[#00306E] p-4 rounded-2xl border border-gray-100 shadow-md flex flex-col items-start justify-center w-1/2">
             <h2 className="text-lg font-semibold text-white mb-1">Total Respondents Today:</h2>
             <span className="text-4xl font-bold text-white">{data?.totalRespondents}</span>
         </div>

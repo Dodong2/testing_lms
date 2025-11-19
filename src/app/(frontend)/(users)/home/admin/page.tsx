@@ -1,4 +1,5 @@
-// import PushTest from "@/components/PushTest"
+import Image from "next/image"
+/* components */
 import ChartAllUsers from "@/components/charts/ChartAllUsers"
 import ProgramCountCard from "@/components/charts/ProgramCountCard"
 import ChartUserRegistrations from "@/components/charts/ChartUserRegistrations"
@@ -7,14 +8,25 @@ import PostsPerMonthChart from "@/components/charts/PostsPerMonthChart"
 import MostActivePrograms from "@/components/charts/MostActivePrograms"
 import LatestProgram from "@/components/charts/LatestProgram"
 
+
 export default function Admin() {
     return (
         <div>
-            <h2 className="text-2xl font-bold italic text-[#EFEFEF] mb-2">Dashboard</h2>
+            <h1 className="text-2xl font-bold italic text-[#EFEFEF]">Dashboard</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-2 items-start">
                 <div className="md:col-span-1 flex flex-col gap-4">
+                    <div className="flex items-center justify-between bg-[#00306E] p-1 gap-2 rounded-2xl border border-transparent hover:border-gray-100 transition shadow-md">
+                        <Image src="/Analyze.png" alt='logo' width={100} height={100} />
+                        <div>
+                            
+                            <p className="text-sm text-gray-300">
+                               “Quick overview of programs, user roles, uploads, and recent activity within the system.”
+                            </p>
+                        </div>
+                    </div>
+
                     <ProgramCountCard className="h-[100px]" />
-                    <LatestProgram/>
+                    <LatestProgram />
                 </div>
 
                 <div className="md:col-span-1">
@@ -23,7 +35,7 @@ export default function Admin() {
 
                 <div className="md:col-span-1">
                     <ChartFiles />
-                </div>                
+                </div>
             </div>
 
             {/* Below section */}
@@ -36,7 +48,7 @@ export default function Admin() {
             <div className="p-2">
                 <PostsPerMonthChart />
             </div>
-            
+
         </div>
     )
 }
