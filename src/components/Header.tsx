@@ -4,7 +4,7 @@ import { useSession, signOut } from "next-auth/react"
 import { useState } from "react"
 import Image from "next/image"
 import NotificationBell from "./notifAdmin/NotificationBell"
-// import { NotificationCenter } from "./NotificationCenter"
+// import { NotificationBells } from "./NotificationBells"
 
 const titles: Record<string, string> = {
   "/home/participants": "Home",
@@ -63,7 +63,7 @@ const Header = () => {
 
       {/* {(session.user.role === 'BENEFICIARY' || session.user.role === 'INSTRUCTOR') && (
         <div className="absolute top-4 right-25 ">
-          <NotificationCenter />
+          <NotificationBells />
         </div>
       )} */}
 

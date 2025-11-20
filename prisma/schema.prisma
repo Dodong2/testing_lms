@@ -37,8 +37,6 @@ model User {
   createdAt DateTime @default(now())
 
   evaluations Evaluation[]
-
-  pushSubscriptions PushSubscription[]
 }
 
 //account for google auth
@@ -234,18 +232,4 @@ model Evaluation {
   ratings Json
 
   createdAt DateTime @default(now())
-}
-
-model PushSubscription {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  endpoint  String
-  auth      String
-  p256dh    String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-
-  @@unique([userId, endpoint])
-  @@index([userId])
 }

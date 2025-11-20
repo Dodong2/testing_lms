@@ -10,6 +10,7 @@ import { useProgramEvents } from "@/hooks/socket/useProgramSocket"
 import { useJoinRequests } from "@/hooks/program/useJoinRequests"
 /* components */
 import RequestProgramModal from "@/components/modals/programs modal/RequestProgramModal"
+import { SkeletonGrid } from "@/components/SkeletonGrid"
 /* icons */
 import { FaUserCircle } from "react-icons/fa"
 import { request } from "http"
@@ -24,7 +25,7 @@ export default function MemberContent({ programId }: { programId: string }) {
   const { selectedEmails, handleToggleEmail, handleRemove, isRemoving } = useRemoveMember(programId)
   const { data: requests } = useJoinRequests().useRequestLists(programId)
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <SkeletonGrid variant="member" count={1} />
 
   if (isError) {
     console.log(isError)

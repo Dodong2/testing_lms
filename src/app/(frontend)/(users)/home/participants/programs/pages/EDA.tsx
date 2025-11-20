@@ -1,17 +1,7 @@
 "use client";
-import { useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
 /* components */
 import OverallSummary from "@/components/charts/eda/OverallSummary";
+import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* hooks */
 import { useEDA } from "@/hooks/evaluations/useEDA";
 /* types */
@@ -21,7 +11,7 @@ import DetailPerQuestion from "@/components/charts/eda/DetailPerQuestion";
 export default function EDA({ programId }: { programId: string }) {
   const { useDailyEDA } = useEDA(programId);
   const { data, isLoading } = useDailyEDA();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <SkeletonGrid variant="eda" count={1} />;
 
 
 

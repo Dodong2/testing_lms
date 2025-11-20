@@ -13,15 +13,15 @@ import { handleSubmissionEvents } from './handlers/submissionHandlers'
 
 const app = express()
 app.use(cors())
-app.use(express.json()) 
+app.use(express.json())
 const server = http.createServer(app)
 
 const io = new Server(server, {
- cors: {
+  cors: {
     origin: "http://localhost:3000", // Frontend address
     methods: ["GET", "POST"],
     credentials: true
-  },      
+  },
 })
 
 // Listen for connections
@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
 app.post("/emit", express.json(), (req, res) => {
   const { category, type, payload } = req.body
 
-  switch(category) {
+  switch (category) {
     case 'program':
       handleProgramEvents(io, type, payload)
       break
@@ -67,5 +67,5 @@ app.post("/emit", express.json(), (req, res) => {
 
 
 server.listen(3001, () => {
-    console.log("Socket.IO server running on http://localhost:3001")
+  console.log("Socket.IO server running on http://localhost:3001")
 })

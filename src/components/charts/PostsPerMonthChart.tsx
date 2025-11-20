@@ -5,7 +5,14 @@ import { useStats } from "@/hooks/stats/useStats";
 const PostsPerMonthChart = () => {
   const { data, isLoading, error } = useStats().usePostStats()
 
-  if (isLoading) return <p>Loading chart...</p>;
+  if (isLoading) {
+        return (
+            <div className="bg-[#00306E] p-4 rounded-2xl shadow-md text-white border border-gray-100 h-[100px] flex items-center justify-center">
+                <p className="text-gray-300">Loading...</p>
+            </div>
+        )
+    }
+    
   if (error || !data) return <p>Failed to load chart data</p>;
 
   // Optional total this month

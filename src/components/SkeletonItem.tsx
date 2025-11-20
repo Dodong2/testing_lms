@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 
-type Variant = 'card' | 'list' | 'tableRow' | 'feedbackLists' | "post" | "programs" | "adminPrograms"
+type Variant = 'card' | 'list' | 'tableRow' | 'feedbackLists' | "post" | "programs" | "adminPrograms" | "eda" | "evalLists" | "member"
 
 interface SkeletonItemProps {
   variant?: Variant
@@ -143,6 +143,108 @@ export const SkeletonItem: React.FC<SkeletonItemProps> = ({ variant = 'card' }) 
       </div>
     )
   }
+
+  if (variant === 'eda') {
+    return (
+      <div className="w-full space-y-4 animate-pulse">
+
+        {/* Title */}
+        <div className="h-5 w-64 bg-gray-400/40 rounded"></div>
+
+        {/* Total Respondents Card */}
+        <div className="bg-gray-300/20 dark:bg-gray-700/20 p-6 rounded-xl border border-gray-400/20">
+          <div className="h-4 w-40 bg-gray-400/40 rounded mb-4"></div>
+          <div className="h-10 w-10 bg-gray-400/60 rounded"></div>
+        </div>
+
+        {/* Graph Container */}
+        <div className="bg-gray-300/20 dark:bg-gray-700/20 p-6 rounded-xl border border-gray-400/20">
+
+          {/* Graph Title */}
+          <div className="h-4 w-72 bg-gray-400/40 rounded mb-6"></div>
+
+          {/* Graph Bars */}
+          <div className="flex items-end gap-4 h-[250px]">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="flex-1 bg-gray-400/50 rounded"
+                style={{ height: `${50 + Math.random() * 120}px` }}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (variant === 'evalLists') {
+    return (
+      <div className="px-6 py-3 rounded-md bg-gray-400/20 dark:bg-gray-600/20 animate-pulse">
+        {/* small icon */}
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-gray-300/50 rounded"></div>
+          <div className="h-4 w-24 bg-gray-300/50 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'member') {
+  return (
+    <div className="w-full p-6 rounded-lg bg-gray-700/30 border border-gray-600 animate-pulse">
+
+      {/* TOP STATS + BUTTONS */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex gap-3">
+          <div className="h-6 w-24 bg-gray-500/50 rounded-md"></div>
+          <div className="h-6 w-28 bg-gray-500/50 rounded-md"></div>
+          <div className="h-6 w-32 bg-gray-500/50 rounded-md"></div>
+        </div>
+
+        <div className="flex gap-3">
+          <div className="h-8 w-20 bg-gray-500/50 rounded-md"></div>
+          <div className="h-8 w-24 bg-gray-500/50 rounded-md"></div>
+        </div>
+      </div>
+
+      {/* INSTRUCTORS */}
+      <div className="mb-6">
+        <div className="h-5 w-32 bg-gray-500/40 rounded mb-4"></div>
+
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-10 w-10 rounded-full bg-gray-500/40"></div>
+          <div className="h-4 w-44 bg-gray-500/40 rounded"></div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-gray-500/40"></div>
+          <div className="h-4 w-40 bg-gray-500/40 rounded"></div>
+        </div>
+      </div>
+
+      {/* LEARNERS */}
+      <div>
+        <div className="h-5 w-28 bg-gray-500/40 rounded mb-4"></div>
+
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-10 w-10 rounded-full bg-gray-500/40"></div>
+          <div className="h-4 w-40 bg-gray-500/40 rounded"></div>
+        </div>
+
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-10 w-10 rounded-full bg-gray-500/40"></div>
+          <div className="h-4 w-36 bg-gray-500/40 rounded"></div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-gray-500/40"></div>
+          <div className="h-4 w-32 bg-gray-500/40 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
   if (variant === 'tableRow') {
     return (

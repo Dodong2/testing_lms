@@ -14,7 +14,14 @@ const ProgramCountCard = ({ className }: ProgramCountCardProps) => {
     const [search, setSearch] = useState("")
     const { data: programCounts, isLoading, error } = useProgram().usePrograms(page, search)
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) {
+        return (
+            <div className="bg-[#00306E] p-4 rounded-2xl shadow-md text-white border border-gray-100 h-[100px] flex items-center justify-center">
+                <p className="text-gray-300">Loading...</p>
+            </div>
+        )
+    }
+    
     if (error || !programCounts) return <p>Failed to load program data</p>;
 
     return (

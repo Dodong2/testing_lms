@@ -11,7 +11,14 @@ const COLORS = ["#2563eb", "#16a34a"];
 const ChartFiles = () => {
     const { data: filesStats, isLoading, error } = useStats().useFilesStats()
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) {
+        return (
+            <div className="bg-[#00306E] p-4 rounded-2xl shadow-md text-white border border-gray-100 h-[100px] flex items-center justify-center">
+                <p className="text-gray-300">Loading...</p>
+            </div>
+        )
+    }
+    
     if (error || !filesStats) return <p>Failed to load files stats</p>
 
     const pieData = [
