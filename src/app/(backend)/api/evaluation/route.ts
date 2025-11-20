@@ -4,24 +4,24 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 
 type EvaluationPayload = {
-  programId: string;
-  titleOfSeminar: string;
-  date: string;
-  venue: string;
-  suggestions?: string;
-  name?: string;
-  ratings: {
-    content: number[];
-    materials: number[];
-    resourcePerson: number[];
-    overall: number[];
-  };
+    programId: string;
+    titleOfSeminar: string;
+    date: string;
+    venue: string;
+    suggestions?: string;
+    name?: string;
+    ratings: {
+        content: number[];
+        materials: number[];
+        resourcePerson: number[];
+        overall: number[];
+    };
 };
 
 export async function POST(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions)
-        if(!session?.user.id) {
+        if (!session?.user.id) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json(newEvaluation, { status: 201 });
-    } catch(error) {
+    } catch (error) {
         console.log('', error)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }

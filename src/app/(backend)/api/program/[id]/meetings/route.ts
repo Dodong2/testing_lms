@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await getServerSession(authOptions)
-        if(!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
         const { id } = await context.params
         const programId = id
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 }
 
-export async function POST(req: NextRequest, context: { params: Promise<{ id: string }>  }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
         const session = await getServerSession(authOptions)
         if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
         return NextResponse.json(meeting)
 
-    } catch(error) {
+    } catch (error) {
         console.error(error)
         return NextResponse.json({ error: "Internal server error" }, { status: 500 })
     }

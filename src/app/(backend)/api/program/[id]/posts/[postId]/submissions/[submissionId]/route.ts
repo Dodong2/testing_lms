@@ -8,10 +8,10 @@ import { emitSocketEvent } from "@/lib/emitSocketEvent";
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string, postId: string, submissionId: string }> }) {
     try {
         const session = await getServerSession(authOptions)
-        if(!session?.user.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        
+        if (!session?.user.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
         const user = await prisma.user.findUnique({ where: { email: session.user.email } })
-        if(!user || user.role !== 'INSTRUCTOR') {
+        if (!user || user.role !== 'INSTRUCTOR') {
             return NextResponse.json({ error: 'Only instructors can grade' }, { status: 403 })
         }
 
@@ -33,8 +33,8 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
         await emitSocketEvent("submission", "submission-graded", graded);
 
         return NextResponse.json(graded)
-    } catch(error) {
+    } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: 'Internal Server Error' },{ status: 500 })
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }

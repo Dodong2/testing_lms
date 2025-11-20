@@ -67,7 +67,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if (user?.role === "BENEFICIARY") {
         const mySubmission = await prisma.submission.findFirst({
             where: { postId, studentId: user.id },
-            include: { 
+            include: {
                 student: { select: { id: true, name: true, image: true } },
                 post: { select: { id: true, title: true } }
             }
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 
     if (user?.role === "INSTRUCTOR") {
-        if(getAll) {
+        if (getAll) {
             const AllSubmissions = await prisma.submission.findMany({
                 where: {
                     post: {

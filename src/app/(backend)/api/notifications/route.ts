@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
     const [notifications, total] = await Promise.all([
         prisma.notification.findMany({
-            where: { },
+            where: {},
             orderBy: { createdAt: 'desc' },
             skip,
             take: limit
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     const { userId, type, message, referenceId } = await req.json()
 
-    if(!userId || !type || !message) {
+    if (!userId || !type || !message) {
         return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
