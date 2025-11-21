@@ -1,0 +1,25 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.handlePostEvents = void 0;
+const handlePostEvents = (io, type, payload) => {
+    switch (type) {
+        case 'post-created':
+            io.emit("post-created", payload);
+            break;
+        case 'post-updated':
+            io.emit("post-updated", payload);
+            break;
+        case 'post-deleted':
+            io.emit("post-deleted", payload);
+            break;
+        case 'comment-created':
+            io.emit("comment-created", payload);
+            break;
+        case 'comment-deleted':
+            io.emit("comment-deleted", payload);
+            break;
+        default:
+            console.log("Unknown post event type");
+    }
+};
+exports.handlePostEvents = handlePostEvents;

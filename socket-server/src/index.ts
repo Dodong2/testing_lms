@@ -65,7 +65,9 @@ app.post("/emit", express.json(), (req, res) => {
   res.status(200).send("Event emitted");
 })
 
+const PORT = process.env.PORT || 3001
 
-server.listen(3001, () => {
-  console.log("Socket.IO server running on http://localhost:3001")
+
+server.listen(PORT, () => {
+  console.log(`Socket.IO server running on http://localhost:${PORT}`)
 })
