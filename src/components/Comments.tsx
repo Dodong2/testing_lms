@@ -76,6 +76,7 @@ const Comments: React.FC<CommentsProps> = ({ programId, postId, comments = [], o
             <FaRegCommentDots />
           </span>
 
+
           {comments.length > 0 ? (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">
