@@ -33,7 +33,7 @@ services:
 
   next-app:
     build:
-      context: ./next-app
+      context: ./src/app
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
