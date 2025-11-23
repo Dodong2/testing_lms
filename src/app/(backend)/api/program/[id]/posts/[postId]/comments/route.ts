@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { emitSocketEvent } from "@/lib/emitSocketEvent";
+import { sendComment } from "@/lib/email/sendComment";
 
 // create a comment
 export async function POST(req: NextRequest, context: { params: Promise<{ id: string, postId: string }> }) {
@@ -62,6 +63,22 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
                 author: { select: { id: true, name: true, image: true } }
             }
         })
+
+        const instructor = await prisma.user.findUnique({
+            where: { id: post.authorId }
+        })
+
+        if (!instructor?.email) {
+            return NextResponse.json({ error: 'Instructor email not found' }, { status: 404 })
+        }
+
+        if (comment) {
+            await sendComment({
+                postTitle: post.title ?? "",
+                email: instructor.email,
+                programName: post.program.title
+            })
+        }
 
         await emitSocketEvent('post', 'comment-created', comment)
 

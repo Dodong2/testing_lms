@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { emitSocketEvent } from '@/lib/emitSocketEvent';
 import { PostTag } from '@prisma/client';
+import { sendPost } from '@/lib/email/sendPost';
 
 
 //pang get ng mga sa specific programs post
@@ -142,7 +143,21 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             }
         })
 
+        const program = await prisma.program.findUnique({
+            where: { id }
+        })
+
         await emitSocketEvent('post', 'post-created', post)
+
+        if (post && user && program) {
+            await sendPost({
+                post: post.tag,
+                email: user.email,
+                programName: program.title
+            })
+        }
+
+
 
         return NextResponse.json(post)
     } catch (error) {

@@ -19,7 +19,7 @@ export const sendProgramInviteEmail = async ({
         <h2>Hello ${name},</h2>
         <p>You have been added to the program <strong>${programName}</strong> as a <strong>${role}</strong>.</p>
         <p>Please log in to your LMS account to get started.</p><br>
-        <p>— LMS Team</p>
+        <p>— EduLink Team</p>
       </div>
     `
 

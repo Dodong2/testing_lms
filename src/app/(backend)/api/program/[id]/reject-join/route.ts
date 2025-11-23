@@ -14,6 +14,10 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
         const { id } = await context.params
         const { userId } = await req.json()
 
+        if (!userId) {
+            return NextResponse.json({ error: "userId is required" }, { status: 400 })
+        }
+
         const joinRequest = await prisma.joinRequest.findFirst({
             where: { programId: id, userId, status: 'PENDING' }
         })
@@ -22,20 +26,39 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             return NextResponse.json({ error: "No pending request found" }, { status: 404 })
         }
 
-        await prisma.joinRequest.update({
+        // Update to REJECTED
+        const updatedRequest = await prisma.joinRequest.update({
             where: { id: joinRequest.id },
-            data: { status: 'REJECTED' }
+            data: { status: 'REJECTED' },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        role: true,
+                        image: true
+                    }
+                }
+            }
         })
 
-        await emitSocketEvent("program", "join-rejected", {
+        // Emit socket event to notify all connected clients
+        await emitSocketEvent("program", `join-request-updated:${id}`, {
             programId: id,
             userId,
+            status: 'REJECTED',
+            requestId: joinRequest.id
         })
 
-        return NextResponse.json({ success: true, message: "Join request rejected" })
+        return NextResponse.json({
+            success: true,
+            message: "Join request rejected",
+            request: updatedRequest
+        })
 
     } catch (error) {
-        console.log("failed to connect reject-join", error)
+        console.error("failed to reject join request", error)
         return NextResponse.json({ error: "Internal server error" }, { status: 500 })
     }
 }

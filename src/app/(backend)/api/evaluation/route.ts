@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
+import { sendEval } from "@/lib/email/sendEval"
 
 type EvaluationPayload = {
     programId: string;
@@ -40,6 +41,34 @@ export async function POST(req: NextRequest) {
                 ratings: body.ratings,
             }
         })
+
+        if (newEvaluation) {
+            // get all instructors assigned to the program
+            const instructors = await prisma.programMember.findMany({
+                where: {
+                    programId: body.programId,
+                    user: { role: "INSTRUCTOR" }
+                },
+                select: {
+                    user: { select: { email: true } }
+                }
+            });
+
+            const program = await prisma.program.findUnique({
+                where: { id: body.programId },
+                select: { title: true }
+            });
+
+            for (const inst of instructors) {
+                if (inst.user.email) {
+                    await sendEval({
+                        email: inst.user.email,
+                        programName: program?.title ?? ""
+                    });
+                }
+            }
+        }
+
 
         return NextResponse.json(newEvaluation, { status: 201 });
     } catch (error) {

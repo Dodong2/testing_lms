@@ -3,18 +3,18 @@ import { ProgramGetTypes } from "@/types/programManagetypes"
 import { JoinRequestUser, JoinRequest } from "@/types/joinManagetypes"
 
 export interface ProgramResponse {
-  programs: ProgramGetTypes[]
-  total: number
-  page: number
-  totalPages: number
-  joinedOnly: boolean
+    programs: ProgramGetTypes[]
+    total: number
+    page: number
+    totalPages: number
+    joinedOnly: boolean
 }
 
 
 // pang get lahat ng programs for all roles (paginated & search)
 export const getPrograms = async (page: number, search: string, joinedOnly = false): Promise<ProgramResponse> => {
     const query = new URLSearchParams({ page: String(page), search, joinedOnly: String(joinedOnly) })
-  return apiFetch<ProgramResponse>(`/api/program?${query.toString()}`)
+    return apiFetch<ProgramResponse>(`/api/program?${query.toString()}`)
 }
 
 // types ng create Program
@@ -26,7 +26,7 @@ interface ProgramData {
 }
 
 // para pang create ng Programs (for admin)
-export const createProgram = async(data: ProgramData) => {
+export const createProgram = async (data: ProgramData) => {
     return apiFetch('/api/program', {
         method: 'POST',
         body: JSON.stringify(data)
@@ -34,7 +34,7 @@ export const createProgram = async(data: ProgramData) => {
 }
 
 // pang add ng members sa existing program (for admin)
-export const addProgramMembers = async(programId: string, emails: string[]) => {
+export const addProgramMembers = async (programId: string, emails: string[]) => {
     return apiFetch(`/api/program/${programId}/addmembers`, {
         method: 'POST',
         body: JSON.stringify({ emails })
@@ -59,14 +59,14 @@ interface UpdateProgramData {
 }
 
 // pang-update ng program (for admin)
-export const updateProgram = async ({programId, data}: UpdateProgramData) => {
+export const updateProgram = async ({ programId, data }: UpdateProgramData) => {
     return apiFetch(`/api/program/${programId}/updateprograms`, {
         method: 'PATCH',
         body: JSON.stringify(data)
     })
 }
 
-export const removeProgramMember = async(programId: string, email: string) => {
+export const removeProgramMember = async (programId: string, email: string) => {
     return apiFetch(`/api/program/${programId}/removemember`, {
         method: 'DELETE',
         body: JSON.stringify({ email })
@@ -75,23 +75,23 @@ export const removeProgramMember = async(programId: string, email: string) => {
 
 //types ng getProgramId
 export interface ProgramWithMembers {
-  id: string
-  title: string
-  description?: string | null
-  createdAt: string
-  updatedAt: string
-  members: {
-    user: {
-      image: string
-      id: string
-      email: string
-      name: string
-      role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY"
-    }
-  }[]
+    id: string
+    title: string
+    description?: string | null
+    createdAt: string
+    updatedAt: string
+    members: {
+        user: {
+            image: string
+            id: string
+            email: string
+            name: string
+            role: "ADMIN" | "INSTRUCTOR" | "BENEFICIARY"
+        }
+    }[]
 }
 // pang get ng program pero per ID
-export const getProgramById = async(programId: string): Promise<ProgramWithMembers> => {
+export const getProgramById = async (programId: string): Promise<ProgramWithMembers> => {
     return apiFetch<ProgramWithMembers>(`/api/program/${programId}`)
 }
 
@@ -109,7 +109,7 @@ export const getJoinRequests = async (programId: string) => {
 }
 
 // for beneficiary join program
-export const approveJoinRequest = async(programId: string, userId: string) => {
+export const approveJoinRequest = async (programId: string, userId: string) => {
     return apiFetch(`/api/program/${programId}/approve-join`, {
         method: 'POST',
         body: JSON.stringify({ userId })
@@ -126,7 +126,7 @@ export const rejectJoinRequest = async (programId: string, userId: string) => {
 
 // for beneficiary cancel request
 export const cancelJoinRequest = (programId: string) => {
-    return apiFetch(`/api/program/${programId}/join-requests`,{
+    return apiFetch(`/api/program/${programId}/join-requests`, {
         method: 'DELETE'
     })
 } 
