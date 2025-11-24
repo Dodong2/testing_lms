@@ -10,7 +10,7 @@ type EvaluationPayload = {
     date: string;
     venue: string;
     suggestions?: string;
-    name?: string;
+    name: string;
     ratings: {
         content: number[];
         materials: number[];
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
                 date: body.date,
                 venue: body.venue,
                 suggestions: body.suggestions,
-                name: body.name ?? session.user.name,
+                name: body.name,
                 ratings: body.ratings,
             }
         })

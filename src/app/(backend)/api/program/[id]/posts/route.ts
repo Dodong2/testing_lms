@@ -5,7 +5,8 @@ import { prisma } from '@/lib/db';
 import { emitSocketEvent } from '@/lib/emitSocketEvent';
 import { PostTag } from '@prisma/client';
 import { sendPost } from '@/lib/email/sendPost';
-
+import { sendDeadlineNotif } from '@/lib/email/sendDeadlineNotif';
+import { isDeadlineApproaching } from '@/util/checkDeadline';
 
 //pang get ng mga sa specific programs post
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
@@ -47,6 +48,34 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
             },
             orderBy: { createdAt: 'desc' }
         })
+
+        //mag-notify ng deadline 1 day before
+        /* (logic) if may nag-visit sa program tska lang makaka-receive ng email sa deadline. */
+        const program = await prisma.program.findUnique({
+            where: { id: programId },
+            select: { title: true }
+        });
+
+
+        if (posts.length > 0 && program) {
+            posts.forEach(post => {
+                if (
+                    post.tag === 'TASK' &&
+                    post.deadline &&
+                    isDeadlineApproaching(post.deadline)
+                ) {
+                    // Fire and forget (no await)
+                    sendDeadlineNotif({
+                        postTitle: post.title || 'Untitled Task',
+                        deadline: post.deadline,
+                        email: user.email, // beneficiary email (or instructor depending logic)
+                        programName: program.title  // <-- NOW YOU CAN USE THIS
+                    }).catch(err =>
+                        console.error('Deadline notif error:', err)
+                    );
+                }
+            });
+        }
 
         return NextResponse.json(posts)
 

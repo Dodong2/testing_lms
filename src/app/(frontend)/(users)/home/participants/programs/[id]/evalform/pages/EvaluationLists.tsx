@@ -121,10 +121,10 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
                     className="p-3"
                     onClick={() => setSelectedEval(evalData)}
                   >
-                    <p className="font-semibold text-white">{evalData.user.name}</p>
-                    <p className="text-xs opacity-70 text-gray-300">
+                    <p className="font-semibold text-white">{evalData.name}</p>
+                    {/* <p className="text-xs opacity-70 text-gray-300">
                       {evalData.user.email}
-                    </p>
+                    </p> */}
                   </td>
 
                   {/* ACTIONS */}

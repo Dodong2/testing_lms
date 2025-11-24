@@ -31,7 +31,7 @@ export default function EvalPage() {
   const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");
   const [suggestions, setSuggestions] = useState("");
-  const [name, setName] = useState(session.user.name ?? "");
+  const [name, setName] = useState("");
 
 
   // ⬇ STATE FOR CHECKBOX RATINGS

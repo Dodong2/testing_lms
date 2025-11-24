@@ -7,7 +7,7 @@ interface EvaluationDetailModalProps {
     onClose: () => void;
 }
 
-const EvaluationDetailModal = ({ evaluation, onClose }: EvaluationDetailModalProps) => {
+const EvaluationDetailModal = ({ evaluation, onClose}: EvaluationDetailModalProps) => {
     const { ratings, suggestions, venue, titleOfSeminar, user } = evaluation;
 
     // Questions for each category
@@ -60,8 +60,8 @@ const EvaluationDetailModal = ({ evaluation, onClose }: EvaluationDetailModalPro
                 <div className="space-y-6">
                     {/* User Info */}
                     <div>
-                        <h2 className="text-xl font-bold text-gray-800">{user.name}</h2>
-                        <p className="text-sm text-gray-600">{user.email}</p>
+                        <h2 className="text-xl font-bold text-gray-800">{evaluation.name}</h2>
+                        {/* <p className="text-sm text-gray-600">{user.email}</p> */}
                     </div>
 
                     {/* Title & Venue */}
