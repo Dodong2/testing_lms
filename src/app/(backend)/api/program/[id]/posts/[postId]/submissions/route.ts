@@ -32,13 +32,16 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
             return NextResponse.json({ error: 'Already submitted' }, { status: 400 })
         }
 
+        const isLate = post.deadline ? new Date() > new Date(post.deadline) : false;
+
         const submission = await prisma.submission.create({
             data: {
                 postId,
                 studentId: user.id,
                 files: files ?? null,
                 links: links ?? null,
-                grade: null
+                grade: null,
+                isLate: isLate
             },
             include: {
                 student: { select: { id: true, name: true, image: true } }
@@ -86,7 +89,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
                 },
                 include: {
                     student: { select: { id: true, name: true, image: true } },
-                    post: { select: { id: true, title: true } }
+                    post: { select: { id: true, title: true, deadline: true } }
                 }
             })
             return NextResponse.json(AllSubmissions)

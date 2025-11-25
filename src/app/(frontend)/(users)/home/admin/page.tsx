@@ -42,6 +42,8 @@ export default function Admin() {
             <div className="p-2">
                 <MostActivePrograms />
             </div>
+            
+            {/* Monthly User Registrations */}
             <div className="p-2">
                 <ChartUserRegistrations />
             </div>

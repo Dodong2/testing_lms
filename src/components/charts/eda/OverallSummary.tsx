@@ -35,7 +35,7 @@ const OverallSummary = ({ programId }: { programId: string }) => {
               <CartesianGrid stroke="#FFF" strokeDasharray="3 3" />
               <XAxis dataKey="label" tick={{ fill: "#FFF", fontSize: 10 }} />
               <YAxis allowDecimals={false} tick={{ fill: "#FFF" }} />
-              <Tooltip formatter={(value: number) => [value, "Students"]} />
+              <Tooltip formatter={(value: number) => [value, "Rating"]} />
               <Legend />
               <Bar dataKey="value" fill="#FFBD17" />
             </BarChart>

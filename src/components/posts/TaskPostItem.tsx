@@ -37,7 +37,7 @@ const TaskPostItem = ({ post, session, programId, handleToggleUpdateModal, handl
                                 <h1 className="font-bold text-white break-words whitespace-normal leading-tight sm:text-xl md:text-2xl hover:text-amber-500 transition-colors duration-200">{post.title}</h1>
                             </Link>
                             {/* <p className="text-xs text-gray-600">{formatCreatedAt(post.createdAt)}</p> */}
-                              <span className="text-sm text-red-600 font-medium">
+                              <span className="text-sm text-gray-900 font-medium">
                                 Deadline: {post.deadline ? format(new Date(post.deadline), "MMM dd, yyyy") : "N/A"}
                             </span>
                         </div>

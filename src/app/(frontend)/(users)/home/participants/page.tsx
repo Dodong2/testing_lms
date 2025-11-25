@@ -78,7 +78,7 @@ export default function Programs() {
         {isLoading ? (
           <SkeletonGrid count={6} variant="programs" />
         ) : filteredPrograms && filteredPrograms.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3 p-6 bg-[#525252] rounded-md shadow-md">
           {filteredPrograms.map((program) => {
             const isJoined = program.joined
             const isPending = program.pending;
@@ -86,7 +86,7 @@ export default function Programs() {
             return (
               <div
                 key={program.id}
-                className="bg-[#525252] rounded-lg shadow overflow-hidden border-2 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]"
+                className="bg-[#E7E7E7] rounded-lg shadow overflow-hidden border-2 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]"
               >
                 {/* Kung joined na siya, clickable */}
                 {isJoined ? (
@@ -95,8 +95,8 @@ export default function Programs() {
                       {isJoined ? <PiSealCheckDuotone className="text-amber-300" size={25} /> : <div></div>}
                       <span className="bg-amber-300 p-1 text-xs text-center rounded-[10px]">Joined</span>
                     </div>
-                    <span className="text-lg text-[#EFEFEF] font-medium">{program.title}</span>
-                    <div className="flex items-center text-[#EFEFEF] text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
+                    <span className="text-lg text-gray-900 font-medium">{program.title}</span>
+                    <div className="flex items-center text-gray-900 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
                     <div className="mt-2">
                       <Link href={`/home/participants/programs/${program.id}`} className="w-full flex justify-center items-center">
                         <button className="italic bg-[#00306E] w-3/4 hover:bg-[#06234a] text-white font-semibold py-2 px-4 rounded-3xl shadow focus:outline-none focus:ring-2 focus:ring-blue-400 whitespace-nowrap">view program</button>
@@ -110,8 +110,8 @@ export default function Programs() {
                       <div></div>
                       <span className="bg-amber-300 p-1 text-xs text-center rounded-[10px]">{isJoined ? 'Joined' : isPending ? "Pending" : "Not joined"}</span>
                     </div>
-                    <span className="text-lg text-[#EFEFEF] font-medium">{program.title}</span>
-                    <div className="flex items-center text-[#EFEFEF] text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
+                    <span className="text-lg text-gray-900 font-medium">{program.title}</span>
+                    <div className="flex items-center text-gray-900 text-sm mt-1"><FiUser className="mr-1" />{program.totalMembers} total members</div>
                     <div className="flex justify-center items-center mt-2">
                       {isPending ? (
                         <>

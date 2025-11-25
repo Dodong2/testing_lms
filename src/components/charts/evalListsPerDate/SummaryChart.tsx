@@ -27,7 +27,7 @@ const SummaryChart = ({ totalRespondents, data }: SummaryChartProps) => {
             <CartesianGrid stroke="#FFF" strokeDasharray="3 3" />
             <XAxis dataKey="label" tick={{ fill: "#FFF", fontSize: 10 }} />
             <YAxis allowDecimals={false} tick={{ fill: "#FFF" }} />
-            <Tooltip formatter={(v: number) => [v, "Students"]} />
+            <Tooltip formatter={(v: number) => [v, "Rating"]} />
             <Legend />
             <Bar dataKey="value" fill="#FFBD17" />
           </BarChart>

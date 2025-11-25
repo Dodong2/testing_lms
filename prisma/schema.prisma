@@ -10,13 +10,14 @@ datasource db {
 
 //for users
 model User {
-  id       String    @id @default(cuid())
-  name     String
-  email    String    @unique
-  role     Role      @default(BENEFICIARY)
-  image    String?
-  accounts Account[]
-  sessions Session[]
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  role          Role      @default(BENEFICIARY)
+  roleUpdatedAt DateTime? @default(now()) @updatedAt
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
 
   Program Program[]
 
@@ -195,6 +196,7 @@ model Submission {
   student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
   files       Json?
   links       Json?
+  isLate      Boolean   @default(false)
   grade       Int?
   feedback    String?
   submittedAt DateTime  @default(now())

@@ -64,12 +64,25 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
       {mySubmission ? (
         <div className="p-3 rounded-b-md bg-[#E7E7E7]">
           <h1 className="font-semibold text-gray-900">Status</h1>
-          <div className="text-sm flex items-center gap-1">
-            <FaCheckCircle className="text-green-500" size={15}/> 
-            <div className="text-gray-900">
-              Already submitted on
-            {new Date(mySubmission.createdAt).toLocaleDateString()}
-            </div>
+          <div className="text-sm flex items-center gap-2">
+            {mySubmission.isLate ? (
+              <>
+                <FaCheckCircle className="text-green-500" size={15} />
+                <span className="text-gray-900">
+                  Submitted on {new Date(mySubmission.createdAt).toLocaleDateString()}
+                </span>
+              </>
+            ) : (
+              <>
+                
+                <FaCheckCircle className="text-red-500" size={15} />
+                <span className="text-red-600 font-bold">
+                  Submitted late (
+                  {new Date(mySubmission.createdAt).toLocaleDateString()}
+                  )
+                </span>
+              </>
+            )}
           </div>
 
           <div className="text-sm mt-2 flex items-center gap-2">
@@ -109,15 +122,15 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
                   {mySubmission.links.map((link, idx) => (
                     <li key={idx}>
                       <div className="flex items-center gap-1">
-                      <IoLink className="text-blue-600" size={20}/>
-                      <a
-                        href={link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline hover:text-green-600 transition-colors duration-200 mb-1"
-                      >
-                        {link}
-                      </a>
+                        <IoLink className="text-blue-600" size={20} />
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline hover:text-green-600 transition-colors duration-200 mb-1"
+                        >
+                          {link}
+                        </a>
                       </div>
                     </li>
                   ))}

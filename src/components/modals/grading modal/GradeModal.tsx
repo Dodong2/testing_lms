@@ -114,8 +114,16 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   {student.name}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {submission?.grade != null ? <span className="text-green-500">Grade: {submission.grade}</span> : 'Not graded yet'}
+                  {submission?.grade != null
+                    ? <span className="text-green-500">Grade: {submission.grade}</span>
+                    : 'Not graded yet'}
                 </p>
+                {submission && (
+                  <p className={`text-sm font-medium ${submission.isLate ? 'text-green-500' : 'text-red-500'}`}>
+                    {submission.isLate ? 'Submitted On Time' : 'Submitted Late'}
+                  </p>
+                )}
+
               </div>
             </div>
           </div>
@@ -151,7 +159,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   {Array.isArray(submission.links) ? (
                     submission.links.map((link, idx) => (
                       <div key={idx} className="flex items-center">
-                        <span className="mr-2 text-blue-600"><IoLink size={20}/></span>
+                        <span className="mr-2 text-blue-600"><IoLink size={20} /></span>
                         <a
                           href={link}
                           target="_blank"

@@ -12,16 +12,34 @@ export async function GET() {
 
         const currentYear = new Date().getFullYear()
 
-        // Fetch all users created this year
+        // Fetch all users with role changes this year
         const users = await prisma.user.findMany({
             where: {
-                createdAt: {
-                    gte: new Date(`${currentYear}-01-01`),
-                    lte: new Date(`${currentYear}-12-31`),
-                }
+                OR: [
+                    // New users with roleUpdatedAt
+                    {
+                        roleUpdatedAt: {
+                            gte: new Date(`${currentYear}-01-01`),
+                            lte: new Date(`${currentYear}-12-31`),
+                        }
+                    },
+                    // Old users (before roleUpdatedAt was added)
+                    {
+                        AND: [
+                            { roleUpdatedAt: { equals: null } },
+                            {
+                                createdAt: {
+                                    gte: new Date(`${currentYear}-01-01`),
+                                    lte: new Date(`${currentYear}-12-31`),
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
             select: {
                 createdAt: true,
+                roleUpdatedAt: true,
                 role: true
             }
         })
@@ -35,13 +53,15 @@ export async function GET() {
         });
 
         users.forEach((user) => {
-            const date = new Date(user.createdAt)
+            // Use roleUpdatedAt if available, otherwise use createdAt
+            const dateToUse = user.roleUpdatedAt ?? user.createdAt
+            const date = new Date(dateToUse)
             const month = date.toLocaleString("default", { month: "short" })
 
             monthCounts[month].total++
-            if(user.role === 'ADMIN') monthCounts[month].admin++
-            if(user.role === 'INSTRUCTOR') monthCounts[month].instructor++
-            if(user.role === 'BENEFICIARY') monthCounts[month].beneficiary++
+            if (user.role === 'ADMIN') monthCounts[month].admin++
+            if (user.role === 'INSTRUCTOR') monthCounts[month].instructor++
+            if (user.role === 'BENEFICIARY') monthCounts[month].beneficiary++
         })
 
         // Convert to array for Recharts
@@ -49,7 +69,7 @@ export async function GET() {
             month: m,
             total: monthCounts[m].total,
             admin: monthCounts[m].admin,
-            Instructor: monthCounts[m].instructor,
+            instructor: monthCounts[m].instructor,
             beneficiary: monthCounts[m].beneficiary,
         }))
 

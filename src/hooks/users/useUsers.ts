@@ -8,14 +8,14 @@ import { CreateUserData, CreateUserResponse, UsersResponsePaginated, RoleStatsRe
 import toast from "react-hot-toast"
 
 export const useUsers = () => {
-    
+
     //pang get ng lahat ng User lists
     const useUsersLists = (page: number, search: string) => {
         return useQuery<UsersResponsePaginated>({
-        queryKey: ['users', page, search],
-        queryFn: () =>  getUsersLists(page, search),
-        placeholderData: keepPreviousData
-    })
+            queryKey: ['users', page, search],
+            queryFn: () => getUsersLists(page, search),
+            placeholderData: keepPreviousData
+        })
     }
 
     //pang add ng users
@@ -36,16 +36,17 @@ export const useUsers = () => {
     //pang update ng lahat ng User
     const useUpdateUsers = () => {
         const queryClient = useQueryClient()
-        return useMutation({ 
+        return useMutation({
             mutationFn: updateUsers,
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['users'] })
+                queryClient.invalidateQueries({ queryKey: ['user-registration-stats'] })
                 toast.success('User updated successfully!')
-            }, 
+            },
             onError: (error) => {
                 toast.error(error.message)
             }
-         })
+        })
     }
 
     //pang delete ng user
@@ -56,7 +57,7 @@ export const useUsers = () => {
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['users'] })
                 toast.success("User deleted successfully!")
-            }, 
+            },
             onError: (error) => {
                 toast.error(error.message)
             }

@@ -42,17 +42,17 @@ export default function Instructors() {
         {isLoading ? (
           <SkeletonGrid count={6} variant="card" />
         ) : (
-          <div>{(session.user.role === 'ADMIN' || session.user.role === 'INSTRUCTOR') && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          <div className="bg-[#525252] p-5 rounded-md shadow-md mt-2">{(session.user.role === 'ADMIN' || session.user.role === 'INSTRUCTOR') && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {programData?.programs && programData?.programs.length > 0 ? (
                 programData.programs?.map(program => {
                   const counts = program.memberCounts ?? { instructors: 0, beneficiaries: 0, totalMembers: 0 }
                   return (
-                    <div key={program.id} className="bg-white rounded-lg shadow overflow-hidden border-1 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]">
+                    <div key={program.id} className="bg-white rounded-lg shadow overflow-hidden border-2 border-gray-500 hover:border-blue-500 transition-transform duration-200 hover:scale-[1.02]">
                       <div>
                         <Link href={`/home/participants/programs/${program.id}`}>
                           {/* Top gray box */}
-                          <div className="flex justify-between relative bg-gradient-to-r from-yellow-400 via-yellow-400 to-white p-2 w-full">
+                          <div className="flex justify-between relative bg-[#E7E7E7] p-2 w-full">
                             <div>
                               <div className="relative flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.beneficiaries ?? 0} Learners </div>
                               <div className="flex items-center text-gray-950 text-sm mt-1"><FiUser className="mr-1" />{counts?.instructors ?? 0} Instructors</div>
@@ -64,7 +64,7 @@ export default function Instructors() {
                           </div>
 
                           {/* Bottom content */}
-                          <div className="bg-[#525252] flex items-center justify-between p-4">
+                          <div className="bg-[#00306E] flex items-center justify-between p-4">
                             <span className="text-[#EFEFEF] text-lg font-medium">{program.title}</span>
                             <button className="bg-[#EFEFEF] text-[#525252] rounded-full p-2 hover:bg-gray-500">
                               <FiArrowRight />

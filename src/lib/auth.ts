@@ -39,6 +39,7 @@ export const authOptions: AuthOptions = {
             email,
             image,
             role: userCount === 0 ? "ADMIN" : 'BENEFICIARY',
+            roleUpdatedAt: new Date()
           },
         });
       } else {

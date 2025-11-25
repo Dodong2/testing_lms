@@ -75,7 +75,7 @@ const ProgramClient = ({ programId, program, username }: ProgramClientProps) => 
                 <div className="bg-white/30 p-2 rounded-md border border-gray-300 mt-2">
                   <h1 className="text-1xl font-bold text-gray-700 whitespace-pre-wrap">Program descriptions:</h1>
                   {/* <div className="p-0.5 rounded-md w-full bg-gray-700"></div> */}
-                  <span className="text-sm text-gray-700 whitespace-pre-wrap">{program.explanation}</span>
+                  <span className="text-sm text-gray-900 whitespace-pre-wrap">{program.explanation}</span>
                 </div>
               )}
             </div>
