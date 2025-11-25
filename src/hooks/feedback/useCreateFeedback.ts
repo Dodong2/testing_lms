@@ -31,7 +31,7 @@ export const useCreateFeedback = () => {
             visibility,
             type,
             subject,
-            description,
+            description, 
         }, {
             onSuccess: () => {
                 resetForm()
