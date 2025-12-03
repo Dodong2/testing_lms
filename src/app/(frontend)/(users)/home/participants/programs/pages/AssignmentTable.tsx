@@ -86,7 +86,7 @@ export const AssignmentTable = ({ programId, beneficiaries, taskPosts, submissio
                     className="px-2 py-1 hover:bg-gray-400 transition-colors duration-200 cursor-pointer"
                   >
                     <div className="flex items-center justify-center gap-2 text-1xl">
-                      {gradeDisplay}
+                      {/* {gradeDisplay} */}
                       {hasSubmission ? 
                         <FaCheck size={20} className="text-green-500" /> : 
                         <IoClose size={20} className="text-red-600"/>

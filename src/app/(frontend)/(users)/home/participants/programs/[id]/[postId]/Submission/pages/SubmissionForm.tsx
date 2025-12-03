@@ -63,8 +63,9 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
       {/* If user has already submitted */}
       {mySubmission ? (
         <div className="p-3 rounded-b-md bg-[#E7E7E7]">
-          <h1 className="font-semibold text-gray-900">Status</h1>
-          <div className="text-sm flex items-center gap-2">
+          {/* <h1 className="font-semibold text-gray-900">Status</h1> */}
+          {/* status */}
+          {/* <div className="text-sm flex items-center gap-2">
             {mySubmission.isLate ? (
               <>
                 <FaCheckCircle className="text-green-500" size={15} />
@@ -83,20 +84,20 @@ const SubmissionForm = ({ postId, programId }: SubmissionFormProps) => {
                 </span>
               </>
             )}
-          </div>
+          </div> */}
 
-          <div className="text-sm mt-2 flex items-center gap-2">
+          {/* <div className="text-sm mt-2 flex items-center gap-2">
             <span className="font-semibold">Grade:</span>{" "}
             {mySubmission.grade !== null && mySubmission.grade !== undefined
               ? <div className="font-semibold"><span className="text-green-600">{mySubmission.grade}</span>/100</div>
               : <div className="font-semibold"><span className="text-red-600">0</span>/100 <span className="text-amber-500">(Not graded yet)</span></div>}
-          </div>
+          </div> */}
 
-          {mySubmission.feedback && (
+          {/* {mySubmission.feedback && (
             <p className="text-sm mt-1 italic text-gray-600">
               Feedback: {mySubmission.feedback}
             </p>
-          )}
+          )} */}
 
           <div className="mt-2">
             <p className="text-gray-900 font-medium text-sm">File Submmited:</p>

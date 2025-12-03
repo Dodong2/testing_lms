@@ -1,3 +1,4 @@
+// import EvaluationLists from "../pages/EvaluationLists"
 import dynamic from "next/dynamic"
 
 interface EvaluationDate {
@@ -9,7 +10,6 @@ interface EvaluationDate {
 
 export default async function EvaluationDatePage({ params }: EvaluationDate) {
     const { id: programId, date } = await params
-
 
     const EvaluationLists = dynamic(() => import("../pages/EvaluationLists"))
 

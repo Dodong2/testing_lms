@@ -9,6 +9,8 @@ import { useSubmission } from "@/hooks/submission/useSubmission"
 import FileViewer from "@/components/FileViewer"
 import PostFiles from "@/components/posts/PostFiles"
 import ModalFileViewer from "@/components/ModalFileViewer"
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
+
 /* icons */
 import { FaCheckCircle } from "react-icons/fa";
 import { IoLink } from "react-icons/io5";
@@ -23,6 +25,7 @@ interface GradeModalProps {
 }
 
 export default function GradeModal({ programId, postId, postTitle, student, submission, onClose }: GradeModalProps) {
+  useLockBodyScroll(true)
   const [grade, setGrade] = useState<number>(0)
   const [feedback, setFeedback] = useState<string>("")
   const [selectedFile, setSelectedFile] = useState<{ name: string; url: string } | null>(null)
@@ -113,16 +116,19 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                 <h3 className="text-lg text-gray-700 font-medium">
                   {student.name}
                 </h3>
-                <p className="text-sm text-gray-500">
+                {/* grade status */}
+                {/* <p className="text-sm text-gray-500">
                   {submission?.grade != null
                     ? <span className="text-green-500">Grade: {submission.grade}</span>
                     : 'Not graded yet'}
-                </p>
-                {submission && (
+                </p> */}
+
+                {/* status submission */}
+                {/* {submission && (
                   <p className={`text-sm font-medium ${submission.isLate ? 'text-green-500' : 'text-red-500'}`}>
                     {submission.isLate ? 'Submitted On Time' : 'Submitted Late'}
                   </p>
-                )}
+                )} */}
 
               </div>
             </div>
@@ -192,7 +198,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
             )}
 
             {/* Existing Grade & Feedback - SAME AS SUBMISSIONLIST */}
-            {submission.grade != null && (
+            {/* {submission.grade != null && (
               <div>
                 <div className="flex items-center gap-1 font-bold italic text-green-500"><h1>Graded</h1> <FaCheckCircle /></div>
                 <div className="p-3 bg-gray-50 rounded border border-gray-300">
@@ -206,7 +212,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   )}
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <div className="mb-3 p-4 bg-yellow-50 rounded border border-yellow-200">
@@ -215,7 +221,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
         )}
 
         {/* Grading Form - SAME STRUCTURE AS SUBMISSIONLIST */}
-        <div className="p-0.5 rounded-md w-full bg-gray-500"></div>
+        {/* <div className="p-0.5 rounded-md w-full bg-gray-500"></div>
         <div className="mt-2">
           <h4 className="font-semibold text-gray-700 mb-3">Grade this submission</h4>
           <div className="space-y-4">
@@ -234,7 +240,6 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
                   disabled={!submission || isPending}
                   required
                 />
-                {/* Quick-grade buttons */}
                 <button
                   onClick={() => setGrade(50)}
                   disabled={!submission || isPending}
@@ -265,7 +270,7 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3 mt-6">
@@ -276,12 +281,12 @@ export default function GradeModal({ programId, postId, postTitle, student, subm
           >
             Cancel
           </button>
-          <button
+          {/* <button
             onClick={handleSubmit}
             disabled={!canSubmit}
             className={`px-2 py-2 rounded-md font-medium shadow text-white ${!canSubmit ? "bg-[#00306E] cursor-not-allowed opacity-50" : "bg-[#00306E] hover:bg-blue-700"}`}>
             {isPending ? "Submitting..." : "Submit Grade"}
-          </button>
+          </button> */}
         </div>
       </div>
 

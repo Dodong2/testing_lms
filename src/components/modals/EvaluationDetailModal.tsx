@@ -1,5 +1,5 @@
 "use client"
-
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll"
 import { EvaluationEntry } from "@/types/evaluationManagetypes"
 
 interface EvaluationDetailModalProps {
@@ -8,6 +8,7 @@ interface EvaluationDetailModalProps {
 }
 
 const EvaluationDetailModal = ({ evaluation, onClose}: EvaluationDetailModalProps) => {
+    useLockBodyScroll(true)
     const { ratings, suggestions, venue, titleOfSeminar, user } = evaluation;
 
     // Questions for each category

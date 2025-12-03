@@ -50,6 +50,9 @@ export const useNavbarTabs = ({ program, username, role, postId, initialTab = "u
             case 'evaluation':
                 return role === "INSTRUCTOR" || role === 'ADMIN' ? ( <Evaluation programId={program.id} />)
                 : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
+            case 'attendance':
+                return role === "INSTRUCTOR" ? ( <Attendance programId={program.id} />)
+                : ( <p className="text-center text-gray-500 mt-4">Only instructors can view this tab.</p> )
             default:
                 return <UpdatesContent programId={program.id} />
 
