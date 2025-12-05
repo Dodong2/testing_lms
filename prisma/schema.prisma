@@ -38,6 +38,7 @@ model User {
   createdAt DateTime @default(now())
 
   evaluations Evaluation[]
+  attendances Attendance[]
 }
 
 //account for google auth
@@ -93,6 +94,7 @@ model Program {
   JoinRequest JoinRequest[]
 
   evaluations Evaluation[]
+  attendances Attendance[]
 }
 
 model ProgramMember {
@@ -232,6 +234,22 @@ model Evaluation {
   name           String?
 
   ratings Json
+
+  createdAt DateTime @default(now())
+}
+
+model Attendance {
+  id        String  @id @default(cuid())
+  programId String
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String
+  address       String
+  sex           String
+  contactNumber String
+  date          String
 
   createdAt DateTime @default(now())
 }

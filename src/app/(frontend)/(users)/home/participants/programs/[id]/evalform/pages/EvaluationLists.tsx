@@ -8,6 +8,7 @@ import { useEvaluation } from "@/hooks/evaluations/useEvaluation";
 import EvaluationDetailModal from "@/components/modals/EvaluationDetailModal";
 import SummaryChart from "@/components/charts/evalListsPerDate/SummaryChart";
 import QuestionCharts from "@/components/charts/evalListsPerDate/QuestionCharts";
+import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* types */
 import { EvaluationEntry, RatingCount } from "@/types/evaluationManagetypes";
 /* icons */
@@ -21,7 +22,7 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   const [showQuestions, setShowQuestions] = useState(false)
   const router = useRouter()
 
-  if (evalLoading || edaLoading) return <p className="text-white">Loading...</p>;
+  if (evalLoading || edaLoading) return <SkeletonGrid variant="eda" count={1} />;
 
   const handleBack = () => {
     router.push(`/home/participants/programs/${programId}?tab=evaluation`)
