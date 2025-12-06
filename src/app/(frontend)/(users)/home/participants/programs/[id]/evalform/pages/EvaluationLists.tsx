@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 /* hooks */
 import { useEvaluation } from "@/hooks/evaluations/useEvaluation";
+import { useEvaluationTabs } from "@/hooks/useEvaluationTabs";
 /* components */
 import EvaluationDetailModal from "@/components/modals/EvaluationDetailModal";
 import SummaryChart from "@/components/charts/evalListsPerDate/SummaryChart";
@@ -19,17 +20,15 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   const { data: evaluations, isLoading: evalLoading } = useEvaluation().useEvaluationsByDate(programId, date);
   const { data: edaData, isLoading: edaLoading } = useEvaluation().useEvaluationEDAByDate(programId, date);
   const [selectedEval, setSelectedEval] = useState<EvaluationEntry | null>(null);
-  const [showQuestions, setShowQuestions] = useState(false)
+  // const [showQuestions, setShowQuestions] = useState(false)
   const router = useRouter()
+  const isAdmin = session?.user.role === 'ADMIN'
+  const { activeTab, setActiveTab, visibleTabs } = useEvaluationTabs(isAdmin)
 
   if (evalLoading || edaLoading) return <SkeletonGrid variant="eda" count={1} />;
 
   const handleBack = () => {
     router.push(`/home/participants/programs/${programId}?tab=evaluation`)
-  }
-
-  const handleToggle = () => {
-    setShowQuestions((prev) => !prev)
   }
 
   // Filter evaluations that have suggestions
@@ -53,6 +52,7 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
     return { category, q };
   };
 
+  // arrangements for Per Questions
   const groupedQuestions = edaData?.questionDistributions.reduce<Record<string, typeof edaData.questionDistributions>>((acc, q) => {
     const { category } = parseQuestion(q.question);
     if (!acc[category]) acc[category] = [];
@@ -63,14 +63,14 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   // logic for show detail per question
   const shouldShowCharts =
     session?.user.role === "INSTRUCTOR" ||
-    (session?.user.role === "ADMIN" && showQuestions);
+    (session?.user.role === "ADMIN");
 
   return (
     <>
       <div>
         <button onClick={handleBack} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-2 transition-all duration-200 active:scale-95" title="back"><FaArrowLeft size={20} /></button>
 
-        <h1 className="text-white text-2xl font-bold italic mb-6">
+        <h1 className="text-white text-2xl font-bold italic mb-3">
           Submitted on {date}
         </h1>
 
@@ -79,122 +79,129 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
           <SummaryChart totalRespondents={edaData.totalRespondents} data={summaryData} />
         )}
 
-          {suggestionsData.length > 0 && (
-          <div className="mb-8">
-            <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2 mb-4">
-              <div className="p-0.5 rounded-md w-full bg-white" />
-              <span className="text-center whitespace-nowrap">Suggestions / Comments</span>
-              <div className="p-0.5 rounded-md w-full bg-white" />
-
-              {/* Simple tooltip shown only on hover */}
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
-                Anonymous suggestions and comments from participants
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {suggestionsData.map((evaluation, index) => (
-                <div
-                  key={evaluation.id}
-                  className="bg-[#303030] rounded-lg p-4 border border-gray-600 hover:border-gray-400 transition"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 bg-[#00306E] rounded-full p-2">
-                      <FaCommentDots className="text-white" size={20} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-gray-400 text-xs mb-2">
-                        Participant #{index + 1}
-                      </p>
-                      <p className="text-white text-sm leading-relaxed">
-                        {evaluation.suggestions}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* hover */}
-        <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2">
-          <div className="p-0.5 rounded-md w-full bg-white" />
-          <span className="text-center whitespace-nowrap">Per Questions</span>
-          <div className="p-0.5 rounded-md w-full bg-white" />
-
-          {/* Simple tooltip shown only on hover */}
-          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
-            Breakdown of student responses per question
-          </div>
+        {/* navbar */}
+        <div className="px-2 py-2 bg-[#222222] rounded-md">
+        <div className="sticky top-0 z-5 py-1 flex justify-start gap-4 mb-3 border-b border-gray-700">
+          {visibleTabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeTab === tab.key ? "bg-[#00306E] text-white" : "bg-[#303030] text-gray-300 hover:bg-gray-600"}`}>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* for admin */}
-        {session?.user.role === 'ADMIN' && (
-          <button onClick={handleToggle} className="px-3 py-2 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 mb-3 transition-all duration-200 active:scale-95 font-bold">{showQuestions ? 'close' : 'Show Per Questions'}</button>
-        )}
-
         {/* Detail Per Question */}
-        {shouldShowCharts && groupedQuestions && (
-          <QuestionCharts groupedQuestions={groupedQuestions} />
-        )}
+        {activeTab === "questions" && (
+          <>
+            {shouldShowCharts && groupedQuestions && (
+              <QuestionCharts groupedQuestions={groupedQuestions} />
+            )}
+          </>)}
+
+        {/* suggestions */}  
+        {activeTab === "suggestions" && (
+          <>
+            {suggestionsData.length > 0 && (
+              <div className="">
+                {/* <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2 mb-4">
+                  <div className="p-0.5 rounded-md w-full bg-white" />
+                  <span className="text-center whitespace-nowrap">Suggestions / Comments</span>
+                  <div className="p-0.5 rounded-md w-full bg-white" />
+
+                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+                    Anonymous suggestions and comments from participants
+                  </div>
+                </div> */}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {suggestionsData.map((evaluation, index) => (
+                    <div
+                      key={evaluation.id}
+                      className="bg-[#303030] rounded-lg p-4 border border-gray-600 hover:border-gray-400 transition"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 bg-[#00306E] rounded-full p-2">
+                          <FaCommentDots className="text-white" size={20} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-gray-400 text-xs mb-2">
+                            Participant #{index + 1}
+                          </p>
+                          <p className="text-white text-sm leading-relaxed">
+                            {evaluation.suggestions}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>)}
+
+        
 
         {/* admin can see who submit form & can view form */}
-        {session?.user.role === 'ADMIN' && (
-          <div>
-            {/* hover */}
-            <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2">
-              <div className="p-0.5 rounded-md w-full bg-white" ></div>
-              <span className="text-center whitespace-nowrap">Individual Submissions</span>
-              <div className="p-0.5 rounded-md w-full bg-white" ></div>
+        {activeTab === "submissions" && isAdmin && (
+          <>
+          {session?.user.role === 'ADMIN' && (
+            <div>
+              {/* <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2">
+                <div className="p-0.5 rounded-md w-full bg-white" ></div>
+                <span className="text-center whitespace-nowrap">Individual Submissions</span>
+                <div className="p-0.5 rounded-md w-full bg-white" ></div>
 
-              {/* Simple tooltip shown only on hover */}
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
-                List of participants who submitted the evaluation form for this date.
-              </div>
-            </div>
-            <div className="overflow-x-auto rounded-lg mt-4">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#303030] text-white">
-                    <th className="p-3">Name</th>
-                    <th className="p-3 text-center">Actions</th>
-                  </tr>
-                </thead>
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+                  List of participants who submitted the evaluation form for this date.
+                </div>
+              </div> */}
 
-                <tbody>
-                  {evaluations?.map((evalData) => (
-                    <tr
-                      key={evalData.id}
-                      className="border-b border-gray-600 hover:bg-[#4d4d4d] transition cursor-pointer"
-                    >
-                      {/* NAME */}
-                      <td
-                        className="p-3"
-                        onClick={() => setSelectedEval(evalData)}
+              <div className="overflow-x-auto rounded-lg">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#303030] text-white">
+                      <th className="p-3">Name</th>
+                      <th className="p-3 text-center">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {evaluations?.map((evalData) => (
+                      <tr
+                        key={evalData.id}
+                        className="border-b border-gray-600 hover:bg-[#4d4d4d] transition cursor-pointer"
                       >
-                        <p className="font-semibold text-white">{evalData.name}</p>
-                        {/* <p className="text-xs opacity-70 text-gray-300">
+                        {/* NAME */}
+                        <td
+                          className="p-3"
+                          onClick={() => setSelectedEval(evalData)}
+                        >
+                          <p className="font-semibold text-white">{evalData.name}</p>
+                          {/* <p className="text-xs opacity-70 text-gray-300">
                         {evalData.user.email}
                       </p> */}
-                      </td>
+                        </td>
 
-                      {/* ACTIONS */}
-                      <td className="p-3 text-center">
-                        <button
-                          onClick={() => setSelectedEval(evalData)}
-                          className="px-2 py-1 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-95"
-                        >
-                          View Form
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        {/* ACTIONS */}
+                        <td className="p-3 text-center">
+                          <button
+                            onClick={() => setSelectedEval(evalData)}
+                            className="px-2 py-1 bg-[#00306E] text-white rounded-lg hover:bg-gray-800 transition-all duration-200 active:scale-95"
+                          >
+                            View Form
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </>)}
+      </div>
       </div>
 
       {selectedEval && (

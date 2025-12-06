@@ -42,7 +42,7 @@ export default function Instructors() {
         {isLoading ? (
           <SkeletonGrid count={6} variant="card" />
         ) : (
-          <div className="bg-[#525252] p-5 rounded-md shadow-md mt-2">{(session.user.role === 'ADMIN' || session.user.role === 'INSTRUCTOR') && (
+          <div className="mt-2">{(session.user.role === 'ADMIN' || session.user.role === 'INSTRUCTOR') && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {programData?.programs && programData?.programs.length > 0 ? (
                 programData.programs?.map(program => {

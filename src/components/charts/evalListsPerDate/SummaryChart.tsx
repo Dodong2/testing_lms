@@ -17,7 +17,7 @@ interface SummaryChartProps {
 
 const SummaryChart = ({ totalRespondents, data }: SummaryChartProps) => {
   return (
-    <div className="bg-[#00306E] p-4 rounded shadow text-white mb-6 border border-transparent hover:border-gray-100 transition">
+    <div className="bg-[#00306E] p-3 rounded shadow text-white mb-6 border border-transparent hover:border-gray-100 transition">
       <h2 className="font-semibold mb-2">Overall Summary (All Questions)</h2>
       <p className="text-sm mb-4">Total Respondents: {totalRespondents}</p>
 

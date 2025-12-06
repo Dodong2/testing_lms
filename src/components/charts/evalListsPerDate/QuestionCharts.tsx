@@ -25,7 +25,7 @@ const QuestionCharts = ({ groupedQuestions }: QuestionChartsProps) => {
     ratings.map((r) => ({ rating: r.value, count: r.count }));
 
   return (
-    <div className="space-y-6 mb-6">
+    <div className="space-y-2">
       {Object.keys(groupedQuestions)
         .sort((a, b) => {
           if (a === "overall") return 1;
@@ -34,7 +34,7 @@ const QuestionCharts = ({ groupedQuestions }: QuestionChartsProps) => {
         })
         .map((category) => (
           <div key={category}>
-            <h2 className="font-bold text-white text-lg mb-2">
+            <h2 className="font-bold text-white text-lg mb-2 text-center">
               {category.toUpperCase()}
             </h2>
 
@@ -42,7 +42,7 @@ const QuestionCharts = ({ groupedQuestions }: QuestionChartsProps) => {
               {groupedQuestions[category].map((q) => (
                 <div
                   key={q.question}
-                  className="bg-[#00306E] p-4 rounded shadow text-white border border-transparent hover:border-gray-100 transition"
+                  className="bg-[#00306E] p-2 rounded shadow text-white border border-transparent hover:border-gray-100 transition"
                 >
                   <h3 className="font-semibold mb-1">{q.question}</h3>
 
