@@ -12,7 +12,7 @@ import { SkeletonGrid } from "@/components/SkeletonGrid";
 /* types */
 import { EvaluationEntry, RatingCount } from "@/types/evaluationManagetypes";
 /* icons */
-import { FaArrowLeft } from "react-icons/fa6";
+import { FaArrowLeft, FaCommentDots } from "react-icons/fa6";
 
 const EvaluationLists = ({ programId, date }: { programId: string, date: string }) => {
   const { data: session } = useSession()
@@ -31,6 +31,11 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
   const handleToggle = () => {
     setShowQuestions((prev) => !prev)
   }
+
+  // Filter evaluations that have suggestions
+  const suggestionsData = evaluations?.filter(
+    (evaluation) => evaluation.suggestions && evaluation.suggestions.trim() !== ""
+  ) || []
 
 
   // Format for summary chart
@@ -72,6 +77,44 @@ const EvaluationLists = ({ programId, date }: { programId: string, date: string 
         {/* Overall Summary Chart */}
         {edaData && (
           <SummaryChart totalRespondents={edaData.totalRespondents} data={summaryData} />
+        )}
+
+          {suggestionsData.length > 0 && (
+          <div className="mb-8">
+            <div className="relative group font-bold text-2xl text-white text-center italic flex items-center justify-center gap-2 mb-4">
+              <div className="p-0.5 rounded-md w-full bg-white" />
+              <span className="text-center whitespace-nowrap">Suggestions / Comments</span>
+              <div className="p-0.5 rounded-md w-full bg-white" />
+
+              {/* Simple tooltip shown only on hover */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-black text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+                Anonymous suggestions and comments from participants
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {suggestionsData.map((evaluation, index) => (
+                <div
+                  key={evaluation.id}
+                  className="bg-[#303030] rounded-lg p-4 border border-gray-600 hover:border-gray-400 transition"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 bg-[#00306E] rounded-full p-2">
+                      <FaCommentDots className="text-white" size={20} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-gray-400 text-xs mb-2">
+                        Participant #{index + 1}
+                      </p>
+                      <p className="text-white text-sm leading-relaxed">
+                        {evaluation.suggestions}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* hover */}

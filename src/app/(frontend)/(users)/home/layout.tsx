@@ -25,6 +25,7 @@ export default function BeneficiaryLayout({ children }: { children: React.ReactN
     { href: "/home/participants", icon: <HiHome />, text: "Programs" },
     { href: "/home/participants/evaluation", icon: <FaWpforms />, text: "Evaluation" },
     { href: "/home/participants/feedback", icon: <MdOutlineFeedback  />, text: "Feedback"  },
+    { href: "/home/participants/attendance", icon: <MdOutlineFeedback  />, text: "Attendance"  },
   ]: []),
 
     ...(session.user.role === 'INSTRUCTOR' ? [
