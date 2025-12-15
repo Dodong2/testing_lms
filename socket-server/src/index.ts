@@ -18,7 +18,7 @@ const server = http.createServer(app)
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: "https://testing-lms-dusky.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -65,7 +65,7 @@ app.post("/emit", express.json(), (req, res) => {
   res.status(200).send("Event emitted");
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = 3001
 
 
 server.listen(PORT, () => {
