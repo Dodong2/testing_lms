@@ -65,7 +65,7 @@ app.post("/emit", express.json(), (req, res) => {
   res.status(200).send("Event emitted");
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 
 server.listen(PORT, () => {
