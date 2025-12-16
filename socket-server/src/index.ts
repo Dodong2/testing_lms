@@ -68,7 +68,6 @@ app.post("/emit", express.json(), (req, res) => {
 
 const PORT = process.env.PORT || 3001
 
-
 server.listen(PORT, () => {
   console.log(`Socket.IO server running on http://localhost:${PORT}`)
 })
