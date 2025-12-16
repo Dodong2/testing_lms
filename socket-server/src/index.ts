@@ -19,6 +19,7 @@ const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
     origin: "https://testing-lms-dusky.vercel.app",
+    // origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   },
