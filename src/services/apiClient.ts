@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_API || "http://localhost:3000";
+const API_BASE_URL = process.env.NEXT_API;
 
 export async function apiFetch<T>(
     endPoint: string,
@@ -7,13 +7,13 @@ export async function apiFetch<T>(
     const res = await fetch(`${API_BASE_URL}${endPoint}`, {
         ...options,
         headers: {
-      "Content-Type": "application/json",
-      ...(options?.headers || {}),
-    },
+            "Content-Type": "application/json",
+            ...(options?.headers || {}),
+        },
     })
 
 
-    if(!res.ok) {
+    if (!res.ok) {
         throw new Error(`API request failed: ${res.status} ${res.statusText}`)
     }
 
