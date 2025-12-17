@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_API;
+const API_BASE_URL = process.env.NEXT_API || "http://localhost:3000";
 
 export async function apiFetch<T>(
     endPoint: string,
