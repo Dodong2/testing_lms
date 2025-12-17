@@ -7,7 +7,7 @@ export const emitSocketEvent = async (
   payload: unknown // or a stricter type if desired
 ): Promise<void> => {
   try {
-    const socketServerUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const socketServerUrl = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:3001";
     await fetch(`${socketServerUrl}/emit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -3,7 +3,7 @@ Ito ang Socket.IO client ng frontend. Dito nakakonekta ang Next.js browser clien
 
 import { io } from "socket.io-client";
 
-const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001"
+const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:3001"
 
 const socket = io(socketURL, {
   transports: ['websocket'],
